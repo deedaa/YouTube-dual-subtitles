@@ -1,0 +1,27 @@
+{
+  "name": "YouTube 双字幕",
+  "description": "YouTube 双语对照和自动切换中文",
+  "version": "1.0.0",
+  "icons": {
+    "128": "assets/128.png",
+    "32": "assets/32.png"
+  },
+  "page_action": {
+    "default_title": "YouTube 双字幕\n已开启 👍"
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/watch?v=*"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "permissions": ["storage", "tabs", "declarativeContent"],
+  "options_page": "options.html",
+  "web_accessible_resources": ["constant.js", "assets/2.ogg"],
+  "manifest_version": 2
+}
