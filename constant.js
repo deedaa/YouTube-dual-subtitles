@@ -47,7 +47,10 @@ const proxiedOpen = function () {
   nativeOpen.apply(this, arguments);
 };
 
-const single = 0;
+// const singleStatus = 0;
+// const singleStatus = JSON.parse(document.querySelector('#single-button').getAttribute('aria-checked'));
+let aaaa = JSON.stringify(document.querySelector('#single-button'));
+console.log('aaaa: ', aaaa);
 
 const proxiedSend = async function () {
   if (this._url.includes(url)) {
@@ -59,7 +62,9 @@ const proxiedSend = async function () {
       let en = {};
       let zh = {};
       // 单字幕
-      if (single) {
+      const singleStatus = JSON.parse(document.querySelector('#single-button').getAttribute('aria-checked'));
+      console.log('singleStatus: ', singleStatus);
+      if (singleStatus) {
         zh = await fetch(`https://www.youtube.com/api/timedtext?type=list&v=${v}`)
           .then(response => response.text())
           .then(str => new window.DOMParser().parseFromString(str, 'text/xml'))
@@ -92,7 +97,7 @@ const proxiedSend = async function () {
 
       let mergeLang = {};
 
-      if (single) {
+      if (singleStatus) {
         mergeLang = zh;
         console.log('zh: ', zh);
       } else {
