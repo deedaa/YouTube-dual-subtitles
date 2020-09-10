@@ -26,10 +26,6 @@ const setIcon = (tabId, status, title, path) => {
   chrome.storage.local.set({ status: !status }, () => {
     chrome.pageAction.setTitle({ tabId, title });
     chrome.pageAction.setIcon({ tabId, path });
-
-    // chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-    //   chrome.tabs.sendMessage(tabs[0].id, { status: !status });
-    // });
   });
 };
 
@@ -42,3 +38,7 @@ const toggleHandler = ({ id: tabId }) => {
 };
 
 chrome.pageAction.onClicked.addListener(toggleHandler);
+
+// chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+//   chrome.tabs.sendMessage(tabs[0].id, { status: !status });
+// });

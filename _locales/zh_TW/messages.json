@@ -1,0 +1,11 @@
+{
+  "extension_name": {
+    "message": "YouTube 雙字幕"
+  },
+  "extension_desc": {
+    "message": "YouTube 雙語對照和自動切換中文"
+  },
+  "single_subtitle": {
+    "message": "單字幕"
+  }
+}

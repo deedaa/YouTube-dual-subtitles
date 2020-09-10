@@ -1,0 +1,11 @@
+{
+  "extension_name": {
+    "message": "YouTubeデュアル字幕"
+  },
+  "extension_desc": {
+    "message": "YouTubeのバイリンガル比較と中国語への自動切り替え"
+  },
+  "single_subtitle": {
+    "message": "シングル字幕"
+  }
+}

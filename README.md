@@ -10,3 +10,11 @@ JSON.parse(ytplayer.config.args.player_response).captions.playerCaptionsTracklis
 
 let data = chrome.i18n.getUILanguage();
 watch?v=
+
+window.addEventListener(
+'mousedown',
+() => {
+console.log('触发请求');
+},
+{ once: true }
+);

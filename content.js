@@ -46,13 +46,16 @@ injection('constant.js').onload = function () {
 const restartSubtitles = () => {
   chrome.storage.local.get('single', ({ single }) => {
     localStorage.setItem('singleStatus', single);
-    const subtitlesButton = document.querySelector('.ytp-subtitles-button.ytp-button');
-    subtitlesButton.click();
-    subtitlesButton.click();
+
+    setTimeout(() => {
+      const subtitlesButton = document.querySelector('.ytp-subtitles-button.ytp-button');
+      subtitlesButton.click();
+      subtitlesButton.click();
+    }, 180);
   });
 };
 
-chrome.storage.onChanged.addListener(({ status, single }) => {
+chrome.storage.onChanged.addListener(({ status }) => {
   if (!status) return;
 
   if (status.newValue) {
@@ -82,7 +85,7 @@ const insertSingle = () => {
       `
       <div class='ytp-menuitem' role='menuitemcheckbox' aria-checked=${single} tabindex='0' id='single-button'>
         <div class='ytp-menuitem-icon'></div>
-        <div class='ytp-menuitem-label'>单字幕</div>
+        <div class='ytp-menuitem-label'>${chrome.i18n.getMessage('single_subtitle')}</div>
         <div class='ytp-menuitem-content'>
           <div class='ytp-menuitem-toggle-checkbox'></div>
         </div>
@@ -120,4 +123,16 @@ chrome.storage.local.get(['status', 'single'], ({ status, single }) => {
 
 // chrome.runtime.onMessage.addListener(({ status }) => {});
 // const singleStatus = JSON.parse(this.getAttribute('aria-checked'));
-// localStorage.setItem('singleStatus', !single);
+
+// document.querySelector('.ytp-popup.ytp-settings-menu').addEventListener('blur', () => {
+//   console.log('隐藏了');
+// });
+/*  const subtitlesButton = document.querySelector('.ytp-subtitles-button.ytp-button');
+    console.log('subtitlesButton: ', subtitlesButton);
+    const observer = new MutationObserver(([mutations]) => {
+      console.log('mutations: ', mutations);
+      console.log(subtitlesButton.getAttribute('aria-expanded'));
+    });
+
+    observer.observe(subtitlesButton, { attributes: true });
+    */
