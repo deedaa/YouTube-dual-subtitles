@@ -43,10 +43,16 @@ injection('constant.js').onload = function () {
   // this.remove();
 };
 
-chrome.storage.onChanged.addListener(({ status, single }) => {
-  console.log('status, single : ', status, single);
-  console.log('storage发生改变');
+const restartSubtitles = () => {
+  chrome.storage.local.get('single', ({ single }) => {
+    localStorage.setItem('singleStatus', single);
+    const subtitlesButton = document.querySelector('.ytp-subtitles-button.ytp-button');
+    subtitlesButton.click();
+    subtitlesButton.click();
+  });
+};
 
+chrome.storage.onChanged.addListener(({ status, single }) => {
   if (!status) return;
 
   if (status.newValue) {
@@ -64,9 +70,8 @@ chrome.storage.onChanged.addListener(({ status, single }) => {
   }
 
   audioPlay('assets/2.ogg');
-  const subtitlesButton = document.querySelector('.ytp-subtitles-button.ytp-button');
-  subtitlesButton.click();
-  subtitlesButton.click();
+
+  restartSubtitles();
 });
 
 const insertSingle = () => {
@@ -75,30 +80,36 @@ const insertSingle = () => {
     panelMenu.insertAdjacentHTML(
       'beforeend',
       `
-    <div class='ytp-menuitem' role='menuitemcheckbox' aria-checked=${single} tabindex='0' id='single-button'>
-      <div class='ytp-menuitem-icon'></div>
-      <div class='ytp-menuitem-label'>单字幕</div>
-      <div class='ytp-menuitem-content'>
-        <div class='ytp-menuitem-toggle-checkbox'></div>
+      <div class='ytp-menuitem' role='menuitemcheckbox' aria-checked=${single} tabindex='0' id='single-button'>
+        <div class='ytp-menuitem-icon'></div>
+        <div class='ytp-menuitem-label'>单字幕</div>
+        <div class='ytp-menuitem-content'>
+          <div class='ytp-menuitem-toggle-checkbox'></div>
+        </div>
       </div>
-    </div>
-    `
+      `
     );
 
-    document.querySelector('#single-button').addEventListener('click', function () {
-      const singleStatus = JSON.parse(this.getAttribute('aria-checked'));
-      this.setAttribute('aria-checked', !singleStatus);
-      chrome.storage.local.set({ single: !singleStatus });
+    window.addEventListener('focus', () => {
+      chrome.storage.local.get('single', ({ single }) => {
+        document.querySelector('#single-button').setAttribute('aria-checked', single);
+      });
+    });
 
-      const subtitlesButton = document.querySelector('.ytp-subtitles-button.ytp-button');
-      subtitlesButton.click();
-      subtitlesButton.click();
+    document.querySelector('#single-button').addEventListener('click', function () {
+      chrome.storage.local.get('single', ({ single }) => {
+        this.setAttribute('aria-checked', !single);
+        chrome.storage.local.set({ single: !single }, () => {
+          restartSubtitles();
+        });
+      });
     });
   });
 };
 
-chrome.storage.local.get('status', ({ status }) => {
-  // 判断本地存储, 没有就是同步
+chrome.storage.local.get(['status', 'single'], ({ status, single }) => {
+  localStorage.setItem('singleStatus', single);
+
   if (status) {
     document.addEventListener('DOMContentLoaded', () => {
       insertSingle();
@@ -108,3 +119,5 @@ chrome.storage.local.get('status', ({ status }) => {
 });
 
 // chrome.runtime.onMessage.addListener(({ status }) => {});
+// const singleStatus = JSON.parse(this.getAttribute('aria-checked'));
+// localStorage.setItem('singleStatus', !single);
