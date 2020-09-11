@@ -42,6 +42,10 @@ const finishing = lang => {
   };
 };
 
+// const selectLang = JSON.parse(localStorage.getItem('selectLang'));
+// const autoLang = JSON.parse(localStorage.getItem('autoLangCode'));
+// const langArg = selectLang || autoLang;
+
 const proxiedOpen = function () {
   this._url = arguments[1];
   nativeOpen.apply(this, arguments);
@@ -53,12 +57,13 @@ const proxiedSend = async function () {
     const lang = u.searchParams.get('lang');
     const v = u.searchParams.get('v');
 
+    // if(!langArg.includes(lang)) { }
+
     if (lang !== 'zh-Hans' && lang !== 'zh-CN') {
       let en = {};
       let zh = {};
       // 单字幕
       const singleStatus = JSON.parse(localStorage.getItem('singleStatus'));
-      console.log('singleStatus: ', JSON.parse(singleStatus));
 
       if (singleStatus) {
         zh = await fetch(`https://www.youtube.com/api/timedtext?type=list&v=${v}`)
@@ -70,6 +75,7 @@ const proxiedSend = async function () {
               lang_code: v.getAttribute('lang_code'),
             }));
 
+            // const result = list.find(v => langArg.includes(v.lang_code));
             const result = list.find(v => v.lang_code === 'zh-Hans' || v.lang_code === 'zh-CN');
             console.log('result: ', list, result);
 
@@ -88,16 +94,13 @@ const proxiedSend = async function () {
           fetch(this._url).then(res => res.json()),
           fetch(`${this._url}&tlang=zh-Hans`).then(res => res.json()),
         ]);
-        console.log('双');
       }
 
       let mergeLang = {};
 
       if (singleStatus) {
         mergeLang = zh;
-        console.log('zh: ', zh);
       } else {
-        console.log('en, zh', en, zh);
         mergeLang = finishing(en);
         mergeLang.events.forEach((v, i) => (v.segs[0].utf8 += `\n${zh.events[i].segs[0].utf8}`));
       }

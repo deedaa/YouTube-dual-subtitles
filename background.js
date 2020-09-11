@@ -1,4 +1,6 @@
-chrome.runtime.onInstalled.addListener(() => chrome.storage.local.set({ status: true, single: false }));
+chrome.runtime.onInstalled.addListener(() =>
+  chrome.storage.local.set({ status: true, single: false, selectLang: null })
+);
 
 chrome.tabs.onUpdated.addListener((tabId, status) => {
   chrome.storage.local.get('status', result => {

@@ -93,18 +93,12 @@ const insertSingle = () => {
       `
     );
 
-    window.addEventListener('focus', () => {
-      chrome.storage.local.get('single', ({ single }) => {
-        document.querySelector('#single-button').setAttribute('aria-checked', single);
-      });
-    });
+    // 每个窗口同步状态
 
     document.querySelector('#single-button').addEventListener('click', function () {
       chrome.storage.local.get('single', ({ single }) => {
         this.setAttribute('aria-checked', !single);
-        chrome.storage.local.set({ single: !single }, () => {
-          restartSubtitles();
-        });
+        chrome.storage.local.set({ single: !single }, restartSubtitles);
       });
     });
   });
@@ -120,6 +114,19 @@ chrome.storage.local.get(['status', 'single'], ({ status, single }) => {
     });
   }
 });
+
+// console.log('@@ui_locale', chrome.i18n.getMessage('@@ui_locale'));
+// chrome.storage.local.get('selectLang', ({ selectLang }) => {
+//   localStorage.setItem('selectLang', selectLang);
+// });
+
+// chrome.storage.local.set('selectLang', ['codeLang']);
+
+// window.addEventListener('focus', () => {
+//   chrome.storage.local.get('single', ({ single }) => {
+//     document.querySelector('#single-button').setAttribute('aria-checked', single);
+//   });
+// });
 
 // chrome.runtime.onMessage.addListener(({ status }) => {});
 // const singleStatus = JSON.parse(this.getAttribute('aria-checked'));

@@ -7,16 +7,5 @@
   },
   "single_subtitle": {
     "message": "单字幕"
-  },
-  "about_me": {
-    "message": "$name$ ouweiya  $age$",
-    "placeholders": {
-      "name": {
-        "content": "$2"
-      },
-      "age": {
-        "content": "30"
-      }
-    }
   }
 }
