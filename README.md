@@ -18,3 +18,5 @@ console.log('触发请求');
 },
 { once: true }
 );
+"all_frames": true,
+"persistent": true

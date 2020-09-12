@@ -10,18 +10,17 @@
     "default_title": "YouTube 双字幕\n已开启 👍"
   },
   "background": {
-    "scripts": ["background.js"],
-    "persistent": true
+    "scripts": ["background.js"]
   },
   "content_scripts": [
     {
-      "matches": ["https://www.youtube.com/watch?v=*"],
+      "matches": ["https://www.youtube.com/watch?v=*", "http://127.0.0.1/*"],
       "js": ["content.js", "langs.js"],
       "run_at": "document_start"
     }
   ],
   "default_locale": "en",
-  "permissions": ["storage", "tabs", "declarativeContent"],
+  "permissions": ["storage", "tabs", "declarativeContent", "contextMenus"],
   "options_page": "options.html",
   "web_accessible_resources": ["constant.js", "assets/2.ogg"],
   "manifest_version": 2

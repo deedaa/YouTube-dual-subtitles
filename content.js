@@ -83,6 +83,14 @@ const insertSingle = () => {
     panelMenu.insertAdjacentHTML(
       'beforeend',
       `
+      <div class="ytp-menuitem" aria-haspopup="true" role="menuitem" tabindex="0">
+        <div class="ytp-menuitem-icon"></div>
+        <div class="ytp-menuitem-label">默认语言</div>
+        <div class="ytp-menuitem-content">
+          <div class="ytp-menuitem-content">English</div>
+        </div>
+      </div>
+
       <div class='ytp-menuitem' role='menuitemcheckbox' aria-checked=${single} tabindex='0' id='single-button'>
         <div class='ytp-menuitem-icon'></div>
         <div class='ytp-menuitem-label'>${chrome.i18n.getMessage('single_subtitle')}</div>
@@ -106,13 +114,7 @@ const insertSingle = () => {
 
 chrome.storage.local.get(['status', 'single'], ({ status, single }) => {
   localStorage.setItem('singleStatus', single);
-
-  if (status) {
-    document.addEventListener('DOMContentLoaded', () => {
-      insertSingle();
-      console.log('单字幕已插入');
-    });
-  }
+  if (status) document.addEventListener('DOMContentLoaded', insertSingle);
 });
 
 // console.log('@@ui_locale', chrome.i18n.getMessage('@@ui_locale'));
@@ -130,16 +132,3 @@ chrome.storage.local.get(['status', 'single'], ({ status, single }) => {
 
 // chrome.runtime.onMessage.addListener(({ status }) => {});
 // const singleStatus = JSON.parse(this.getAttribute('aria-checked'));
-
-// document.querySelector('.ytp-popup.ytp-settings-menu').addEventListener('blur', () => {
-//   console.log('隐藏了');
-// });
-/*  const subtitlesButton = document.querySelector('.ytp-subtitles-button.ytp-button');
-    console.log('subtitlesButton: ', subtitlesButton);
-    const observer = new MutationObserver(([mutations]) => {
-      console.log('mutations: ', mutations);
-      console.log(subtitlesButton.getAttribute('aria-expanded'));
-    });
-
-    observer.observe(subtitlesButton, { attributes: true });
-    */

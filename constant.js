@@ -42,9 +42,10 @@ const finishing = lang => {
   };
 };
 
-// const selectLang = JSON.parse(localStorage.getItem('selectLang'));
-// const autoLang = JSON.parse(localStorage.getItem('autoLangCode'));
-// const langArg = selectLang || autoLang;
+// const selectLangCode = JSON.parse(localStorage.getItem('selectLang'));
+const autoLangCode = JSON.parse(localStorage.getItem('autoLangCode'));
+// const langArg = selectLangCode || autoLangCode;
+const langArg = autoLangCode;
 
 const proxiedOpen = function () {
   this._url = arguments[1];
@@ -57,16 +58,16 @@ const proxiedSend = async function () {
     const lang = u.searchParams.get('lang');
     const v = u.searchParams.get('v');
 
-    // if(!langArg.includes(lang)) { }
-
-    if (lang !== 'zh-Hans' && lang !== 'zh-CN') {
-      let en = {};
-      let zh = {};
+    console.log('字幕请求:', lang, langArg);
+    if (!langArg.includes(lang)) {
+      let original = {};
+      let local = {};
+      let mergeLang = {};
       // 单字幕
       const singleStatus = JSON.parse(localStorage.getItem('singleStatus'));
 
       if (singleStatus) {
-        zh = await fetch(`https://www.youtube.com/api/timedtext?type=list&v=${v}`)
+        local = await fetch(`https://www.youtube.com/api/timedtext?type=list&v=${v}`)
           .then(response => response.text())
           .then(str => new window.DOMParser().parseFromString(str, 'text/xml'))
           .then(data => {
@@ -75,9 +76,7 @@ const proxiedSend = async function () {
               lang_code: v.getAttribute('lang_code'),
             }));
 
-            // const result = list.find(v => langArg.includes(v.lang_code));
-            const result = list.find(v => v.lang_code === 'zh-Hans' || v.lang_code === 'zh-CN');
-            console.log('result: ', list, result);
+            const result = list.find(v => langArg.includes(v.lang_code));
 
             if (result) {
               result.name ? u.searchParams.set('name', result.name) : u.searchParams.delete('name');
@@ -85,24 +84,20 @@ const proxiedSend = async function () {
               return fetch(u.toString()).then(res => res.json());
               // 优先使用已有字幕
             } else {
-              return fetch(`${this._url}&tlang=zh-Hans`).then(res => res.json());
+              return fetch(`${this._url}&tlang=${langArg[0]}`).then(res => res.json());
               // 使用自动翻译
             }
           });
+
+        mergeLang = local;
       } else {
-        [en, zh] = await Promise.all([
+        [original, local] = await Promise.all([
           fetch(this._url).then(res => res.json()),
-          fetch(`${this._url}&tlang=zh-Hans`).then(res => res.json()),
+          fetch(`${this._url}&tlang=${langArg[0]}`).then(res => res.json()),
         ]);
-      }
 
-      let mergeLang = {};
-
-      if (singleStatus) {
-        mergeLang = zh;
-      } else {
-        mergeLang = finishing(en);
-        mergeLang.events.forEach((v, i) => (v.segs[0].utf8 += `\n${zh.events[i].segs[0].utf8}`));
+        mergeLang = finishing(original);
+        mergeLang.events.forEach((v, i) => (v.segs[0].utf8 += `\n${local.events[i].segs[0].utf8}`));
       }
 
       this.addEventListener('readystatechange', () => {
@@ -120,3 +115,14 @@ const proxiedSend = async function () {
 
 // XMLHttpRequest.prototype.open = proxiedOpen;
 // XMLHttpRequest.prototype.send = proxiedSend;
+
+// if (lang !== 'zh-Hans' && lang !== 'zh-CN')
+
+// const result = list.find(v => v.lang_code === 'zh-Hans' || v.lang_code === 'zh-CN');
+
+// if (singleStatus) {
+//   mergeLang = local;
+// } else {
+//   mergeLang = finishing(original);
+//   mergeLang.events.forEach((v, i) => (v.segs[0].utf8 += `\n${local.events[i].segs[0].utf8}`));
+// }

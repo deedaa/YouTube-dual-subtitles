@@ -1,5 +1,5 @@
 chrome.runtime.onInstalled.addListener(() =>
-  chrome.storage.local.set({ status: true, single: false, selectLang: null })
+  chrome.storage.local.set({ status: true, single: false, selectLangCode: null })
 );
 
 chrome.tabs.onUpdated.addListener((tabId, status) => {
@@ -41,6 +41,27 @@ const toggleHandler = ({ id: tabId }) => {
 
 chrome.pageAction.onClicked.addListener(toggleHandler);
 
-// chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-//   chrome.tabs.sendMessage(tabs[0].id, { status: !status });
+chrome.contextMenus.create({
+  title: '问题反馈',
+  contexts: ['page_action'],
+  onclick: () => chrome.tabs.create({ url: 'https://github.com/ouweiya/YouTube-dual-subtitles/issues/new' }),
+});
+
+chrome.contextMenus.create({
+  title: '了解更多',
+  contexts: ['page_action'],
+  onclick: () =>
+    chrome.tabs.create({ url: 'https://www.youtube.com/channel/UCY_XK0-kSagJq9ZQspmzd-g?view_as=subscriber' }),
+});
+
+let num = chrome.contextMenus.create({
+  title: 'GitHub',
+  contexts: ['page_action'],
+  onclick: () => chrome.tabs.create({ url: 'https://github.com/ouweiya/YouTube-dual-subtitles' }),
+});
+
+// chrome.contextMenus.onClicked.addListener(({ menuItemId }) => {
+//   console.log('menuItemId: ', menuItemId);
 // });
+
+// chrome.i18n.getMessage('popup_reportIssues'),

@@ -2,12 +2,12 @@ const langs = [
   {
     language: 'Chinese (China)',
     UICode: 'zh-CN',
-    languageCode: ['zh-CN', 'zh-Hans'],
+    languageCode: ['zh-Hans', 'zh-CN'],
   },
   {
     language: 'Chinese (Taiwan)',
     UICode: 'zh-TW',
-    languageCode: ['zh-TW', 'zh-Hant'],
+    languageCode: ['zh-Hant', 'zh-TW'],
   },
   {
     language: 'English',
@@ -17,12 +17,12 @@ const langs = [
   {
     language: 'English (Great Britain)',
     UICode: 'en-GB',
-    languageCode: ['en-GB', 'en'],
+    languageCode: ['en', 'en-GB'],
   },
   {
     language: 'English (USA)',
     UICode: 'en-US',
-    languageCode: ['en-US', 'en'],
+    languageCode: ['en', 'en-US'],
   },
   {
     language: 'Spanish',
@@ -32,7 +32,7 @@ const langs = [
   {
     language: 'Spanish (Latin America and Caribbean)',
     UICode: 'es-419',
-    languageCode: ['es-419', 'es'],
+    languageCode: ['es', 'es-419'],
   },
   {
     language: 'Japanese',
@@ -47,12 +47,12 @@ const langs = [
   {
     language: 'Portuguese (Brazil)',
     UICode: 'pt-BR',
-    languageCode: ['pt-BR', 'pt'],
+    languageCode: ['pt', 'pt-BR'],
   },
   {
     language: 'Portuguese (Portugal)',
     UICode: 'pt-PT',
-    languageCode: ['pt-PT', 'pt'],
+    languageCode: ['pt', 'pt-PT'],
   },
   {
     language: 'French',
@@ -271,17 +271,20 @@ const langs = [
   },
 ];
 
-console.log('langs: ', langs);
+chrome.storage.local.get('selectLangCode', ({ selectLangCode }) => {
+  console.log('selectLangCode: ', selectLangCode);
+  localStorage.setItem('selectLangCode', JSON.stringify(selectLangCode));
+});
+
 const UILang = chrome.i18n.getUILanguage();
+
 const substitutionLang = {
   language: 'English',
   UICode: 'en',
   languageCode: ['en'],
 };
 
-const autoLang = langs.find(v => v.UICode === UILang) || substitutionLang;
+const { languageCode } = langs.find(v => v.UICode === UILang) || substitutionLang;
 console.log('UILang: ', UILang);
-console.log('autoLang: ', autoLang);
-console.log('autoLangCode: ', autoLang.languageCode);
 
-localStorage.setItem('autoLangCode', JSON.stringify(autoLang.languageCode));
+localStorage.setItem('autoLangCode', JSON.stringify(languageCode));
