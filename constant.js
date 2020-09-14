@@ -113,6 +113,10 @@ const proxiedSend = async function () {
   nativeSend.apply(this, arguments);
 };
 
+const autoTranslationList = JSON.parse(ytplayer.config.args.player_response).captions.playerCaptionsTracklistRenderer
+  .translationLanguages;
+
+localStorage.setItem('autoTranslationList', JSON.stringify(autoTranslationList));
 // XMLHttpRequest.prototype.open = proxiedOpen;
 // XMLHttpRequest.prototype.send = proxiedSend;
 

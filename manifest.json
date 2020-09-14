@@ -14,7 +14,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://www.youtube.com/watch?v=*", "http://127.0.0.1/*"],
+      "matches": ["https://www.youtube.com/watch?v=*"],
       "js": ["content.js", "langs.js"],
       "run_at": "document_start"
     }
