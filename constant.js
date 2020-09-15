@@ -112,10 +112,11 @@ const proxiedSend = async function () {
   nativeSend.apply(this, arguments);
 };
 
-const autoTranslationList = JSON.parse(ytplayer.config.args.player_response).captions.playerCaptionsTracklistRenderer
-  .translationLanguages;
+// const autoTranslationList = JSON.parse(ytplayer.config.args.player_response).captions.playerCaptionsTracklistRenderer
+//   .translationLanguages;
+// console.log('autoTranslationList: ', autoTranslationList);
+// localStorage.setItem('autoTranslationList', JSON.stringify(autoTranslationList));
 
-localStorage.setItem('autoTranslationList', JSON.stringify(autoTranslationList));
 // XMLHttpRequest.prototype.open = proxiedOpen;
 // XMLHttpRequest.prototype.send = proxiedSend;
 

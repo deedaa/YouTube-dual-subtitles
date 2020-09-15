@@ -274,12 +274,6 @@ const langs = [
 const UILang = chrome.i18n.getUILanguage();
 console.log('UILang: ', UILang);
 
-// const substitutionLang = {
-//   language: 'English',
-//   UICode: 'en',
-//   languageCode: ['en'],
-// };
-
 const autoLang = langs.find(v => v.UICode === UILang) || { language: 'English', UICode: 'en', languageCode: ['en'] };
 
 localStorage.setItem('autoLangCode', JSON.stringify(autoLang.languageCode));

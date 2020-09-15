@@ -77,18 +77,22 @@ chrome.storage.onChanged.addListener(({ status }) => {
 
 const insertCustomMenu = () => {
   chrome.storage.local.get(['single', 'selectLangCode'], ({ single, selectLangCode }) => {
+    injection2(`
+      const autoTranslationList = JSON.parse(ytplayer.config.args.player_response).captions.playerCaptionsTracklistRenderer
+      .translationLanguages;
+      console.log('autoTranslationList-99: ', autoTranslationList);
+      localStorage.setItem('autoTranslationList', JSON.stringify(autoTranslationList));
+    `);
+
     localStorage.setItem('selectLangCode', JSON.stringify(selectLangCode));
     const panelMenu = document.querySelector('.ytp-settings-menu .ytp-panel-menu');
     document.querySelector('.ytp-settings-menu').addEventListener('click', e => e.stopPropagation());
 
     const langArg = selectLangCode || autoLang.languageCode;
-    console.log('langArg: ', langArg);
     const autoTranslationList = JSON.parse(localStorage.getItem('autoTranslationList'));
     const { languageName } = autoTranslationList.find(v => v.languageCode === langArg[0]) || {
       languageName: { simpleText: '' },
     };
-
-    console.log('languageName: ', languageName.simpleText);
 
     panelMenu.insertAdjacentHTML(
       'beforeend',
@@ -119,10 +123,20 @@ const insertCustomMenu = () => {
       });
     });
 
-    document.querySelector('#language-button').addEventListener('click', event => {
-      // const ytpSettingsMenu = document.querySelector('.ytp-popup.ytp-settings-menu');
+    document.querySelector('#language-button').addEventListener('click', () => {
+      const ytpSettingsMenu = document.querySelector('.ytp-popup.ytp-settings-menu');
       const ytpPanel = document.querySelector('.ytp-settings-menu .ytp-panel');
       [...ytpPanel.children].forEach(el => el.style.setProperty('display', 'none', 'important'));
+      const levelHeight = ytpSettingsMenu.style.getPropertyValue('height');
+      const levelWidth = ytpSettingsMenu.style.getPropertyValue('width');
+
+      [ytpSettingsMenu, ytpPanel].forEach(el => {
+        el.style.setProperty('transition', 'height 0.3s ease-out, width 0.3s ease-out');
+        el.style.setProperty('height', '366px');
+        el.style.setProperty('width', '251px');
+        // el.style.setProperty('overflow', 'hidden');
+        el.style.setProperty('white-space', 'nowrap');
+      });
 
       const autoTranslationList = JSON.parse(localStorage.getItem('autoTranslationList'));
 
@@ -131,11 +145,13 @@ const insertCustomMenu = () => {
 
       const list = autoTranslationList
         .map(
-          el => `
-            <div class="ytp-menuitem" tabindex="0" role="menuitemradio" aria-checked=${el.languageCode === langArg[0]}>
-              <div class="ytp-menuitem-label" data-lang="${el.languageCode}" data-languagename="${
-            el.languageName.simpleText
-          }">${el.languageName.simpleText}</div>
+          ({ languageCode, languageName }) => `
+            <div class="ytp-menuitem" tabindex="0" role="menuitemradio" aria-checked=${languageCode === langArg[0]}>
+              <div class="ytp-menuitem-label" data-lang="${languageCode}" data-languagename="${
+            languageName.simpleText
+          }">
+               ${languageName.simpleText}
+              </div>
             </div>`
         )
         .join('');
@@ -146,7 +162,6 @@ const insertCustomMenu = () => {
         <div class="ytp-panel-header defaultLanguage">
           <button class="ytp-button ytp-panel-title">默认语言</button>
         </div>
-
         <div class="ytp-panel-menu defaultLanguage" role="menu" id="languageList">
           ${list}
         </div>
@@ -156,18 +171,30 @@ const insertCustomMenu = () => {
       const languageList = document.querySelector('#languageList');
 
       languageList.addEventListener('click', e => {
-        chrome.storage.local.set({ selectLangCode: [e.target.dataset.lang] }, () => {
-          localStorage.setItem('selectLangCode', JSON.stringify([e.target.dataset.lang]));
-        });
+        chrome.storage.local.set({ selectLangCode: [e.target.dataset.lang] }, () =>
+          localStorage.setItem('selectLangCode', JSON.stringify([e.target.dataset.lang]))
+        );
+
         [...languageList.children].forEach(el => el.removeAttribute('aria-checked'));
         e.target.parentElement.setAttribute('aria-checked', true);
-        console.log('e.target.dataset.languageName: ', e.target.dataset.languageName);
         document.querySelector('#language-button .ytp-menuitem-content').textContent = e.target.dataset.languagename;
       });
 
       const defaultLevel = () => {
+        [ytpSettingsMenu, ytpPanel].forEach(el => {
+          el.style.setProperty('height', levelHeight);
+          el.style.setProperty('width', levelWidth);
+
+          setTimeout(() => {
+            el.style.removeProperty('transition');
+            el.style.removeProperty('white-space');
+          }, 308);
+        });
+
         [...document.querySelectorAll('.defaultLanguage')].forEach(el => el.remove());
         [...ytpPanel.children].forEach(el => el.style.removeProperty('display'));
+        // 增加透明度过度
+        // 搜索框?
       };
 
       document.querySelector('.ytp-panel-header').addEventListener('click', defaultLevel, { once: true });
@@ -188,7 +215,6 @@ const insertCustomMenu = () => {
         },
         { once: true }
       ); */
-      event.stopPropagation();
     });
   });
 };
@@ -199,7 +225,7 @@ chrome.storage.local.get(['status', 'single'], ({ status, single }) => {
 });
 
 // window.addEventListener('click', () => {
-//   console.log('windwos');
+//   console.log('windwos:click');
 // });
 
 // console.log('@@ui_locale', chrome.i18n.getMessage('@@ui_locale'));
@@ -227,3 +253,5 @@ chrome.storage.local.get(['status', 'single'], ({ status, single }) => {
 //   this.setAttribute('aria-checked', !single);
 //   chrome.storage.local.set({ single: !single }, restartSubtitles);
 // });
+
+// const ytpSettingsMenu = document.querySelector('.ytp-popup.ytp-settings-menu');
