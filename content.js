@@ -193,6 +193,7 @@ const insertCustomMenu = () => {
 
         [...document.querySelectorAll('.defaultLanguage')].forEach(el => el.remove());
         [...ytpPanel.children].forEach(el => el.style.removeProperty('display'));
+
         // 增加透明度过度
         // 搜索框?
       };
