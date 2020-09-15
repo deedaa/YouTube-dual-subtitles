@@ -7,17 +7,5 @@
   },
   "single_subtitle": {
     "message": "Single subtitle"
-  },
-  "about_me": {
-    "message": "$name$ ouweiya  $age$",
-    "example": "Translator-aimed example of the placeholder string.",
-    "placeholders": {
-      "name": {
-        "content": "$1"
-      },
-      "age": {
-        "content": "30"
-      }
-    }
   }
 }

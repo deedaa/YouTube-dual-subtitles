@@ -271,20 +271,15 @@ const langs = [
   },
 ];
 
-chrome.storage.local.get('selectLangCode', ({ selectLangCode }) => {
-  console.log('selectLangCode: ', selectLangCode);
-  localStorage.setItem('selectLangCode', JSON.stringify(selectLangCode));
-});
-
 const UILang = chrome.i18n.getUILanguage();
-
-const substitutionLang = {
-  language: 'English',
-  UICode: 'en',
-  languageCode: ['en'],
-};
-
-const { languageCode } = langs.find(v => v.UICode === UILang) || substitutionLang;
 console.log('UILang: ', UILang);
 
-localStorage.setItem('autoLangCode', JSON.stringify(languageCode));
+// const substitutionLang = {
+//   language: 'English',
+//   UICode: 'en',
+//   languageCode: ['en'],
+// };
+
+const autoLang = langs.find(v => v.UICode === UILang) || { language: 'English', UICode: 'en', languageCode: ['en'] };
+
+localStorage.setItem('autoLangCode', JSON.stringify(autoLang.languageCode));

@@ -61,7 +61,7 @@ chrome.storage.onChanged.addListener(({ status }) => {
       XMLHttpRequest.prototype.open = proxiedOpen;
       XMLHttpRequest.prototype.send = proxiedSend;
     `);
-    insertSingle();
+    insertCustomMenu();
   } else {
     injection2(`
       XMLHttpRequest.prototype.open = nativeOpen;
@@ -75,16 +75,28 @@ chrome.storage.onChanged.addListener(({ status }) => {
   restartSubtitles();
 });
 
-const insertSingle = () => {
-  chrome.storage.local.get('single', ({ single }) => {
+const insertCustomMenu = () => {
+  chrome.storage.local.get(['single', 'selectLangCode'], ({ single, selectLangCode }) => {
+    localStorage.setItem('selectLangCode', JSON.stringify(selectLangCode));
     const panelMenu = document.querySelector('.ytp-settings-menu .ytp-panel-menu');
+    document.querySelector('.ytp-settings-menu').addEventListener('click', e => e.stopPropagation());
+
+    const langArg = selectLangCode || autoLang.languageCode;
+    console.log('langArg: ', langArg);
+    const autoTranslationList = JSON.parse(localStorage.getItem('autoTranslationList'));
+    const { languageName } = autoTranslationList.find(v => v.languageCode === langArg[0]) || {
+      languageName: { simpleText: '' },
+    };
+
+    console.log('languageName: ', languageName.simpleText);
+
     panelMenu.insertAdjacentHTML(
       'beforeend',
       `
       <div class="ytp-menuitem" aria-haspopup="true" role="menuitem" tabindex="0" id="language-button">
         <div class="ytp-menuitem-icon"></div>
         <div class="ytp-menuitem-label">默认语言</div>
-        <div class="ytp-menuitem-content">English</div>
+        <div class="ytp-menuitem-content">${languageName.simpleText}</div>
       </div>
 
       <div class="ytp-menuitem" role="menuitemcheckbox" aria-checked="${single}" tabindex="0" id="single-button">
@@ -97,11 +109,7 @@ const insertSingle = () => {
       `
     );
 
-    // 每个窗口同步状态
-    document.querySelector('.ytp-settings-menu').addEventListener('click', e => {
-      console.log('ytp-settings-menu, 停止传播');
-      e.stopPropagation();
-    });
+    /* 每个窗口同步状态 */
 
     document.querySelector('#single-button').addEventListener('click', function () {
       chrome.storage.local.get('single', ({ single }) => {
@@ -111,45 +119,50 @@ const insertSingle = () => {
       });
     });
 
-    document.querySelector('#language-button').addEventListener('click', function (event) {
+    document.querySelector('#language-button').addEventListener('click', event => {
       // const ytpSettingsMenu = document.querySelector('.ytp-popup.ytp-settings-menu');
       const ytpPanel = document.querySelector('.ytp-settings-menu .ytp-panel');
-      [...ytpPanel.children].forEach(el => {
-        el.style.setProperty('display', 'none', 'important');
-      });
+      [...ytpPanel.children].forEach(el => el.style.setProperty('display', 'none', 'important'));
 
       const autoTranslationList = JSON.parse(localStorage.getItem('autoTranslationList'));
-      console.log('autoTranslationList: ', autoTranslationList);
+
+      const selectLangCode = JSON.parse(localStorage.getItem('selectLangCode'));
+      const langArg = selectLangCode || autoLang.languageCode;
+
+      const list = autoTranslationList
+        .map(
+          el => `
+            <div class="ytp-menuitem" tabindex="0" role="menuitemradio" aria-checked=${el.languageCode === langArg[0]}>
+              <div class="ytp-menuitem-label" data-lang="${el.languageCode}" data-languagename="${
+            el.languageName.simpleText
+          }">${el.languageName.simpleText}</div>
+            </div>`
+        )
+        .join('');
 
       ytpPanel.insertAdjacentHTML(
         'afterbegin',
         `
-          <div class="ytp-panel-header defaultLanguage">
-            <button class="ytp-button ytp-panel-title">默认语言</button>
-          </div>
+        <div class="ytp-panel-header defaultLanguage">
+          <button class="ytp-button ytp-panel-title">默认语言</button>
+        </div>
 
-          <div class="ytp-panel-menu defaultLanguage" role="menu" id="languageList">
-            <div class="ytp-menuitem" tabindex="0" role="menuitemradio" aria-checked="true">
-              <div class="ytp-menuitem-label">Auto</div>
-            </div>
-          </div>
+        <div class="ytp-panel-menu defaultLanguage" role="menu" id="languageList">
+          ${list}
+        </div>
         `
       );
 
       const languageList = document.querySelector('#languageList');
-      const selectHandler = languageCode => {
-        console.log('lang: ', languageCode);
-      };
 
-      autoTranslationList.forEach(el => {
-        languageList.insertAdjacentHTML(
-          'beforeend',
-          `
-          <div class="ytp-menuitem" tabindex="0" role="menuitemradio" data-lang="${el.languageCode}">
-            <div class="ytp-menuitem-label">${el.languageName.simpleText}</div>
-          </div>
-          `
-        );
+      languageList.addEventListener('click', e => {
+        chrome.storage.local.set({ selectLangCode: [e.target.dataset.lang] }, () => {
+          localStorage.setItem('selectLangCode', JSON.stringify([e.target.dataset.lang]));
+        });
+        [...languageList.children].forEach(el => el.removeAttribute('aria-checked'));
+        e.target.parentElement.setAttribute('aria-checked', true);
+        console.log('e.target.dataset.languageName: ', e.target.dataset.languageName);
+        document.querySelector('#language-button .ytp-menuitem-content').textContent = e.target.dataset.languagename;
       });
 
       const defaultLevel = () => {
@@ -157,10 +170,24 @@ const insertSingle = () => {
         [...ytpPanel.children].forEach(el => el.style.removeProperty('display'));
       };
 
-      window.addEventListener('click', defaultLevel, { once: true });
-      window.addEventListener('blur', defaultLevel, { once: true });
-      document.querySelector('.ytp-panel-header').addEventListener('click', defaultLevel);
+      document.querySelector('.ytp-panel-header').addEventListener('click', defaultLevel, { once: true });
 
+      window.addEventListener(
+        'click',
+        () => {
+          defaultLevel();
+          restartSubtitles();
+        },
+        { once: true }
+      );
+      /* window.addEventListener(
+        'blur',
+        () => {
+          defaultLevel();
+          restartSubtitles();
+        },
+        { once: true }
+      ); */
       event.stopPropagation();
     });
   });
@@ -168,7 +195,7 @@ const insertSingle = () => {
 
 chrome.storage.local.get(['status', 'single'], ({ status, single }) => {
   localStorage.setItem('singleStatus', single);
-  if (status) document.addEventListener('DOMContentLoaded', insertSingle);
+  if (status) document.addEventListener('DOMContentLoaded', insertCustomMenu);
 });
 
 // window.addEventListener('click', () => {
@@ -180,7 +207,7 @@ chrome.storage.local.get(['status', 'single'], ({ status, single }) => {
 //   localStorage.setItem('selectLang', selectLang);
 // });
 
-// chrome.storage.local.set('selectLang', ['codeLang']);
+//
 
 // window.addEventListener('focus', () => {
 //   chrome.storage.local.get('single', ({ single }) => {

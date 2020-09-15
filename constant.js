@@ -42,11 +42,6 @@ const finishing = lang => {
   };
 };
 
-// const selectLangCode = JSON.parse(localStorage.getItem('selectLang'));
-const autoLangCode = JSON.parse(localStorage.getItem('autoLangCode'));
-// const langArg = selectLangCode || autoLangCode;
-const langArg = autoLangCode;
-
 const proxiedOpen = function () {
   this._url = arguments[1];
   nativeOpen.apply(this, arguments);
@@ -58,7 +53,11 @@ const proxiedSend = async function () {
     const lang = u.searchParams.get('lang');
     const v = u.searchParams.get('v');
 
-    console.log('字幕请求:', lang, langArg);
+    const selectLangCode = JSON.parse(localStorage.getItem('selectLangCode'));
+    const autoLangCode = JSON.parse(localStorage.getItem('autoLangCode'));
+    const langArg = selectLangCode || autoLangCode;
+    console.log({ selectLangCode, autoLangCode, langArg });
+
     if (!langArg.includes(lang)) {
       let original = {};
       let local = {};
