@@ -34,16 +34,17 @@ injection('constant.js').onload = function () {
   chrome.storage.local.get('status', ({ status }) => {
     console.log('constant.js');
     if (status) {
-      // injection2(`
-      //   XMLHttpRequest.prototype.open = proxiedOpen;
-      //   XMLHttpRequest.prototype.send = proxiedSend;
-      // `);
+      injection2(`
+        XMLHttpRequest.prototype.open = proxiedOpen;
+        XMLHttpRequest.prototype.send = proxiedSend;
+      `);
     }
   });
   // this.remove();
 };
 
 const restartSubtitles = () => {
+  console.log('restartSubtitles');
   chrome.storage.local.get('single', ({ single }) => {
     localStorage.setItem('singleStatus', single);
 
@@ -124,10 +125,9 @@ const insertCustomMenu = () => {
     // ytp-panel-animate-back   ytp-panel-animate-forward (100%)
     ytpSettingsMenu.querySelector('#language-button').addEventListener('click', () => {
       const ytpPanel = ytpSettingsMenu.querySelector('.ytp-panel');
-      ytpSettingsMenu.classList.add('ytp-popup-animating');
 
       const levelHeight = ytpSettingsMenu.style.getPropertyValue('height');
-      const levelWidth = ytpSettingsMenu.style.getPropertyValue('width');
+      // const levelWidth = ytpSettingsMenu.style.getPropertyValue('width');
 
       const autoTranslationList = JSON.parse(localStorage.getItem('autoTranslationList'));
       const langArg = JSON.parse(localStorage.getItem('selectLangCode')) || autoLang.languageCode;
@@ -145,13 +145,15 @@ const insertCustomMenu = () => {
         )
         .join('');
 
-      // afterbegin
+      let resHeight = Math.round(document.querySelector('.html5-video-player').offsetHeight * 0.7);
+      resHeight = resHeight > 414 ? 414 : resHeight;
+
       ytpSettingsMenu.insertAdjacentHTML(
         'beforeend',
         `
-        <div class="ytp-panel ytp-panel-animate-forward" id="forward" style="min-width: 250px; width: 251px; height: 366px">
+        <div class="ytp-panel ytp-panel-animate-forward" id="forward" style="min-width: 250px; width: 251px; height: ${resHeight}px;">
           <div class="ytp-panel-header">
-            <button class="ytp-button ytp-panel-title">默认语言</button>
+            <button class="ytp-button ytp-panel-title">默认字幕</button>
           </div>
           <div class="ytp-panel-menu" role="menu" id="languageList">
             ${list}
@@ -160,30 +162,30 @@ const insertCustomMenu = () => {
         `
       );
 
-      ytpSettingsMenu.style.setProperty('height', '366px');
+      ytpSettingsMenu.classList.add('ytp-popup-animating');
+      ytpSettingsMenu.style.setProperty('height', `${resHeight}px`);
       [ytpSettingsMenu, ytpPanel].forEach(el => el.style.setProperty('width', `251px`));
+
       ytpPanel.classList.add('ytp-panel-animate-back');
       setTimeout(() => ytpSettingsMenu.querySelector('#forward').classList.remove('ytp-panel-animate-forward'), 5);
       setTimeout(() => ytpSettingsMenu.classList.remove('ytp-popup-animating'), 290);
 
-      ytpSettingsMenu.querySelector('.ytp-panel-header').addEventListener(
-        'click',
-        () => {
-          ytpSettingsMenu.classList.add('ytp-popup-animating');
-          ytpSettingsMenu.querySelector('#forward').classList.add('ytp-panel-animate-forward');
-          ytpPanel.classList.remove('ytp-panel-animate-back');
+      const defaultLevel = () => {
+        ytpSettingsMenu.classList.add('ytp-popup-animating');
+        ytpSettingsMenu.style.setProperty('height', levelHeight);
+        [ytpSettingsMenu, ytpPanel].forEach(el => el.style.setProperty('width', `${panelMenu.offsetWidth}px`));
+        ytpSettingsMenu.querySelector('#forward').classList.add('ytp-panel-animate-forward');
+        ytpPanel.classList.remove('ytp-panel-animate-back');
 
-          ytpSettingsMenu.style.setProperty('height', levelHeight);
-          [ytpSettingsMenu, ytpPanel].forEach(el => el.style.setProperty('width', `${panelMenu.offsetWidth}px`));
-          // ytpSettingsMenu.style.setProperty('width', levelWidth);
-          // console.log('panelMenu: offsetWidth', panelMenu.offsetWidth);
-          setTimeout(() => {
-            ytpSettingsMenu.classList.remove('ytp-popup-animating');
-            ytpSettingsMenu.querySelector('#forward').remove();
-          }, 290);
-        },
-        { once: true }
-      );
+        setTimeout(() => {
+          ytpSettingsMenu.classList.remove('ytp-popup-animating');
+          ytpSettingsMenu.querySelector('#forward').remove();
+        }, 290);
+      };
+
+      ytpSettingsMenu
+        .querySelector('.ytp-panel-header .ytp-button')
+        .addEventListener('click', defaultLevel, { once: true });
 
       ytpSettingsMenu.querySelector('#languageList').addEventListener('click', function (e) {
         chrome.storage.local.set({ selectLangCode: [e.target.dataset.lang] }, () =>
@@ -194,6 +196,8 @@ const insertCustomMenu = () => {
         e.target.parentElement.setAttribute('aria-checked', true);
         ytpSettingsMenu.querySelector('#language-button .ytp-menuitem-content').textContent =
           e.target.dataset.languagename;
+
+        defaultLevel();
       });
 
       window.addEventListener(
@@ -216,6 +220,8 @@ const insertCustomMenu = () => {
         },
         { once: true }
       ); */
+
+      [...panelMenu.children].forEach(el => el.style.setProperty('white-space', 'nowrap'));
     });
   });
 };
@@ -225,82 +231,11 @@ chrome.storage.local.get(['status', 'single'], ({ status, single }) => {
   if (status) document.addEventListener('DOMContentLoaded', insertCustomMenu);
 });
 
-// const defaultLevel = () => {
-//   ytpSettingsMenu.classList.add('ytp-popup-animating');
-//   document.querySelector('#forward').classList.add('ytp-panel-animate-forward');
-//   ytpPanel.classList.remove('ytp-panel-animate-back');
-
-//   ytpSettingsMenu.style.setProperty('height', levelHeight);
-//   ytpSettingsMenu.style.setProperty('width', levelWidth);
-//   setTimeout(() => {
-//     ytpSettingsMenu.classList.remove('ytp-popup-animating');
-//     document.querySelector('#forward').remove();
-//   }, 290);
-// };
-
-// const ytpPanelClone = ytpPanel.cloneNode(true);
-// [...ytpPanel.children].forEach(el => el.style.setProperty('display', 'none', 'important'));
-
-// [ytpSettingsMenu, ytpPanel].forEach(el => {
-//   el.style.setProperty('transition', 'all 0.3s ease');
-//   el.style.setProperty('height', '366px');
-//   el.style.setProperty('width', '251px');
-//   el.style.setProperty('white-space', 'nowrap');
-// });
-
-// el.style.setProperty('opacity', 0);
-// el.style.setProperty('overflow', 'hidden');
-
-// document.querySelector('#forward').style.setProperty('height', '366px');
-// document.querySelector('#forward').style.setProperty('width', '251px');
-
-// [ytpSettingsMenu, ytpPanel].forEach(el => {
-// el.style.setProperty('height', levelHeight);
-// el.style.setProperty('width', levelWidth);
-// setTimeout(() => {
-//   el.style.removeProperty('transition');
-//   el.style.removeProperty('white-space');
-// }, 308);
-// });
-
-// [...document.querySelectorAll('.defaultLanguage')].forEach(el => el.remove());
-// [...ytpPanel.children].forEach(el => el.style.removeProperty('display'));
-// [...ytpPanel.children].forEach(el => el.style.setProperty('opacity', 1));
-
 // window.addEventListener('click', () => {
 //   console.log('windwos:click');
 // });
 
-// console.log('@@ui_locale', chrome.i18n.getMessage('@@ui_locale'));
-// chrome.storage.local.get('selectLang', ({ selectLang }) => {
-//   localStorage.setItem('selectLang', selectLang);
-// });
-
-//
-
-// window.addEventListener('focus', () => {
-//   chrome.storage.local.get('single', ({ single }) => {
-//     document.querySelector('#single-button').setAttribute('aria-checked', single);
-//   });
-// });
-
-// chrome.runtime.onMessage.addListener(({ status }) => {});
 // const singleStatus = JSON.parse(this.getAttribute('aria-checked'));
-
-// const settingsButton = document.querySelector('.ytp-button.ytp-settings-button');
-// settingsButton.addEventListener('click', () => {
-//   window.addEventListener('click', restartSubtitles, { once: true });
-// });
-
-// chrome.storage.local.get('single', ({ single }) => {
-//   this.setAttribute('aria-checked', !single);
-//   chrome.storage.local.set({ single: !single }, restartSubtitles);
-// });
-
-// const ytpSettingsMenu = document.querySelector('.ytp-popup.ytp-settings-menu');
-
-// [...ytpPanel.children].forEach(el => el.style.setProperty('opacity', 0));
-// [...ytpPanel.children].forEach(el => el.style.setProperty('transition', 'opacity 0.3s ease-out'));
 
 // .ytp-popup-animating, .ytp-settings-menu { transition: all 2s; }0.25s
 
@@ -310,3 +245,10 @@ chrome.storage.local.get(['status', 'single'], ({ status, single }) => {
 //     .ytp-popup-animating { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: auto;}
 // </style>`
 // );
+
+// 每个窗口同步状态
+// window.addEventListener('focus', () => {
+//   chrome.storage.local.get('single', ({ single }) => {
+//     document.querySelector('#single-button').setAttribute('aria-checked', single);
+//   });
+// });
