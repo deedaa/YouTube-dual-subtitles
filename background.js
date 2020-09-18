@@ -42,26 +42,32 @@ const toggleHandler = ({ id: tabId }) => {
 chrome.pageAction.onClicked.addListener(toggleHandler);
 
 chrome.contextMenus.create({
+  id: 'issues',
   title: '问题反馈',
   contexts: ['page_action'],
-  onclick: () => chrome.tabs.create({ url: 'https://github.com/ouweiya/YouTube-dual-subtitles/issues/new' }),
+  // onclick: () => chrome.tabs.create({ url: 'https://github.com/ouweiya/YouTube-dual-subtitles/issues/new' }),
 });
 
 chrome.contextMenus.create({
+  id: 'more',
   title: '了解更多',
   contexts: ['page_action'],
-  onclick: () =>
-    chrome.tabs.create({ url: 'https://www.youtube.com/channel/UCY_XK0-kSagJq9ZQspmzd-g?view_as=subscriber' }),
+  // onclick: () => chrome.tabs.create({ url: 'https://www.youtube.com/channel/UCY_XK0-kSagJq9ZQspmzd-g?view_as=subscriber' }),
 });
 
-let num = chrome.contextMenus.create({
+chrome.contextMenus.create({
+  id: 'github',
   title: 'GitHub',
   contexts: ['page_action'],
-  onclick: () => chrome.tabs.create({ url: 'https://github.com/ouweiya/YouTube-dual-subtitles' }),
+  // onclick: () => chrome.tabs.create({ url: 'https://github.com/ouweiya/YouTube-dual-subtitles' }),
 });
 
-// chrome.contextMenus.onClicked.addListener(({ menuItemId }) => {
-//   console.log('menuItemId: ', menuItemId);
-// });
+chrome.contextMenus.onClicked.addListener(({ menuItemId }) => {
+  if (menuItemId === 'issues')
+    chrome.tabs.create({ url: 'https://github.com/ouweiya/YouTube-dual-subtitles/issues/new' });
+  if (menuItemId === 'more')
+    chrome.tabs.create({ url: 'https://www.youtube.com/channel/UCY_XK0-kSagJq9ZQspmzd-g?view_as=subscriber' });
+  if (menuItemId === 'github') chrome.tabs.create({ url: 'https://github.com/ouweiya/YouTube-dual-subtitles' });
+});
 
 // chrome.i18n.getMessage('popup_reportIssues'),

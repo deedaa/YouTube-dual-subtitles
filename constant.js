@@ -51,16 +51,16 @@ const proxiedSend = async function () {
   if (this._url.includes(url)) {
     const u = new URL(this._url);
     const lang = u.searchParams.get('lang');
-    const tlang = u.searchParams.get('tlang');
     const v = u.searchParams.get('v');
+    // const tlang = u.searchParams.get('tlang');
 
     const selectLangCode = JSON.parse(localStorage.getItem('selectLangCode'));
     const autoLangCode = JSON.parse(localStorage.getItem('autoLangCode'));
     const langArg = selectLangCode || autoLangCode;
     console.log({ selectLangCode, autoLangCode, langArg });
-    console.log('tlang: ', tlang);
-    // && !langArg.includes(tlang)
+
     if (!langArg.includes(lang)) {
+      console.log('进入');
       let original = {};
       let local = {};
       let mergeLang = {};
@@ -85,18 +85,20 @@ const proxiedSend = async function () {
               return fetch(u.toString()).then(res => res.json());
               // 优先使用已有字幕
             } else {
-              return fetch(`${this._url}&tlang=${langArg[0]}`).then(res => res.json());
+              u.searchParams.set('tlang', langArg[0]);
+              return fetch(u.toString()).then(res => res.json());
               // 使用自动翻译
             }
           });
 
         mergeLang = local;
       } else {
+        u.searchParams.set('tlang', langArg[0]);
+
         [original, local] = await Promise.all([
           fetch(this._url).then(res => res.json()),
-          fetch(`${this._url}&tlang=${langArg[0]}`).then(res => res.json()),
+          fetch(u.toString()).then(res => res.json()),
         ]);
-        // 不是追加,而是修改
 
         mergeLang = finishing(original);
         mergeLang.events.forEach((v, i) => (v.segs[0].utf8 += `\n${local.events[i].segs[0].utf8}`));

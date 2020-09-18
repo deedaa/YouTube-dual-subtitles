@@ -32,7 +32,6 @@ const audioPlay = async url => {
 
 injection('constant.js').onload = function () {
   chrome.storage.local.get('status', ({ status }) => {
-    console.log('constant.js');
     if (status) {
       injection2(`
         XMLHttpRequest.prototype.open = proxiedOpen;
@@ -44,7 +43,6 @@ injection('constant.js').onload = function () {
 };
 
 const restartSubtitles = () => {
-  console.log('restartSubtitles');
   chrome.storage.local.get('single', ({ single }) => {
     localStorage.setItem('singleStatus', single);
 
@@ -68,6 +66,7 @@ chrome.storage.onChanged.addListener(({ status }) => {
       XMLHttpRequest.prototype.open = nativeOpen;
       XMLHttpRequest.prototype.send = nativeSend ;
     `);
+    document.querySelector('#language-button').remove();
     document.querySelector('#single-button').remove();
   }
 
@@ -86,6 +85,7 @@ const insertCustomMenu = () => {
 
     localStorage.setItem('selectLangCode', JSON.stringify(selectLangCode));
     const ytpSettingsMenu = document.querySelector('.ytp-popup.ytp-settings-menu');
+    const ytpPanel = ytpSettingsMenu.querySelector('.ytp-panel');
     const panelMenu = ytpSettingsMenu.querySelector('.ytp-panel-menu');
 
     ytpSettingsMenu.addEventListener('click', e => e.stopPropagation());
@@ -100,12 +100,12 @@ const insertCustomMenu = () => {
       <div class="ytp-menuitem" aria-haspopup="true" role="menuitem" tabindex="0" id="language-button">
         <div class="ytp-menuitem-icon"></div>
         <div class="ytp-menuitem-label">默认语言</div>
-        <div class="ytp-menuitem-content" style="white-space: nowrap;">${languageName.simpleText}</div>
+        <div class="ytp-menuitem-content">${languageName.simpleText}</div>
       </div>
 
       <div class="ytp-menuitem" role="menuitemcheckbox" aria-checked="${single}" tabindex="0" id="single-button">
         <div class="ytp-menuitem-icon"></div>
-        <div class="ytp-menuitem-label" style="white-space: nowrap;">${chrome.i18n.getMessage('single_subtitle')}</div>
+        <div class="ytp-menuitem-label">${chrome.i18n.getMessage('single_subtitle')}</div>
         <div class="ytp-menuitem-content">
           <div class="ytp-menuitem-toggle-checkbox"></div>
         </div>
@@ -123,9 +123,20 @@ const insertCustomMenu = () => {
       });
     });
     // ytp-panel-animate-back   ytp-panel-animate-forward (100%)
-    ytpSettingsMenu.querySelector('#language-button').addEventListener('click', () => {
-      const ytpPanel = ytpSettingsMenu.querySelector('.ytp-panel');
+    const revertOrigin = e => {
+      const eventType = e.type === 'blur' ? 'click' : 'blur';
+      window.removeEventListener(eventType, revertOrigin);
 
+      setTimeout(() => {
+        const forward = ytpSettingsMenu.querySelector('#forward');
+        forward && forward.remove();
+        ytpPanel.classList.remove('ytp-panel-animate-back');
+      }, 200);
+
+      restartSubtitles();
+    };
+
+    ytpSettingsMenu.querySelector('#language-button').addEventListener('click', () => {
       const levelHeight = ytpSettingsMenu.style.getPropertyValue('height');
       // const levelWidth = ytpSettingsMenu.style.getPropertyValue('width');
 
@@ -200,26 +211,8 @@ const insertCustomMenu = () => {
         defaultLevel();
       });
 
-      window.addEventListener(
-        'click',
-        () => {
-          setTimeout(() => {
-            const forward = ytpSettingsMenu.querySelector('#forward');
-            forward && forward.remove();
-            ytpPanel.classList.remove('ytp-panel-animate-back');
-          }, 200);
-
-          // restartSubtitles();
-        },
-        { once: true }
-      );
-      /* window.addEventListener(
-        'blur',
-        () => {
-          restartSubtitles();
-        },
-        { once: true }
-      ); */
+      window.addEventListener('click', revertOrigin, { once: true });
+      window.addEventListener('blur', revertOrigin, { once: true });
 
       [...panelMenu.children].forEach(el => el.style.setProperty('white-space', 'nowrap'));
     });
@@ -252,3 +245,5 @@ chrome.storage.local.get(['status', 'single'], ({ status, single }) => {
 //     document.querySelector('#single-button').setAttribute('aria-checked', single);
 //   });
 // });
+
+// 框架中使用?

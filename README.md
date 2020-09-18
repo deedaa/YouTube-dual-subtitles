@@ -24,3 +24,7 @@ console.log('触发请求');
 <div class="ytp-menuitem" tabindex="0" role="menuitemradio" data-lang="${autoLang.languageCode[0]}" aria-checked="true">
               <div class="ytp-menuitem-label">Auto</div>
             </div>
+
+page_action
+browser_action
+"icons": {},
