@@ -1,12 +1,12 @@
 chrome.runtime.onInstalled.addListener(() =>
-  chrome.storage.local.set({ status: true, single: false, selectLangCode: null })
+  chrome.storage.local.set({ status: true, single: false, selectLangCode: null, autoLangCode: ['en'] })
 );
 
 chrome.tabs.onUpdated.addListener((tabId, status) => {
   chrome.storage.local.get('status', result => {
     if (!result.status && status.status === 'loading') {
       chrome.pageAction.setIcon({ tabId, path: 'assets/disable32.png' });
-      chrome.pageAction.setTitle({ tabId, title: 'YouTube 双字幕\n已关闭 ⚡' });
+      // chrome.pageAction.setTitle({ tabId, title: 'YouTube 双字幕\n已关闭 ⚡' });
     }
   });
 });
@@ -26,7 +26,7 @@ chrome.declarativeContent.onPageChanged.removeRules(undefined, () => {
 
 const setIcon = (tabId, status, title, path) => {
   chrome.storage.local.set({ status: !status }, () => {
-    chrome.pageAction.setTitle({ tabId, title });
+    // chrome.pageAction.setTitle({ tabId, title });
     chrome.pageAction.setIcon({ tabId, path });
   });
 };

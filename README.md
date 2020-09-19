@@ -28,3 +28,10 @@ console.log('触发请求');
 page_action
 browser_action
 "icons": {},
+"matches": ["https://www.youtube.com/watch?v=*"],
+
+https://www.youtube-nocookie.com/embed/vsMJiNtQWvw"
+
+https://www.youtube.com/embed/vsMJiNtQWvw
+
+<!-- \n已开启 👍 -->

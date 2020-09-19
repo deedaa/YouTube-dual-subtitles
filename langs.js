@@ -274,6 +274,12 @@ const langs = [
 const UILang = chrome.i18n.getUILanguage();
 console.log('UILang: ', UILang);
 
-const autoLang = langs.find(v => v.UICode === UILang) || { language: 'English', UICode: 'en', languageCode: ['en'] };
+const autoLang = langs.find(v => v.UICode === UILang);
 
-localStorage.setItem('autoLangCode', JSON.stringify(autoLang.languageCode));
+if (autoLang) {
+  chrome.storage.local.set({ autoLangCode: autoLang.languageCode }, () =>
+    localStorage.setItem('autoLangCode', JSON.stringify(autoLang.languageCode))
+  );
+}
+
+// || { language: 'English', UICode: 'en', languageCode: ['en'] };

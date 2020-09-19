@@ -1,6 +1,6 @@
 const nativeOpen = XMLHttpRequest.prototype.open;
 const nativeSend = XMLHttpRequest.prototype.send;
-const url = 'www.youtube.com/api/timedtext';
+const subtitleUrl = 'www.youtube.com/api/timedtext';
 
 const finishing = lang => {
   const events = [];
@@ -48,11 +48,10 @@ const proxiedOpen = function () {
 };
 
 const proxiedSend = async function () {
-  if (this._url.includes(url)) {
+  if (this._url.includes(subtitleUrl)) {
     const u = new URL(this._url);
     const lang = u.searchParams.get('lang');
     const v = u.searchParams.get('v');
-    // const tlang = u.searchParams.get('tlang');
 
     const selectLangCode = JSON.parse(localStorage.getItem('selectLangCode'));
     const autoLangCode = JSON.parse(localStorage.getItem('autoLangCode'));
@@ -64,9 +63,10 @@ const proxiedSend = async function () {
       let original = {};
       let local = {};
       let mergeLang = {};
-      // 单字幕
+
       const singleStatus = JSON.parse(localStorage.getItem('singleStatus'));
 
+      // 单字幕
       if (singleStatus) {
         local = await fetch(`https://www.youtube.com/api/timedtext?type=list&v=${v}`)
           .then(response => response.text())
@@ -119,19 +119,7 @@ const proxiedSend = async function () {
 
 // const autoTranslationList = JSON.parse(ytplayer.config.args.player_response).captions.playerCaptionsTracklistRenderer
 //   .translationLanguages;
-// console.log('autoTranslationList: ', autoTranslationList);
-// localStorage.setItem('autoTranslationList', JSON.stringify(autoTranslationList));
 
 // XMLHttpRequest.prototype.open = proxiedOpen;
 // XMLHttpRequest.prototype.send = proxiedSend;
-
-// if (lang !== 'zh-Hans' && lang !== 'zh-CN')
-
-// const result = list.find(v => v.lang_code === 'zh-Hans' || v.lang_code === 'zh-CN');
-
-// if (singleStatus) {
-//   mergeLang = local;
-// } else {
-//   mergeLang = finishing(original);
-//   mergeLang.events.forEach((v, i) => (v.segs[0].utf8 += `\n${local.events[i].segs[0].utf8}`));
-// }
+// console.log('ytplayer', ytplayer);

@@ -1,8 +1,9 @@
-const injection = src => {
+const injection = handler => {
   const script = document.createElement('script');
-  script.src = chrome.runtime.getURL(src);
+  script.src = chrome.runtime.getURL('constant.js');
+  script.onload = handler;
   (document.head || document.documentElement).append(script);
-  return script;
+  // script.remove();
 };
 
 const injection2 = textContent => {
@@ -30,69 +31,49 @@ const audioPlay = async url => {
   // source.start(0, 0, 1);
 };
 
-injection('constant.js').onload = function () {
-  chrome.storage.local.get('status', ({ status }) => {
-    if (status) {
-      injection2(`
-        XMLHttpRequest.prototype.open = proxiedOpen;
-        XMLHttpRequest.prototype.send = proxiedSend;
-      `);
-    }
-  });
-  // this.remove();
-};
-
 const restartSubtitles = () => {
-  chrome.storage.local.get('single', ({ single }) => {
-    localStorage.setItem('singleStatus', single);
-
-    const subtitlesButton = document.querySelector('.ytp-subtitles-button.ytp-button');
-    subtitlesButton.click();
-    subtitlesButton.click();
-  });
+  const subtitlesButton = document.querySelector('.ytp-subtitles-button.ytp-button');
+  subtitlesButton.click();
+  subtitlesButton.click();
 };
 
 chrome.storage.onChanged.addListener(({ status }) => {
   if (!status) return;
 
   if (status.newValue) {
-    injection2(`
-      XMLHttpRequest.prototype.open = proxiedOpen;
-      XMLHttpRequest.prototype.send = proxiedSend;
-    `);
-    insertCustomMenu();
+    injection2(`XMLHttpRequest.prototype.open = proxiedOpen; XMLHttpRequest.prototype.send = proxiedSend;`);
+    insertCustomMenu(restartSubtitles);
   } else {
-    injection2(`
-      XMLHttpRequest.prototype.open = nativeOpen;
-      XMLHttpRequest.prototype.send = nativeSend ;
-    `);
-    document.querySelector('#language-button').remove();
-    document.querySelector('#single-button').remove();
+    injection2(`XMLHttpRequest.prototype.open = nativeOpen; XMLHttpRequest.prototype.send = nativeSend;`);
+    ['#language-button', '#single-button'].forEach(id => document.querySelector(id).remove());
+    restartSubtitles();
   }
 
   audioPlay('assets/2.ogg');
-
-  restartSubtitles();
 });
 
-const insertCustomMenu = () => {
-  chrome.storage.local.get(['single', 'selectLangCode'], ({ single, selectLangCode }) => {
+const insertCustomMenu = reboot => {
+  chrome.storage.local.get(['single', 'selectLangCode', 'autoLangCode'], ({ single, selectLangCode, autoLangCode }) => {
+    localStorage.setItem('singleStatus', single);
+    localStorage.setItem('selectLangCode', JSON.stringify(selectLangCode));
+    localStorage.setItem('autoLangCode', JSON.stringify(autoLangCode));
+
     injection2(`
+      {
+      console.log('ytplayer', ytplayer);
       const autoTranslationList = JSON.parse(ytplayer.config.args.player_response).captions.playerCaptionsTracklistRenderer
       .translationLanguages;
-      localStorage.setItem('autoTranslationList', JSON.stringify(autoTranslationList));
+      localStorage.setItem('autoTranslationList', JSON.stringify(autoTranslationList));}
     `);
-
-    localStorage.setItem('selectLangCode', JSON.stringify(selectLangCode));
-    const ytpSettingsMenu = document.querySelector('.ytp-popup.ytp-settings-menu');
-    const ytpPanel = ytpSettingsMenu.querySelector('.ytp-panel');
-    const panelMenu = ytpSettingsMenu.querySelector('.ytp-panel-menu');
-
-    ytpSettingsMenu.addEventListener('click', e => e.stopPropagation());
 
     const langArg = selectLangCode || autoLang.languageCode;
     const autoTranslationList = JSON.parse(localStorage.getItem('autoTranslationList'));
     const { languageName } = autoTranslationList.find(v => v.languageCode === langArg[0]);
+
+    const ytpSettingsMenu = document.querySelector('.ytp-popup.ytp-settings-menu');
+    const ytpPanel = ytpSettingsMenu.querySelector('.ytp-panel');
+    const panelMenu = ytpSettingsMenu.querySelector('.ytp-panel-menu');
+    ytpSettingsMenu.addEventListener('click', e => e.stopPropagation());
 
     panelMenu.insertAdjacentHTML(
       'beforeend',
@@ -113,8 +94,6 @@ const insertCustomMenu = () => {
       `
     );
 
-    /* 每个窗口同步状态 */
-
     ytpSettingsMenu.querySelector('#single-button').addEventListener('click', function () {
       chrome.storage.local.get('single', ({ single }) => {
         this.setAttribute('aria-checked', !single);
@@ -122,7 +101,7 @@ const insertCustomMenu = () => {
         window.addEventListener('click', restartSubtitles, { once: true });
       });
     });
-    // ytp-panel-animate-back   ytp-panel-animate-forward (100%)
+
     const revertOrigin = e => {
       const eventType = e.type === 'blur' ? 'click' : 'blur';
       window.removeEventListener(eventType, revertOrigin);
@@ -138,10 +117,6 @@ const insertCustomMenu = () => {
 
     ytpSettingsMenu.querySelector('#language-button').addEventListener('click', () => {
       const levelHeight = ytpSettingsMenu.style.getPropertyValue('height');
-      // const levelWidth = ytpSettingsMenu.style.getPropertyValue('width');
-
-      const autoTranslationList = JSON.parse(localStorage.getItem('autoTranslationList'));
-      const langArg = JSON.parse(localStorage.getItem('selectLangCode')) || autoLang.languageCode;
 
       const list = autoTranslationList
         .map(
@@ -216,28 +191,36 @@ const insertCustomMenu = () => {
 
       [...panelMenu.children].forEach(el => el.style.setProperty('white-space', 'nowrap'));
     });
+
+    reboot && reboot();
   });
 };
 
-chrome.storage.local.get(['status', 'single'], ({ status, single }) => {
-  localStorage.setItem('singleStatus', single);
-  if (status) document.addEventListener('DOMContentLoaded', insertCustomMenu);
+injection(() => {
+  chrome.storage.local.get('status', ({ status }) => {
+    if (status) {
+      injection2(`XMLHttpRequest.prototype.open = proxiedOpen; XMLHttpRequest.prototype.send = proxiedSend;`);
+      insertCustomMenu();
+    }
+  });
 });
+
+// document.addEventListener('DOMContentLoaded', () => console.log('DOMContentLoaded!!'));
+
+// document.addEventListener('DOMContentLoaded', () => insertCustomMenu());
+// chrome.storage.local.get('status', ({ status }) => {
+//   if (status) document.addEventListener('DOMContentLoaded', () => insertCustomMenu());
+// });
+
+// ytp-panel-animate-back ytp-panel-animate-forward (100%)
 
 // window.addEventListener('click', () => {
 //   console.log('windwos:click');
 // });
 
-// const singleStatus = JSON.parse(this.getAttribute('aria-checked'));
-
-// .ytp-popup-animating, .ytp-settings-menu { transition: all 2s; }0.25s
-
-// document.body.insertAdjacentHTML(
-//   'beforeend',
-//   `<style>
-//     .ytp-popup-animating { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: auto;}
-// </style>`
-// );
+// const levelWidth = ytpSettingsMenu.style.getPropertyValue('width');
+// const autoTranslationList = JSON.parse(localStorage.getItem('autoTranslationList'));
+// const langArg = JSON.parse(localStorage.getItem('selectLangCode')) || autoLang.languageCode;
 
 // 每个窗口同步状态
 // window.addEventListener('focus', () => {
@@ -245,5 +228,3 @@ chrome.storage.local.get(['status', 'single'], ({ status, single }) => {
 //     document.querySelector('#single-button').setAttribute('aria-checked', single);
 //   });
 // });
-
-// 框架中使用?

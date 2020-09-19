@@ -8,7 +8,7 @@
     "128": "assets/128.png"
   },
   "page_action": {
-    "default_title": "YouTube 双字幕\n已开启 👍"
+    "default_title": "YouTube 双字幕"
   },
   "background": {
     "scripts": ["background.js"],
@@ -16,9 +16,14 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://www.youtube.com/watch?v=*"],
+      "matches": [
+        "https://www.youtube.com/watch?v=*",
+        "https://www.youtube.com/embed/*",
+        "https://www.youtube-nocookie.com/embed/*"
+      ],
       "js": ["content.js", "langs.js"],
-      "run_at": "document_start"
+      "run_at": "document_start",
+      "all_frames": true
     }
   ],
   "permissions": ["storage", "tabs", "declarativeContent", "contextMenus"],
