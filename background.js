@@ -1,5 +1,11 @@
 chrome.runtime.onInstalled.addListener(() =>
-  chrome.storage.local.set({ status: true, single: false, selectLangCode: null, autoLangCode: ['en'] })
+  chrome.storage.local.set({
+    status: true,
+    single: false,
+    selectLangCode: null,
+    autoLangCode: ['en'],
+    autoTranslationList_: null,
+  })
 );
 
 chrome.tabs.onUpdated.addListener((tabId, status) => {

@@ -22,8 +22,8 @@ console.log('触发请求');
 "persistent": true
 
 <div class="ytp-menuitem" tabindex="0" role="menuitemradio" data-lang="${autoLang.languageCode[0]}" aria-checked="true">
-              <div class="ytp-menuitem-label">Auto</div>
-            </div>
+  <div class="ytp-menuitem-label">Auto</div>
+</div>
 
 page_action
 browser_action
@@ -35,3 +35,9 @@ https://www.youtube-nocookie.com/embed/vsMJiNtQWvw"
 https://www.youtube.com/embed/vsMJiNtQWvw
 
 <!-- \n已开启 👍 -->
+
+ytInitialPlayerResponse.captions.playerCaptionsTracklistRenderer.translationLanguages
+var e=this.H.getOption("captions","translationLanguages");
+
+// console.log('ytplayer', ytplayer);
+// const autoTranslationList = JSON.parse(ytplayer.config.args.player_response).captions.playerCaptionsTracklistRenderer.translationLanguages;
