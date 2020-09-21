@@ -1,6 +1,7 @@
 const nativeOpen = XMLHttpRequest.prototype.open;
 const nativeSend = XMLHttpRequest.prototype.send;
 const subtitleUrl = 'www.youtube.com/api/timedtext';
+const subtitleUrl2 = 'www.youtube-nocookie.com/api/timedtext';
 
 const finishing = lang => {
   const events = [];
@@ -48,7 +49,7 @@ const proxiedOpen = function () {
 };
 
 const proxiedSend = async function () {
-  if (this._url.includes(subtitleUrl)) {
+  if (this._url.includes(subtitleUrl) || this._url.includes(subtitleUrl2)) {
     const u = new URL(this._url);
     const lang = u.searchParams.get('lang');
     const v = u.searchParams.get('v');

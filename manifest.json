@@ -21,7 +21,7 @@
         "https://www.youtube.com/embed/*",
         "https://www.youtube-nocookie.com/embed/*"
       ],
-      "js": ["content.js", "langs.js"],
+      "js": ["langs.js", "content.js"],
       "run_at": "document_start",
       "all_frames": true
     }
