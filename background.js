@@ -1,12 +1,6 @@
-chrome.runtime.onInstalled.addListener(() =>
-  chrome.storage.local.set({
-    status: true,
-    single: false,
-    selectLangCode: null,
-    autoLangCode: ['en'],
-    autoTranslationList_: [],
-  })
-);
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.storage.local.set({ status: true, singleStatus: false });
+});
 
 chrome.tabs.onUpdated.addListener((tabId, status) => {
   chrome.storage.local.get('status', result => {
@@ -16,6 +10,7 @@ chrome.tabs.onUpdated.addListener((tabId, status) => {
   });
 });
 
+// css 侦测时间过慢
 const rule1 = {
   conditions: [
     new chrome.declarativeContent.PageStateMatcher({
@@ -28,21 +23,17 @@ const rule1 = {
   actions: [new chrome.declarativeContent.ShowPageAction()],
 };
 
-chrome.declarativeContent.onPageChanged.removeRules(undefined, () => {
-  chrome.declarativeContent.onPageChanged.addRules([rule1]);
-});
+chrome.declarativeContent.onPageChanged.removeRules(undefined, () =>
+  chrome.declarativeContent.onPageChanged.addRules([rule1])
+);
 
-const setIcon = (tabId, status, title, path) => {
-  chrome.storage.local.set({ status: !status }, () => {
-    chrome.pageAction.setIcon({ tabId, path });
-  });
+const setIcon = (tabId, status, path) => {
+  chrome.storage.local.set({ status: !status }, () => chrome.pageAction.setIcon({ tabId, path }));
 };
 
 const toggleHandler = ({ id: tabId }) => {
   chrome.storage.local.get('status', ({ status }) => {
-    status
-      ? setIcon(tabId, status, 'YouTube 双字幕\n已关闭 ⚡', 'assets/disable32.png')
-      : setIcon(tabId, status, 'YouTube 双字幕\n已开启 👍', 'assets/32.png');
+    status ? setIcon(tabId, status, 'assets/disable32.png') : setIcon(tabId, status, 'assets/32.png');
   });
 };
 
@@ -75,9 +66,5 @@ chrome.contextMenus.onClicked.addListener(({ menuItemId }) => {
 });
 
 // chrome.i18n.getMessage('popup_reportIssues'),
-// onclick: () => chrome.tabs.create({ url: 'https://github.com/ouweiya/YouTube-dual-subtitles/issues/new' }),
-// onclick: () => chrome.tabs.create({ url: 'https://www.youtube.com/channel/UCY_XK0-kSagJq9ZQspmzd-g?view_as=subscriber' }),
-// onclick: () => chrome.tabs.create({ url: 'https://github.com/ouweiya/YouTube-dual-subtitles' }),
-
 // chrome.pageAction.setTitle({ tabId, title });
 // chrome.pageAction.setTitle({ tabId, title: 'YouTube 双字幕\n已关闭 ⚡' });

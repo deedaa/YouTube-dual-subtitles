@@ -54,12 +54,9 @@ const proxiedSend = async function () {
     const lang = u.searchParams.get('lang');
     const v = u.searchParams.get('v');
 
-    const selectLangCode = JSON.parse(localStorage.getItem('selectLangCode'));
-    const autoLangCode = JSON.parse(localStorage.getItem('autoLangCode'));
-    const langArg = selectLangCode || autoLangCode;
-    console.log({ selectLangCode, autoLangCode, langArg });
+    const { languageCode } = JSON.parse(localStorage.getItem('languageParameter'));
 
-    if (!langArg.includes(lang)) {
+    if (!languageCode.includes(lang)) {
       console.log('进入');
       let original = {};
       let local = {};
@@ -78,7 +75,7 @@ const proxiedSend = async function () {
               lang_code: v.getAttribute('lang_code'),
             }));
 
-            const result = list.find(v => langArg.includes(v.lang_code));
+            const result = list.find(v => languageCode.includes(v.lang_code));
 
             if (result) {
               result.name ? u.searchParams.set('name', result.name) : u.searchParams.delete('name');
@@ -86,7 +83,7 @@ const proxiedSend = async function () {
               return fetch(u.toString()).then(res => res.json());
               // 优先使用已有字幕
             } else {
-              u.searchParams.set('tlang', langArg[0]);
+              u.searchParams.set('tlang', languageCode[0]);
               return fetch(u.toString()).then(res => res.json());
               // 使用自动翻译
             }
@@ -94,7 +91,7 @@ const proxiedSend = async function () {
 
         mergeLang = local;
       } else {
-        u.searchParams.set('tlang', langArg[0]);
+        u.searchParams.set('tlang', languageCode[0]);
 
         [original, local] = await Promise.all([
           fetch(this._url).then(res => res.json()),
@@ -117,10 +114,3 @@ const proxiedSend = async function () {
 
   nativeSend.apply(this, arguments);
 };
-
-// const autoTranslationList = JSON.parse(ytplayer.config.args.player_response).captions.playerCaptionsTracklistRenderer
-//   .translationLanguages;
-
-// XMLHttpRequest.prototype.open = proxiedOpen;
-// XMLHttpRequest.prototype.send = proxiedSend;
-// console.log('ytplayer', ytplayer);

@@ -432,13 +432,3 @@ const langsRaw = [
     },
   ],
 ];
-// const UILang = chrome.i18n.getUILanguage();
-// const autoLang = new Map(langsRaw).get(UILang + 1);
-
-// console.log('UILang: ', UILang);
-// console.log('autoLang: ', autoLang);
-
-// if (autoLang) {
-//   localStorage.setItem('autoLangCode', JSON.stringify(autoLang.languageCode));
-//   chrome.storage.local.set({ autoLangCode: autoLang.languageCode });
-// }
