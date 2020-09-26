@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "Legendas duplas no YouTube e mudança automática para o idioma local."
+  },
+  "singleSubtitle": {
+    "message": "Subtítulo único"
+  },
+  "defaultSubtitles": {
+    "message": "Legendas padrão"
+  },
+  "auto": {
+    "message": "Auto"
+  },
+  "feedback": {
+    "message": "Comentários"
+  },
+  "learnMore": {
+    "message": "Saber mais"
+  }
+}

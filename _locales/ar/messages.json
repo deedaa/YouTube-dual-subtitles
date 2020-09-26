@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "ترجمات يوتيوب مزدوجة والتبديل التلقائي إلى اللغة المحلية."
+  },
+  "singleSubtitle": {
+    "message": "ترجمة واحدة"
+  },
+  "defaultSubtitles": {
+    "message": "الترجمة الافتراضية"
+  },
+  "auto": {
+    "message": "تلقاءي"
+  },
+  "feedback": {
+    "message": "ردود الفعل"
+  },
+  "learnMore": {
+    "message": "أعرف أكثر"
+  }
+}

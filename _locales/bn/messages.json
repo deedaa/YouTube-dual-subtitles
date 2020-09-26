@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "YouTube দ্বৈত সাবটাইটেল এবং স্থানীয় ভাষায় স্বয়ংক্রিয়ভাবে স্যুইচ করা।"
+  },
+  "singleSubtitle": {
+    "message": "একক সাবটাইটেল"
+  },
+  "defaultSubtitles": {
+    "message": "ডিফল্ট সাবটাইটেলগুলি"
+  },
+  "auto": {
+    "message": "অটো"
+  },
+  "feedback": {
+    "message": "মতামত"
+  },
+  "learnMore": {
+    "message": "আরও জানুন"
+  }
+}

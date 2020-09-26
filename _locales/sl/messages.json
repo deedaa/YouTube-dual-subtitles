@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "YouTube dvojni podnapisi in samodejni preklop na lokalni jezik."
+  },
+  "singleSubtitle": {
+    "message": "Posamezen podnapis"
+  },
+  "defaultSubtitles": {
+    "message": "Privzeti podnapisi"
+  },
+  "auto": {
+    "message": "Samodejno"
+  },
+  "feedback": {
+    "message": "Povratne informacije"
+  },
+  "learnMore": {
+    "message": "Nauči se več"
+  }
+}

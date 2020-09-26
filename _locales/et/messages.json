@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "YouTube'i kaks subtiitrit ja automaatne üleminek kohalikule keelele."
+  },
+  "singleSubtitle": {
+    "message": "Üks alapealkiri"
+  },
+  "defaultSubtitles": {
+    "message": "Vaikimisi subtiitrid"
+  },
+  "auto": {
+    "message": "Automaatne"
+  },
+  "feedback": {
+    "message": "Tagasiside"
+  },
+  "learnMore": {
+    "message": "Lisateave"
+  }
+}

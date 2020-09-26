@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "Subtítols dobles de YouTube i canvi automàtic a l'idioma local."
+  },
+  "singleSubtitle": {
+    "message": "Subtítol únic"
+  },
+  "defaultSubtitles": {
+    "message": "Subtítols predeterminats"
+  },
+  "auto": {
+    "message": "Automàtic"
+  },
+  "feedback": {
+    "message": "Comentaris"
+  },
+  "learnMore": {
+    "message": "Aprèn més"
+  }
+}

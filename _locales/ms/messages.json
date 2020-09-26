@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "Sari kata ganda YouTube dan pertukaran automatik ke bahasa tempatan."
+  },
+  "singleSubtitle": {
+    "message": "Sarikata tunggal"
+  },
+  "defaultSubtitles": {
+    "message": "Sari kata lalai"
+  },
+  "auto": {
+    "message": "Auto"
+  },
+  "feedback": {
+    "message": "Maklum balas"
+  },
+  "learnMore": {
+    "message": "Ketahui Lebih Lanjut"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "زیرنویس دوگانه YouTube و جابجایی خودکار به زبان محلی."
+  },
+  "singleSubtitle": {
+    "message": "زیرنویس تک"
+  },
+  "defaultSubtitles": {
+    "message": "زیرنویس پیش فرض"
+  },
+  "auto": {
+    "message": "خودکار"
+  },
+  "feedback": {
+    "message": "بازخورد"
+  },
+  "learnMore": {
+    "message": "بیشتر بدانید"
+  }
+}

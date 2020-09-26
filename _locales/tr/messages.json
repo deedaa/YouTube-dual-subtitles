@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "YouTube çift altyazıları ve yerel dile otomatik geçiş."
+  },
+  "singleSubtitle": {
+    "message": "Tek altyazı"
+  },
+  "defaultSubtitles": {
+    "message": "Varsayılan altyazılar"
+  },
+  "auto": {
+    "message": "Oto"
+  },
+  "feedback": {
+    "message": "geri bildirim"
+  },
+  "learnMore": {
+    "message": "Daha fazla bilgi edin"
+  }
+}

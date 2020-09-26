@@ -432,3 +432,7 @@ const langsRaw = [
     },
   ],
 ];
+
+module.exports = {
+  langsRaw,
+};

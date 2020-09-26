@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "YouTube ഇരട്ട സബ്‌ടൈറ്റിലുകളും പ്രാദേശിക ഭാഷയിലേക്ക് സ്വയമേവ മാറുന്നതും."
+  },
+  "singleSubtitle": {
+    "message": "ഒറ്റ ഉപശീർഷകം"
+  },
+  "defaultSubtitles": {
+    "message": "സ്ഥിരസ്ഥിതി സബ്ടൈറ്റിലുകൾ"
+  },
+  "auto": {
+    "message": "യാന്ത്രികം"
+  },
+  "feedback": {
+    "message": "ഫീഡ്‌ബാക്ക്"
+  },
+  "learnMore": {
+    "message": "കൂടുതലറിവ് നേടുക"
+  }
+}

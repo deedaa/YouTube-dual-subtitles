@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "YouTube kettős felirat és automatikus váltás helyi nyelvre."
+  },
+  "singleSubtitle": {
+    "message": "Egyetlen felirat"
+  },
+  "defaultSubtitles": {
+    "message": "Alapértelmezett feliratok"
+  },
+  "auto": {
+    "message": "Auto"
+  },
+  "feedback": {
+    "message": "Visszacsatolás"
+  },
+  "learnMore": {
+    "message": "Tudj meg többet"
+  }
+}

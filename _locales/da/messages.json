@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "YouTube dobbelte undertekster og automatisk skift til lokalt sprog."
+  },
+  "singleSubtitle": {
+    "message": "Enkelt undertekst"
+  },
+  "defaultSubtitles": {
+    "message": "Standard undertekster"
+  },
+  "auto": {
+    "message": "Auto"
+  },
+  "feedback": {
+    "message": "Feedback"
+  },
+  "learnMore": {
+    "message": "Lær mere"
+  }
+}

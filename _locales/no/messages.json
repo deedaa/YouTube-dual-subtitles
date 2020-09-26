@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "YouTube dobbel teksting og automatisk bytte til lokalt språk."
+  },
+  "singleSubtitle": {
+    "message": "Enkelt undertekst"
+  },
+  "defaultSubtitles": {
+    "message": "Standard teksting"
+  },
+  "auto": {
+    "message": "Auto"
+  },
+  "feedback": {
+    "message": "Tilbakemelding"
+  },
+  "learnMore": {
+    "message": "Lære mer"
+  }
+}

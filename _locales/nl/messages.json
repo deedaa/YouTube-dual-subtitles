@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "YouTube dubbele ondertitels en automatisch overschakelen naar de lokale taal."
+  },
+  "singleSubtitle": {
+    "message": "Enkele ondertitel"
+  },
+  "defaultSubtitles": {
+    "message": "Standaard ondertitels"
+  },
+  "auto": {
+    "message": "Auto"
+  },
+  "feedback": {
+    "message": "Feedback"
+  },
+  "learnMore": {
+    "message": "Leer meer"
+  }
+}

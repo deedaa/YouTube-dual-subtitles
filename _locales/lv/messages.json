@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "YouTube dubultā subtitri un automātiska pārslēgšanās uz vietējo valodu."
+  },
+  "singleSubtitle": {
+    "message": "Viens apakšvirsraksts"
+  },
+  "defaultSubtitles": {
+    "message": "Noklusētie subtitri"
+  },
+  "auto": {
+    "message": "Automātiski"
+  },
+  "feedback": {
+    "message": "Atsauksmes"
+  },
+  "learnMore": {
+    "message": "Uzzināt vairāk"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "Manukuu mawili ya YouTube na kubadilisha moja kwa moja kwa lugha ya kienyeji."
+  },
+  "singleSubtitle": {
+    "message": "Kichwa kidogo"
+  },
+  "defaultSubtitles": {
+    "message": "Manukuu chaguomsingi"
+  },
+  "auto": {
+    "message": "Kiotomatiki"
+  },
+  "feedback": {
+    "message": "Maoni"
+  },
+  "learnMore": {
+    "message": "Jifunze zaidi"
+  }
+}

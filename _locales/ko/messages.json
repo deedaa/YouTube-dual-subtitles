@@ -1,11 +1,20 @@
 {
-  "extension_name": {
-    "message": "YouTube 双字幕"
+  "description": {
+    "message": "YouTube 이중 자막 및 현지 언어로 자동 전환."
   },
-  "extension_desc": {
-    "message": "YouTube 双语对照和自动切换中文"
+  "singleSubtitle": {
+    "message": "단일 자막"
   },
-  "single_subtitle": {
-    "message": "单字幕"
+  "defaultSubtitles": {
+    "message": "기본 자막"
+  },
+  "auto": {
+    "message": "자동"
+  },
+  "feedback": {
+    "message": "피드백"
+  },
+  "learnMore": {
+    "message": "더 알아보기"
   }
 }

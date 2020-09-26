@@ -1,8 +1,20 @@
 {
-  "extension_name": {
-    "message": "YouTube dual subtitles"
+  "description": {
+    "message": "Subtítulos dobles de YouTube"
   },
-  "extension_desc": {
-    "message": "YouTube bilingual comparison and automatic switching to Chinese"
+  "singleSubtitle": {
+    "message": "Subtítulo único"
+  },
+  "defaultSubtitles": {
+    "message": "Subtítulos predeterminados"
+  },
+  "auto": {
+    "message": "Auto"
+  },
+  "feedback": {
+    "message": "Retroalimentación"
+  },
+  "learnMore": {
+    "message": "Aprende más"
   }
 }

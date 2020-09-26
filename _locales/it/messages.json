@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "Sottotitoli doppi di YouTube e passaggio automatico alla lingua locale."
+  },
+  "singleSubtitle": {
+    "message": "Sottotitolo singolo"
+  },
+  "defaultSubtitles": {
+    "message": "Sottotitoli predefiniti"
+  },
+  "auto": {
+    "message": "Auto"
+  },
+  "feedback": {
+    "message": "Risposta"
+  },
+  "learnMore": {
+    "message": "Per saperne di più"
+  }
+}

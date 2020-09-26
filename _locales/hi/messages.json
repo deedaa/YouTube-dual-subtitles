@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "YouTube दोहरी उपशीर्षक और स्थानीय भाषा में स्वचालित स्विचिंग।"
+  },
+  "singleSubtitle": {
+    "message": "एकल उपशीर्षक"
+  },
+  "defaultSubtitles": {
+    "message": "डिफ़ॉल्ट उपशीर्षक"
+  },
+  "auto": {
+    "message": "ऑटो"
+  },
+  "feedback": {
+    "message": "प्रतिपुष्टि"
+  },
+  "learnMore": {
+    "message": "और अधिक जानें"
+  }
+}

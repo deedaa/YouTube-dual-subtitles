@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "YouTube ద్వంద్వ ఉపశీర్షికలు మరియు స్థానిక భాషకు స్వయంచాలకంగా మారడం."
+  },
+  "singleSubtitle": {
+    "message": "ఒకే ఉపశీర్షిక"
+  },
+  "defaultSubtitles": {
+    "message": "డిఫాల్ట్ ఉపశీర్షికలు"
+  },
+  "auto": {
+    "message": "దానంతట అదే"
+  },
+  "feedback": {
+    "message": "అభిప్రాయం"
+  },
+  "learnMore": {
+    "message": "ఇంకా నేర్చుకో"
+  }
+}

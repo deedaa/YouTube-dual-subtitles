@@ -1,22 +1,20 @@
 {
-  "extension_name": {
-    "message": "YouTube 双字幕"
+  "description": {
+    "message": "YouTube双字幕"
   },
-  "extension_desc": {
-    "message": "YouTube 双语对照和自动切换中文"
+  "singleSubtitle": {
+    "message": "YouTube双字幕，并自动切换为本地语言。"
   },
-  "single_subtitle": {
+  "defaultSubtitles": {
     "message": "单字幕"
   },
-  "about_me": {
-    "message": "$name$ ouweiya  $age$",
-    "placeholders": {
-      "name": {
-        "content": "$2"
-      },
-      "age": {
-        "content": "30"
-      }
-    }
+  "auto": {
+    "message": "默认字幕"
+  },
+  "feedback": {
+    "message": "反馈"
+  },
+  "learnMore": {
+    "message": "学到更多"
   }
 }

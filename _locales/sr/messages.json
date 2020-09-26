@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "ИоуТубе двоструки титлови и аутоматски прелазак на локални језик."
+  },
+  "singleSubtitle": {
+    "message": "Појединачни титлови"
+  },
+  "defaultSubtitles": {
+    "message": "Подразумевани титлови"
+  },
+  "auto": {
+    "message": "Ауто"
+  },
+  "feedback": {
+    "message": "Повратна информација"
+  },
+  "learnMore": {
+    "message": "Сазнајте више"
+  }
+}

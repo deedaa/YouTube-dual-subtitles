@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "Dvigubi „YouTube“ subtitrai ir automatinis perėjimas prie vietinės kalbos."
+  },
+  "singleSubtitle": {
+    "message": "Vienas paantraštė"
+  },
+  "defaultSubtitles": {
+    "message": "Numatytieji subtitrai"
+  },
+  "auto": {
+    "message": "Automatinis"
+  },
+  "feedback": {
+    "message": "Atsiliepimas"
+  },
+  "learnMore": {
+    "message": "Sužinokite daugiau"
+  }
+}

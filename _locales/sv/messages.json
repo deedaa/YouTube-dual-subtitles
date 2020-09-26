@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "YouTube dubbla undertexter och automatisk växling till lokalt språk."
+  },
+  "singleSubtitle": {
+    "message": "Enstaka undertexter"
+  },
+  "defaultSubtitles": {
+    "message": "Standardtexter"
+  },
+  "auto": {
+    "message": "Bil"
+  },
+  "feedback": {
+    "message": "Respons"
+  },
+  "learnMore": {
+    "message": "Läs mer"
+  }
+}

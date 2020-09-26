@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "YouTube ડ્યુઅલ ઉપશીર્ષકો અને સ્થાનિક ભાષામાં સ્વચાલિત સ્વિચિંગ."
+  },
+  "singleSubtitle": {
+    "message": "એકલ ઉપશીર્ષક"
+  },
+  "defaultSubtitles": {
+    "message": "ડિફaultલ્ટ ઉપશીર્ષકો"
+  },
+  "auto": {
+    "message": "Autoટો"
+  },
+  "feedback": {
+    "message": "પ્રતિસાદ"
+  },
+  "learnMore": {
+    "message": "વધુ શીખો"
+  }
+}

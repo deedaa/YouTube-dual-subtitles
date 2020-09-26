@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "YouTube இரட்டை வசன வரிகள் மற்றும் உள்ளூர் மொழிக்கு தானாக மாறுதல்."
+  },
+  "singleSubtitle": {
+    "message": "ஒற்றை வசன வரிகள்"
+  },
+  "defaultSubtitles": {
+    "message": "இயல்புநிலை வசன வரிகள்"
+  },
+  "auto": {
+    "message": "ஆட்டோ"
+  },
+  "feedback": {
+    "message": "பின்னூட்டம்"
+  },
+  "learnMore": {
+    "message": "மேலும் அறிக"
+  }
+}

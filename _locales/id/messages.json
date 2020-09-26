@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "Subtitel ganda YouTube dan peralihan otomatis ke bahasa lokal."
+  },
+  "singleSubtitle": {
+    "message": "Subtitle tunggal"
+  },
+  "defaultSubtitles": {
+    "message": "Subtitle default"
+  },
+  "auto": {
+    "message": "Mobil"
+  },
+  "feedback": {
+    "message": "Umpan balik"
+  },
+  "learnMore": {
+    "message": "Belajarlah lagi"
+  }
+}

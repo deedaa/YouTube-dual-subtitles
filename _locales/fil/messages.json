@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "Mga dalawahang subtitle ng YouTube at awtomatikong paglipat sa lokal na wika."
+  },
+  "singleSubtitle": {
+    "message": "Nag-iisang subtitle"
+  },
+  "defaultSubtitles": {
+    "message": "Mga default na subtitle"
+  },
+  "auto": {
+    "message": "Auto"
+  },
+  "feedback": {
+    "message": "Puna"
+  },
+  "learnMore": {
+    "message": "Matuto Nang Higit Pa"
+  }
+}

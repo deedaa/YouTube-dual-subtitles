@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "Dvojité titulky na YouTube a automatické prepínanie do miestneho jazyka."
+  },
+  "singleSubtitle": {
+    "message": "Jeden podnadpis"
+  },
+  "defaultSubtitles": {
+    "message": "Predvolené titulky"
+  },
+  "auto": {
+    "message": "Auto"
+  },
+  "feedback": {
+    "message": "Spätná väzba"
+  },
+  "learnMore": {
+    "message": "Uč sa viac"
+  }
+}

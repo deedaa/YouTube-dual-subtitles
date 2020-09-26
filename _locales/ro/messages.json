@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "Subtitrări duale YouTube și trecerea automată la limba locală."
+  },
+  "singleSubtitle": {
+    "message": "Subtitlu unic"
+  },
+  "defaultSubtitles": {
+    "message": "Subtitrări implicite"
+  },
+  "auto": {
+    "message": "Auto"
+  },
+  "feedback": {
+    "message": "Părere"
+  },
+  "learnMore": {
+    "message": "Aflați mai multe"
+  }
+}

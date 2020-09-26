@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "Διπλοί υπότιτλοι στο YouTube και αυτόματη μετάβαση σε τοπική γλώσσα."
+  },
+  "singleSubtitle": {
+    "message": "Ενιαίος υπότιτλος"
+  },
+  "defaultSubtitles": {
+    "message": "Προεπιλεγμένοι υπότιτλοι"
+  },
+  "auto": {
+    "message": "Αυτο"
+  },
+  "feedback": {
+    "message": "Ανατροφοδότηση"
+  },
+  "learnMore": {
+    "message": "Μάθε περισσότερα"
+  }
+}

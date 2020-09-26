@@ -1,11 +1,23 @@
 {
-  "extension_name": {
-    "message": "YouTube 雙字幕"
+  "name": {
+    "message": "YouTube雙字幕"
   },
-  "extension_desc": {
-    "message": "YouTube 雙語對照和自動切換中文"
+  "description": {
+    "message": "YouTube雙字幕，並自動切換為本地語言。"
   },
-  "single_subtitle": {
+  "singleSubtitle": {
     "message": "單字幕"
+  },
+  "defaultSubtitles": {
+    "message": "默認字幕"
+  },
+  "auto": {
+    "message": "汽車"
+  },
+  "feedback": {
+    "message": "反饋"
+  },
+  "learnMore": {
+    "message": "學到更多"
   }
 }

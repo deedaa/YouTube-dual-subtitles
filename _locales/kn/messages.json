@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "ಯೂಟ್ಯೂಬ್ ಡ್ಯುಯಲ್ ಉಪಶೀರ್ಷಿಕೆಗಳು ಮತ್ತು ಸ್ಥಳೀಯ ಭಾಷೆಗೆ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಬದಲಾಯಿಸುವುದು."
+  },
+  "singleSubtitle": {
+    "message": "ಏಕ ಉಪಶೀರ್ಷಿಕೆ"
+  },
+  "defaultSubtitles": {
+    "message": "ಡೀಫಾಲ್ಟ್ ಉಪಶೀರ್ಷಿಕೆಗಳು"
+  },
+  "auto": {
+    "message": "ಆಟೋ"
+  },
+  "feedback": {
+    "message": "ಪ್ರತಿಕ್ರಿಯೆ"
+  },
+  "learnMore": {
+    "message": "ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ"
+  }
+}

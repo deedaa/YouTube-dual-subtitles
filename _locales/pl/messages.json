@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "Podwójne napisy YouTube i automatyczne przełączanie na język lokalny."
+  },
+  "singleSubtitle": {
+    "message": "Pojedynczy podtytuł"
+  },
+  "defaultSubtitles": {
+    "message": "Domyślne napisy"
+  },
+  "auto": {
+    "message": "Automatyczny"
+  },
+  "feedback": {
+    "message": "Sprzężenie zwrotne"
+  },
+  "learnMore": {
+    "message": "Ucz się więcej"
+  }
+}

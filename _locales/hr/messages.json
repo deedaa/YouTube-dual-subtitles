@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "YouTube dvostruki titlovi i automatsko prebacivanje na lokalni jezik."
+  },
+  "singleSubtitle": {
+    "message": "Pojedinačni titlovi"
+  },
+  "defaultSubtitles": {
+    "message": "Zadani titlovi"
+  },
+  "auto": {
+    "message": "Auto"
+  },
+  "feedback": {
+    "message": "Povratne informacije"
+  },
+  "learnMore": {
+    "message": "Saznajte više"
+  }
+}

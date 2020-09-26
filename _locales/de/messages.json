@@ -1,11 +1,20 @@
 {
-  "extension_name": {
-    "message": "YouTube 双字幕"
+  "description": {
+    "message": "YouTube doppelte Untertitel und automatische Umschaltung auf die Landessprache."
   },
-  "extension_desc": {
-    "message": "YouTube 双语对照和自动切换中文"
+  "singleSubtitle": {
+    "message": "Einzelner Untertitel"
   },
-  "single_subtitle": {
-    "message": "单字幕"
+  "defaultSubtitles": {
+    "message": "Standarduntertitel"
+  },
+  "auto": {
+    "message": "Auto"
+  },
+  "feedback": {
+    "message": "Feedback"
+  },
+  "learnMore": {
+    "message": "Lern mehr"
   }
 }

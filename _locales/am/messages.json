@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "የዩቲዩብ ሁለት ንዑስ ርዕሶች እና በራስ-ሰር ወደ አካባቢያዊ ቋንቋ መቀየር ፡፡"
+  },
+  "singleSubtitle": {
+    "message": "ነጠላ ንዑስ ርዕስ"
+  },
+  "defaultSubtitles": {
+    "message": "ነባሪ የትርጉም ጽሑፎች"
+  },
+  "auto": {
+    "message": "ራስ-ሰር"
+  },
+  "feedback": {
+    "message": "ግብረመልስ"
+  },
+  "learnMore": {
+    "message": "ተጨማሪ እወቅ"
+  }
+}

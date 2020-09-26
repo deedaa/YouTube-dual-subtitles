@@ -1,0 +1,20 @@
+{
+  "description": {
+    "message": "כתוביות כפולות ביוטיוב ומעבר אוטומטי לשפה המקומית."
+  },
+  "singleSubtitle": {
+    "message": "כותרת משנה אחת"
+  },
+  "defaultSubtitles": {
+    "message": "כתוביות ברירת מחדל"
+  },
+  "auto": {
+    "message": "אוטומטי"
+  },
+  "feedback": {
+    "message": "מָשׁוֹב"
+  },
+  "learnMore": {
+    "message": "למד עוד"
+  }
+}
