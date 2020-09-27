@@ -63,6 +63,8 @@ const proxiedSend = async function () {
       let mergeLang = {};
 
       const singleStatus = JSON.parse(localStorage.getItem('singleStatus'));
+      const list = document.querySelector('.html5-video-player').getOption('captions', 'tracklist');
+      console.log('list: ', list);
 
       // 单字幕
       if (singleStatus) {
@@ -74,6 +76,7 @@ const proxiedSend = async function () {
               name: v.getAttribute('name'),
               lang_code: v.getAttribute('lang_code'),
             }));
+            console.log('list-2: ', list);
 
             const result = list.find(v => languageCode.includes(v.lang_code));
 

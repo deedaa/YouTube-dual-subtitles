@@ -1,4 +1,3 @@
-// 测试当前字幕
 const fs = require('fs');
 const { Translate } = require('@google-cloud/translate').v2;
 const { key } = require('./key');

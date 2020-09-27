@@ -193,7 +193,7 @@ injection2(`localStorage.setItem( 'autoTranslationList', JSON.stringify(window.y
 // }, lastTime);
 // });
 
-/_ const loca = [
+/\_ const loca = [
 ['name', 'YouTube dual subtitles'],
 ['description', 'YouTube dual subtitles and automatic switching to local language.'],
 ['singleSubtitle', 'Single subtitle'],
@@ -202,4 +202,5 @@ injection2(`localStorage.setItem( 'autoTranslationList', JSON.stringify(window.y
 ['feedback', 'Feedback'],
 ['learnMore', 'Learn More'],
 ];
-_/
+
+// const track = document.querySelector('.html5-video-player').getOption('captions', 'track');

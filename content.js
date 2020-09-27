@@ -243,12 +243,9 @@ const reboot = () => {
   });
 };
 
-// chrome.storage.local.get('UILang', ({ UILang }) => console.log('UILang: ', UILang));
+// 上传测试视频,配字幕
+// iframe css 的查询时间
 
-// languageParameter
-// translationLanguage
+// 2个问题: 图标点亮, 字幕列表获取方式
 
-// const singleStatus = JSON.parse(localStorage.getItem('singleStatus'));
-
-// console.log('languageParameter-2: ', languageParameter);
-// const languageParameter = JSON.parse(localStorage.getItem('languageParameter'));
+// DOMContentLoaded  load
