@@ -1,15 +1,18 @@
 {
-  "description": {
+  "name": {
     "message": "YouTube双字幕"
   },
-  "singleSubtitle": {
+  "description": {
     "message": "YouTube双字幕，并自动切换为本地语言。"
   },
-  "defaultSubtitles": {
+  "singleSubtitle": {
     "message": "单字幕"
   },
-  "auto": {
+  "defaultSubtitles": {
     "message": "默认字幕"
+  },
+  "auto": {
+    "message": "自动"
   },
   "feedback": {
     "message": "反馈"

@@ -1,49 +1,60 @@
 // 测试当前字幕
 const fs = require('fs');
 const { Translate } = require('@google-cloud/translate').v2;
+const { key } = require('./key');
 const rimraf = require('rimraf');
 const { langsRaw } = require('./langs');
+const translate = new Translate({ key });
 
-const loca = [
-  ['name', 'YouTube dual subtitles'],
-  ['description', 'YouTube dual subtitles and automatic switching to local language.'],
-  ['singleSubtitle', 'Single subtitle'],
-  ['defaultSubtitles', 'Default subtitles'],
-  ['auto', 'Auto'],
-  ['feedback', 'Feedback'],
-  ['learnMore', 'Learn More'],
+// automatic
+// Auto
+const loca2 = [
+  'YouTube dual subtitles',
+  'YouTube dual subtitles and automatic switching to local language.',
+  'Single subtitle',
+  'Default subtitles',
+  'Automatic',
+  'Feedback',
+  'Learn More',
 ];
 
-rimraf.sync('./log.md');
 rimraf.sync('./_locales');
+rimraf.sync('./log.md');
 fs.mkdirSync('./_locales');
 
 const langList = new Map(langsRaw);
-let lastTime = 0;
+/* from: 'en', */
 
-langList.forEach(async (value, key) => {
-  let acc = {};
+(async () => {
+  for (const [key] of langList) {
+    await translate
+      .translate(loca2, { to: key })
+      .then(([translation]) => {
+        const obj = {};
+        obj.name = { message: translation[0] };
+        obj.description = { message: translation[1] };
+        obj.singleSubtitle = { message: translation[2] };
+        obj.defaultSubtitles = { message: translation[3] };
+        obj.auto = { message: translation[4] };
+        obj.feedback = { message: translation[5] };
+        obj.learnMore = { message: translation[6] };
 
-  for ([k, v] of loca) {
-    lastTime += 30;
-
-    try {
-      const [translation] = await translate.translate(v, { from: 'en', to: key });
-
-      Object.assign(acc, { [k]: { message: translation } });
-    } catch (error) {
-      fs.appendFile('./log.md', `${error}: ${key}\n\n`, () => console.log('err'));
-      return;
-    }
+        const createFolder = `./_locales/${key.replace('-', '_')}`;
+        fs.mkdirSync(createFolder);
+        fs.writeFileSync(`${createFolder}/messages.json`, JSON.stringify(obj, null, '  '));
+        console.log('obj');
+      })
+      .catch(error => {
+        fs.appendFileSync('./log.md', `${error} => ${key}\n\n`);
+        console.log('err');
+      });
   }
 
-  const createFolder = `./_locales/${key.replace('-', '_')}`;
-  fs.mkdirSync(createFolder);
-  fs.writeFile(`${createFolder}/messages.json`, JSON.stringify(acc, null, '  '), console.log);
-  console.log('acc: ', JSON.stringify(acc));
-});
+  console.log('writeFile end');
+  const complete = fs.readdirSync('./_locales').every(file => {
+    const content = fs.readFileSync(`./_locales/${file}/messages.json`, 'utf8');
+    return content.split('\n').length === 23;
+  });
 
-// const translation = await new Promise(res => setTimeout(res, lastTime)).then(async () => {
-//   const [translation] = await translate.translate(v, { from: 'en', to: key });
-//   return translation;
-// });
+  console.log('complete =>', complete);
+})();

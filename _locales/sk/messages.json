@@ -1,4 +1,7 @@
 {
+  "name": {
+    "message": "Dvojité titulky YouTube"
+  },
   "description": {
     "message": "Dvojité titulky na YouTube a automatické prepínanie do miestneho jazyka."
   },
@@ -9,7 +12,7 @@
     "message": "Predvolené titulky"
   },
   "auto": {
-    "message": "Auto"
+    "message": "Automaticky"
   },
   "feedback": {
     "message": "Spätná väzba"

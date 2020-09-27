@@ -165,3 +165,41 @@ injection2(`localStorage.setItem( 'autoTranslationList', JSON.stringify(window.y
 // const autoLangCode = JSON.parse(localStorage.getItem('autoLangCode'));
 // const languageParameter = selectLangCode || autoLangCode;
 // console.log({ selectLangCode, autoLangCode, languageParameter });
+
+// return;
+
+// langList.forEach(async (value, key) => {
+// lastTime += 300;
+// setTimeout(() => {
+// translate
+// .translate(loca2, { to: key })
+// .then(([translation]) => {
+// const obj = {};
+// obj.name = { message: translation[0] };
+// obj.description = { message: translation[1] };
+// obj.singleSubtitle = { message: translation[2] };
+// obj.defaultSubtitles = { message: translation[3] };
+// obj.auto = { message: translation[4] };
+// obj.feedback = { message: translation[5] };
+// obj.learnMore = { message: translation[6] };
+
+// const createFolder = `./_locales/${key.replace('-', '_')}`;
+// fs.mkdirSync(createFolder);
+// fs.writeFile(`${createFolder}/messages.json`, JSON.stringify(obj, null, ' '), console.log);
+// })
+// .catch(error => {
+// fs.appendFile('./log.md', `${error} => ${key}\n\n`, () => console.log('error:', key));
+// });
+// }, lastTime);
+// });
+
+/_ const loca = [
+['name', 'YouTube dual subtitles'],
+['description', 'YouTube dual subtitles and automatic switching to local language.'],
+['singleSubtitle', 'Single subtitle'],
+['defaultSubtitles', 'Default subtitles'],
+['auto', 'Auto'],
+['feedback', 'Feedback'],
+['learnMore', 'Learn More'],
+];
+_/

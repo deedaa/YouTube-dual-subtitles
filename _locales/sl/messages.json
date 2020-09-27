@@ -1,4 +1,7 @@
 {
+  "name": {
+    "message": "YouTube dvojni podnapisi"
+  },
   "description": {
     "message": "YouTube dvojni podnapisi in samodejni preklop na lokalni jezik."
   },

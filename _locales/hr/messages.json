@@ -1,4 +1,7 @@
 {
+  "name": {
+    "message": "YouTube dvostruki titlovi"
+  },
   "description": {
     "message": "YouTube dvostruki titlovi i automatsko prebacivanje na lokalni jezik."
   },
@@ -9,7 +12,7 @@
     "message": "Zadani titlovi"
   },
   "auto": {
-    "message": "Auto"
+    "message": "Automatski"
   },
   "feedback": {
     "message": "Povratne informacije"

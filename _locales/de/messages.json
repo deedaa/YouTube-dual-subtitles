@@ -1,4 +1,7 @@
 {
+  "name": {
+    "message": "YouTube doppelte Untertitel"
+  },
   "description": {
     "message": "YouTube doppelte Untertitel und automatische Umschaltung auf die Landessprache."
   },
@@ -9,7 +12,7 @@
     "message": "Standarduntertitel"
   },
   "auto": {
-    "message": "Auto"
+    "message": "Automatisch"
   },
   "feedback": {
     "message": "Feedback"

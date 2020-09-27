@@ -1,4 +1,7 @@
 {
+  "name": {
+    "message": "YouTube 듀얼 자막"
+  },
   "description": {
     "message": "YouTube 이중 자막 및 현지 언어로 자동 전환."
   },
@@ -9,7 +12,7 @@
     "message": "기본 자막"
   },
   "auto": {
-    "message": "자동"
+    "message": "자동적 인"
   },
   "feedback": {
     "message": "피드백"

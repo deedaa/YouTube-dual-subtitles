@@ -1,4 +1,7 @@
 {
+  "name": {
+    "message": "YouTube dobbelte undertekster"
+  },
   "description": {
     "message": "YouTube dobbelte undertekster og automatisk skift til lokalt sprog."
   },
@@ -9,7 +12,7 @@
     "message": "Standard undertekster"
   },
   "auto": {
-    "message": "Auto"
+    "message": "Automatisk"
   },
   "feedback": {
     "message": "Feedback"

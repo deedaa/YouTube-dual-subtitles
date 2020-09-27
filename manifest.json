@@ -1,6 +1,6 @@
 {
-  "name": "__MSG_extension_name__",
-  "description": "__MSG_extension_desc__",
+  "name": "__MSG_name__",
+  "description": "__MSG_description__",
   "version": "1.0.0",
   "default_locale": "en",
   "icons": {
@@ -8,7 +8,7 @@
     "128": "assets/128.png"
   },
   "page_action": {
-    "default_title": "YouTube 双字幕"
+    "default_title": "__MSG_name__"
   },
   "background": {
     "scripts": ["background.js"],

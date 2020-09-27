@@ -1,4 +1,7 @@
 {
+  "name": {
+    "message": "Sari kata ganda YouTube"
+  },
   "description": {
     "message": "Sari kata ganda YouTube dan pertukaran automatik ke bahasa tempatan."
   },
@@ -9,7 +12,7 @@
     "message": "Sari kata lalai"
   },
   "auto": {
-    "message": "Auto"
+    "message": "Automatik"
   },
   "feedback": {
     "message": "Maklum balas"

@@ -1,4 +1,7 @@
 {
+  "name": {
+    "message": "YouTube dubbele ondertitels"
+  },
   "description": {
     "message": "YouTube dubbele ondertitels en automatisch overschakelen naar de lokale taal."
   },
@@ -9,7 +12,7 @@
     "message": "Standaard ondertitels"
   },
   "auto": {
-    "message": "Auto"
+    "message": "Automatisch"
   },
   "feedback": {
     "message": "Feedback"

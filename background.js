@@ -41,13 +41,13 @@ chrome.pageAction.onClicked.addListener(toggleHandler);
 
 chrome.contextMenus.create({
   id: 'issues',
-  title: '问题反馈',
+  title: chrome.i18n.getMessage('feedback'),
   contexts: ['page_action'],
 });
 
 chrome.contextMenus.create({
   id: 'more',
-  title: '了解更多',
+  title: chrome.i18n.getMessage('learnMore'),
   contexts: ['page_action'],
 });
 

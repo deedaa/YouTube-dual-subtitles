@@ -1,4 +1,7 @@
 {
+  "name": {
+    "message": "Double sous-titres YouTube"
+  },
   "description": {
     "message": "Double sous-titres YouTube et passage automatique à la langue locale."
   },
@@ -9,7 +12,7 @@
     "message": "Sous-titres par défaut"
   },
   "auto": {
-    "message": "Auto"
+    "message": "Automatique"
   },
   "feedback": {
     "message": "Retour d'information"

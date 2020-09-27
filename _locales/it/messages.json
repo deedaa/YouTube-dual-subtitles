@@ -1,4 +1,7 @@
 {
+  "name": {
+    "message": "Sottotitoli doppi di YouTube"
+  },
   "description": {
     "message": "Sottotitoli doppi di YouTube e passaggio automatico alla lingua locale."
   },
@@ -9,7 +12,7 @@
     "message": "Sottotitoli predefiniti"
   },
   "auto": {
-    "message": "Auto"
+    "message": "Automatico"
   },
   "feedback": {
     "message": "Risposta"

@@ -1,4 +1,7 @@
 {
+  "name": {
+    "message": "YouTube'i kaks subtiitrit"
+  },
   "description": {
     "message": "YouTube'i kaks subtiitrit ja automaatne üleminek kohalikule keelele."
   },

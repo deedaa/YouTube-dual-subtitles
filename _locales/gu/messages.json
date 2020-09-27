@@ -1,4 +1,7 @@
 {
+  "name": {
+    "message": "YouTube ડ્યુઅલ સબટાઈટલ"
+  },
   "description": {
     "message": "YouTube ડ્યુઅલ ઉપશીર્ષકો અને સ્થાનિક ભાષામાં સ્વચાલિત સ્વિચિંગ."
   },
@@ -9,7 +12,7 @@
     "message": "ડિફaultલ્ટ ઉપશીર્ષકો"
   },
   "auto": {
-    "message": "Autoટો"
+    "message": "સ્વચાલિત"
   },
   "feedback": {
     "message": "પ્રતિસાદ"

@@ -1,4 +1,7 @@
 {
+  "name": {
+    "message": "YouTube ड्युअल उपशीर्षके"
+  },
   "description": {
     "message": "YouTube ड्युअल उपशीर्षके आणि स्थानिक भाषेमध्ये स्वयंचलितपणे स्विच."
   },
@@ -9,7 +12,7 @@
     "message": "डीफॉल्ट उपशीर्षके"
   },
   "auto": {
-    "message": "ऑटो"
+    "message": "स्वयंचलित"
   },
   "feedback": {
     "message": "अभिप्राय"

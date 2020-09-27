@@ -1,4 +1,7 @@
 {
+  "name": {
+    "message": "YouTube ikili altyazılar"
+  },
   "description": {
     "message": "YouTube çift altyazıları ve yerel dile otomatik geçiş."
   },
@@ -9,7 +12,7 @@
     "message": "Varsayılan altyazılar"
   },
   "auto": {
-    "message": "Oto"
+    "message": "Otomatik"
   },
   "feedback": {
     "message": "geri bildirim"

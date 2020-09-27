@@ -1,4 +1,7 @@
 {
+  "name": {
+    "message": "Manukuu mawili ya YouTube"
+  },
   "description": {
     "message": "Manukuu mawili ya YouTube na kubadilisha moja kwa moja kwa lugha ya kienyeji."
   },
@@ -9,7 +12,7 @@
     "message": "Manukuu chaguomsingi"
   },
   "auto": {
-    "message": "Kiotomatiki"
+    "message": "Moja kwa moja"
   },
   "feedback": {
     "message": "Maoni"

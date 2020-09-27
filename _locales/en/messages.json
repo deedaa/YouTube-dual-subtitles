@@ -1,0 +1,23 @@
+{
+  "name": {
+    "message": "YouTube dual subtitles"
+  },
+  "description": {
+    "message": "YouTube dual subtitles and automatic switching to local language."
+  },
+  "singleSubtitle": {
+    "message": "Single subtitle"
+  },
+  "defaultSubtitles": {
+    "message": "Default subtitles"
+  },
+  "auto": {
+    "message": "Automatic"
+  },
+  "feedback": {
+    "message": "Feedback"
+  },
+  "learnMore": {
+    "message": "Learn More"
+  }
+}

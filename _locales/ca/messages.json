@@ -1,4 +1,7 @@
 {
+  "name": {
+    "message": "Subtítols dobles de YouTube"
+  },
   "description": {
     "message": "Subtítols dobles de YouTube i canvi automàtic a l'idioma local."
   },

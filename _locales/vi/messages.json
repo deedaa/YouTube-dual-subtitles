@@ -1,4 +1,7 @@
 {
+  "name": {
+    "message": "Phụ đề kép trên YouTube"
+  },
   "description": {
     "message": "YouTube kép phụ đề và tự động chuyển sang ngôn ngữ địa phương."
   },
@@ -9,7 +12,7 @@
     "message": "Phụ đề mặc định"
   },
   "auto": {
-    "message": "Tự động"
+    "message": "Tự động"
   },
   "feedback": {
     "message": "Phản hồi"

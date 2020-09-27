@@ -1,4 +1,7 @@
 {
+  "name": {
+    "message": "Dalawang subtitle ng YouTube"
+  },
   "description": {
     "message": "Mga dalawahang subtitle ng YouTube at awtomatikong paglipat sa lokal na wika."
   },
@@ -9,7 +12,7 @@
     "message": "Mga default na subtitle"
   },
   "auto": {
-    "message": "Auto"
+    "message": "Awtomatiko"
   },
   "feedback": {
     "message": "Puna"

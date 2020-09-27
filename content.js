@@ -63,13 +63,13 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
     `
     <div class="ytp-menuitem" aria-haspopup="true" role="menuitem" tabindex="0" id="language-button">
       <div class="ytp-menuitem-icon"></div>
-      <div class="ytp-menuitem-label">默认语言</div>
+      <div class="ytp-menuitem-label">${chrome.i18n.getMessage('defaultSubtitles')}</div>
       <div class="ytp-menuitem-content">${languageParameter.languageName}</div>
     </div>
 
     <div class="ytp-menuitem" role="menuitemcheckbox" aria-checked="${singleStatus}" tabindex="0" id="single-button">
       <div class="ytp-menuitem-icon"></div>
-      <div class="ytp-menuitem-label">${chrome.i18n.getMessage('single_subtitle')}</div>
+      <div class="ytp-menuitem-label">${chrome.i18n.getMessage('singleSubtitle')}</div>
       <div class="ytp-menuitem-content">
         <div class="ytp-menuitem-toggle-checkbox"></div>
       </div>
@@ -137,13 +137,17 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
         `
         <div class="ytp-panel ytp-panel-animate-forward" id="forward" style="min-width: 250px; width: 251px; height: ${resHeight}px;">
           <div class="ytp-panel-header">
-            <button class="ytp-button ytp-panel-title">默认字幕</button>
+            <button class="ytp-button ytp-panel-title">${chrome.i18n.getMessage('defaultSubtitles')}</button>
           </div>
           <div class="ytp-panel-menu" role="menu" id="languageList">
             <div class="ytp-menuitem" tabindex="0" role="menuitemradio" aria-checked=${
               `${autoLangCode}` === `${languageParameter.languageCode}`
             }>
-              <div class="ytp-menuitem-label" data-lang="${autoLangCode}" data-languagename="${'Auto'}">${'Auto'}</div>
+              <div class="ytp-menuitem-label" data-lang="${autoLangCode}" data-languagename="${chrome.i18n.getMessage(
+          'auto'
+        )}">
+               ${chrome.i18n.getMessage('auto')}
+              </div>
             </div>
 
             ${list}
@@ -212,7 +216,7 @@ const autoLangCode = autoLang ? autoLang.languageCode : ['en'];
 
 const languageParameter_ = {
   languageCode: autoLangCode,
-  languageName: 'Auto',
+  languageName: chrome.i18n.getMessage('auto'),
 };
 
 chrome.storage.local.get(null, ({ status, singleStatus, languageParameter = languageParameter_ }) => {

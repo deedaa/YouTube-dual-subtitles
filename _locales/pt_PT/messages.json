@@ -1,4 +1,7 @@
 {
+  "name": {
+    "message": "Legendas duplas do YouTube"
+  },
   "description": {
     "message": "Legendas duplas no YouTube e mudança automática para o idioma local."
   },
@@ -9,7 +12,7 @@
     "message": "Legendas padrão"
   },
   "auto": {
-    "message": "Auto"
+    "message": "Automático"
   },
   "feedback": {
     "message": "Comentários"
