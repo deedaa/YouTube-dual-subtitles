@@ -204,3 +204,31 @@ injection2(`localStorage.setItem( 'autoTranslationList', JSON.stringify(window.y
 ];
 
 // const track = document.querySelector('.html5-video-player').getOption('captions', 'track');
+
+// chrome.i18n.getMessage('popup_reportIssues'),
+// chrome.pageAction.setTitle({ tabId, title });
+// chrome.pageAction.setTitle({ tabId, title: 'YouTube 双字幕\n 已关闭 ⚡' });
+
+# 拦截请求
+
+```
+/* await fetch(`https://www.youtube.com/api/timedtext?type=list&v=${v}`)
+.then(response => response.text())
+.then(str => new window.DOMParser().parseFromString(str, 'text/xml'))
+.then(data => {
+const list = [...data.querySelectorAll('track')].map(v => ({
+name: v.getAttribute('name'),
+lang_code: v.getAttribute('lang_code'),
+}));
+const result = list.find(v => languageCode.includes(v.lang_code));
+});
+*/
+// result.name ? u.searchParams.set('name', result.name) : u.searchParams.delete('name');
+// u.searchParams.set('lang', result.lang_code);
+// return fetch(u.toString()).then(res => res.json());
+
+// let original = {};
+// let local = {};
+// const v = u.searchParams.get('v');
+
+```

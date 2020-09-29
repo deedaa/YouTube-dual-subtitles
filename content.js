@@ -32,9 +32,10 @@ const audioPlay = async url => {
 };
 
 const restartSubtitles = () => {
-  const subtitlesButton = document.querySelector('.ytp-subtitles-button.ytp-button');
-  subtitlesButton.click();
-  subtitlesButton.click();
+  injection2(`document.querySelector('.html5-video-player').setOption('captions', 'reload', true);`);
+  // const subtitlesButton = document.querySelector('.ytp-subtitles-button.ytp-button');
+  // subtitlesButton.click();
+  // subtitlesButton.click();
 };
 
 chrome.storage.onChanged.addListener(({ status }) => {
@@ -243,9 +244,13 @@ const reboot = () => {
   });
 };
 
-// 上传测试视频,配字幕
-// iframe css 的查询时间
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOMContentLoaded: ');
+  document.querySelector('.html5-video-player').addEventListener('onReady', () => console.log('onReady'));
+});
 
-// 2个问题: 图标点亮, 字幕列表获取方式
-
+// 字幕重启api
+// 字幕语言切换api
+// 测试api的通用性
+// 为什么有两次 lang ?
 // DOMContentLoaded  load

@@ -10,14 +10,16 @@ chrome.tabs.onUpdated.addListener((tabId, status) => {
   });
 });
 
-// css 侦测时间过慢
 const rule1 = {
   conditions: [
     new chrome.declarativeContent.PageStateMatcher({
       pageUrl: { hostEquals: 'www.youtube.com', pathEquals: '/watch' },
     }),
     new chrome.declarativeContent.PageStateMatcher({
-      css: [`iframe[src*='www.youtube.com/embed']`, `iframe[src*='www.youtube-nocookie.com/embed']`],
+      css: [`iframe[src*='www.youtube.com/embed']`],
+    }),
+    new chrome.declarativeContent.PageStateMatcher({
+      css: [`iframe[src*='www.youtube-nocookie.com/embed']`],
     }),
   ],
   actions: [new chrome.declarativeContent.ShowPageAction()],
@@ -64,7 +66,3 @@ chrome.contextMenus.onClicked.addListener(({ menuItemId }) => {
     chrome.tabs.create({ url: 'https://www.youtube.com/channel/UCY_XK0-kSagJq9ZQspmzd-g?view_as=subscriber' });
   if (menuItemId === 'github') chrome.tabs.create({ url: 'https://github.com/ouweiya/YouTube-dual-subtitles' });
 });
-
-// chrome.i18n.getMessage('popup_reportIssues'),
-// chrome.pageAction.setTitle({ tabId, title });
-// chrome.pageAction.setTitle({ tabId, title: 'YouTube 双字幕\n已关闭 ⚡' });
