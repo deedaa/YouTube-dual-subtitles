@@ -33,9 +33,6 @@ const audioPlay = async url => {
 
 const restartSubtitles = () => {
   injection2(`document.querySelector('.html5-video-player').setOption('captions', 'reload', true);`);
-  // const subtitlesButton = document.querySelector('.ytp-subtitles-button.ytp-button');
-  // subtitlesButton.click();
-  // subtitlesButton.click();
 };
 
 chrome.storage.onChanged.addListener(({ status }) => {
@@ -53,7 +50,6 @@ chrome.storage.onChanged.addListener(({ status }) => {
 });
 
 const insertCustomMenu = ({ singleStatus, languageParameter }) => {
-  console.log('注入: insertCustomMenu');
   const ytpSettingsMenu = document.querySelector('.ytp-popup.ytp-settings-menu');
   const ytpPanel = ytpSettingsMenu.querySelector('.ytp-panel');
   const panelMenu = ytpSettingsMenu.querySelector('.ytp-panel-menu');
@@ -244,13 +240,11 @@ const reboot = () => {
   });
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('DOMContentLoaded: ');
-  document.querySelector('.html5-video-player').addEventListener('onReady', () => console.log('onReady'));
-});
-
-// 字幕重启api
-// 字幕语言切换api
 // 测试api的通用性
-// 为什么有两次 lang ?
+// 更多的测试字幕可靠性
+// 直接API字幕重启
 // DOMContentLoaded  load
+
+// const subtitlesButton = document.querySelector('.ytp-subtitles-button.ytp-button');
+// subtitlesButton.click();
+// subtitlesButton.click();

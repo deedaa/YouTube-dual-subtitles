@@ -44,59 +44,60 @@ const finishing = lang => {
 };
 
 const proxiedOpen = function () {
-  this._url = arguments[1];
+  if (arguments[1].includes(subtitleUrl) || arguments[1].includes(subtitleUrl2)) {
+    this._url = arguments[1];
+  }
   nativeOpen.apply(this, arguments);
 };
 
 const proxiedSend = async function () {
-  if (this._url.includes(subtitleUrl) || this._url.includes(subtitleUrl2)) {
+  if (this._url) {
     const u = new URL(this._url);
     const lang = u.searchParams.get('lang');
-
-    console.log('lang: ', lang);
     const { languageCode } = JSON.parse(localStorage.getItem('languageParameter'));
+    const singleStatus = JSON.parse(localStorage.getItem('singleStatus'));
+    console.log('lang: ', lang);
 
-    if (!languageCode.includes(lang)) {
-      console.log('进入');
-      let mergeLang = {};
+    if (singleStatus) {
+      const videoPlayer = document.querySelector('.html5-video-player');
+      const result = videoPlayer.getOption('captions', 'tracklist').find(v => languageCode.includes(v.languageCode));
 
-      const singleStatus = JSON.parse(localStorage.getItem('singleStatus'));
-      const html5VideoPlayer = document.querySelector('.html5-video-player');
-
-      // 单字幕
-      if (singleStatus) {
-        const result = html5VideoPlayer
-          .getOption('captions', 'tracklist')
-          .find(v => languageCode.includes(v.languageCode));
-
-        if (result) {
-          console.log('result: ', result.languageCode);
-          html5VideoPlayer.setOption('captions', 'track', { languageCode: result.languageCode });
-          return;
-          // 优先使用已有字幕
-        } else {
-          u.searchParams.set('tlang', languageCode[0]);
-          mergeLang = await fetch(u.toString()).then(res => res.json());
-          // 使用自动翻译
-        }
+      if (result) {
+        console.log('result: ', result.languageCode);
+        videoPlayer.setOption('captions', 'track', { languageCode: result.languageCode });
+        if (lang !== result.languageCode) return;
+        // 优先使用已有字幕
       } else {
         u.searchParams.set('tlang', languageCode[0]);
-
-        const [original, local] = await Promise.all([
-          fetch(this._url).then(res => res.json()),
-          fetch(u.toString()).then(res => res.json()),
-        ]);
-
-        mergeLang = finishing(original);
-        mergeLang.events.forEach((v, i) => (v.segs[0].utf8 += `\n${local.events[i].segs[0].utf8}`));
+        const mergeLang = await fetch(u.toString()).then(res => res.json());
+        Object.defineProperty(this, 'responseText', { value: JSON.stringify(mergeLang), writable: false });
+        // 使用自动翻译
       }
+    } else if (!languageCode.includes(lang)) {
+      console.log('两种语言');
+      u.searchParams.set('tlang', languageCode[0]);
 
-      this.addEventListener('readystatechange', () => {
-        if (this.readyState == 3 && this.status == 200) {
-          console.log('修改请求');
-          Object.defineProperty(this, 'responseText', { value: JSON.stringify(mergeLang) });
-        }
+      const [original, local] = await Promise.all([
+        fetch(this._url).then(res => res.json()),
+        fetch(u.toString()).then(res => res.json()),
+      ]);
+
+      const aa = local.events.map(v => [v.tStartMs, v.segs[0].utf8.trim()]);
+      const bb = new Map(aa);
+      console.log('bb: ', bb);
+
+      const mergeLang = finishing(original);
+
+      // return;
+      mergeLang.events.forEach(v => {
+        const localLang = bb.get(v.tStartMs) ? bb.get(v.tStartMs) : '';
+        console.log('localLang: ', v.tStartMs, localLang);
+        const originalLang = v.segs[0].utf8.trim();
+
+        v.segs[0].utf8 = `${originalLang}\n${localLang}`.trim();
       });
+      console.log('mergeLang: ', mergeLang);
+      Object.defineProperty(this, 'responseText', { value: JSON.stringify(mergeLang), writable: false });
     }
 
     console.log('拦截');
@@ -111,3 +112,14 @@ const proxiedSend = async function () {
 // document.querySelector('.html5-video-player').setOption('captions', 'reload', true);
 // document.querySelector('.html5-video-player').toggleSubtitles();
 // document.querySelector('.html5-video-player').stopVideo();
+// document.querySelector('.html5-video-player').loadModule("captions");
+
+// this.addEventListener('readystatechange', () => {
+//   if (this.readyState == 3 && this.status == 200) {
+//     console.log('修改请求');
+//     Object.defineProperty(this, 'responseText', { value: JSON.stringify(mergeLang) });
+//   }
+// });
+// const localLang = local.events[i] ? local.events[i].segs[0].utf8.trim() : '';
+// console.log('original', original);
+// console.log('local', local);

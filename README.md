@@ -211,6 +211,8 @@ injection2(`localStorage.setItem( 'autoTranslationList', JSON.stringify(window.y
 
 # 拦截请求
 
+<!-- https://www.youtube.com/api/timedtext?type=list&v=_toYRFk-AZQ -->
+
 ```
 /* await fetch(`https://www.youtube.com/api/timedtext?type=list&v=${v}`)
 .then(response => response.text())
@@ -230,5 +232,15 @@ const result = list.find(v => languageCode.includes(v.lang_code));
 // let original = {};
 // let local = {};
 // const v = u.searchParams.get('v');
+
+```
+
+# 测试事件
+
+```
+// document.addEventListener('DOMContentLoaded', () => {
+//   console.log('DOMContentLoaded: ');
+//   document.querySelector('.html5-video-player').addEventListener('onReady', () => console.log('onReady'));
+// });
 
 ```
