@@ -74,7 +74,6 @@ const proxiedSend = async function () {
         // 使用自动翻译
       }
     } else if (!languageCode.includes(lang)) {
-      console.log('两种语言');
       u.searchParams.set('tlang', languageCode[0]);
 
       const [original, local] = await Promise.all([
@@ -84,19 +83,16 @@ const proxiedSend = async function () {
 
       const aa = local.events.map(v => [v.tStartMs, v.segs[0].utf8.trim()]);
       const bb = new Map(aa);
-      console.log('bb: ', bb);
 
       const mergeLang = finishing(original);
-
-      // return;
       mergeLang.events.forEach(v => {
-        const localLang = bb.get(v.tStartMs) ? bb.get(v.tStartMs) : '';
-        console.log('localLang: ', v.tStartMs, localLang);
+        const localLang = bb.get(v.tStartMs) || '';
         const originalLang = v.segs[0].utf8.trim();
-
+        // console.log('localLang: ', v.tStartMs, localLang);
         v.segs[0].utf8 = `${originalLang}\n${localLang}`.trim();
       });
-      console.log('mergeLang: ', mergeLang);
+
+      // console.log('mergeLang: ', mergeLang);
       Object.defineProperty(this, 'responseText', { value: JSON.stringify(mergeLang), writable: false });
     }
 

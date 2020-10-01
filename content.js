@@ -50,6 +50,8 @@ chrome.storage.onChanged.addListener(({ status }) => {
 });
 
 const insertCustomMenu = ({ singleStatus, languageParameter }) => {
+  // if (!document.querySelector('.ytp-subtitles-button').offsetWidth) return;
+  // console.log('offsetWidth', document.querySelector('.ytp-subtitles-button').offsetWidth);
   const ytpSettingsMenu = document.querySelector('.ytp-popup.ytp-settings-menu');
   const ytpPanel = ytpSettingsMenu.querySelector('.ytp-panel');
   const panelMenu = ytpSettingsMenu.querySelector('.ytp-panel-menu');
@@ -74,12 +76,26 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
     `
   );
 
+  injection2(`
+    const { languageCode: defaultSubtitles } = document
+    .querySelector('.html5-video-player')
+    .getOption('captions', 'track');
+  `);
+
   ytpSettingsMenu.querySelector('#single-button').addEventListener('click', function () {
     chrome.storage.local.get('singleStatus', ({ singleStatus }) => {
       localStorage.setItem('singleStatus', !singleStatus);
       chrome.storage.local.set({ singleStatus: !singleStatus });
       this.setAttribute('aria-checked', !singleStatus);
-      window.addEventListener('click', restartSubtitles, { once: true });
+      if (singleStatus) {
+        injection2(`
+          document
+          .querySelector('.html5-video-player')
+          .setOption('captions', 'track', { languageCode: defaultSubtitles });
+        `);
+      } else {
+        restartSubtitles();
+      }
     });
   });
 
@@ -92,8 +108,6 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
       forward && forward.remove();
       ytpPanel.classList.remove('ytp-panel-animate-back');
     }, 200);
-
-    restartSubtitles();
   };
 
   ytpSettingsMenu.querySelector('#language-button').addEventListener('click', () => {
@@ -104,7 +118,7 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
       try {
         localStorage.setItem(
           'autoTranslationList',
-          JSON.stringify(document.querySelector('.html5-video-player').getOption('captions', 'translationLanguages'))
+          JSON.stringify(document.querySelector('.html5-video-player').getOption('captions', 'translationLanguages')||[])
         );
       } catch {
         console.log('找不到字幕');
@@ -163,7 +177,7 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
         setTimeout(() => ytpSettingsMenu.classList.remove('ytp-popup-animating'), 280);
       }, 8);
 
-      const defaultLevel = () => {
+      const defaultLevel = reboot => {
         ytpSettingsMenu.classList.add('ytp-popup-animating');
         ytpSettingsMenu.style.setProperty('height', levelHeight);
         [ytpSettingsMenu, ytpPanel].forEach(el => el.style.setProperty('width', `${panelMenu.offsetWidth}px`));
@@ -173,12 +187,13 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
         setTimeout(() => {
           ytpSettingsMenu.classList.remove('ytp-popup-animating');
           ytpSettingsMenu.querySelector('#forward').remove();
-        }, 280);
+          reboot && reboot();
+        }, 270);
       };
 
       ytpSettingsMenu
         .querySelector('.ytp-panel-header .ytp-button')
-        .addEventListener('click', defaultLevel, { once: true });
+        .addEventListener('click', () => defaultLevel(), { once: true });
 
       ytpSettingsMenu.querySelector('#languageList').addEventListener('click', function (e) {
         const selectLanguage = {
@@ -194,14 +209,15 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
         ytpSettingsMenu.querySelector('#language-button .ytp-menuitem-content').textContent =
           selectLanguage.languageName;
 
-        defaultLevel();
+        defaultLevel(restartSubtitles);
       });
 
       window.addEventListener('click', revertOrigin, { once: true });
       window.addEventListener('blur', revertOrigin, { once: true });
-      [...panelMenu.children].forEach(el => el.style.setProperty('white-space', 'nowrap'));
     });
   });
+
+  [...panelMenu.children].forEach(el => el.style.setProperty('white-space', 'nowrap'));
 
   return restartSubtitles;
 };
@@ -240,11 +256,8 @@ const reboot = () => {
   });
 };
 
-// 测试api的通用性
-// 更多的测试字幕可靠性
-// 直接API字幕重启
+// 默认字幕设置时机, 当字幕关闭时获取为空对象 {}, 当没有字幕时获取为 undefined
 // DOMContentLoaded  load
 
 // const subtitlesButton = document.querySelector('.ytp-subtitles-button.ytp-button');
-// subtitlesButton.click();
-// subtitlesButton.click();
+// window.addEventListener('click', restartSubtitles, { once: true });
