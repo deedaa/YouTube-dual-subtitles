@@ -50,8 +50,6 @@ chrome.storage.onChanged.addListener(({ status }) => {
 });
 
 const insertCustomMenu = ({ singleStatus, languageParameter }) => {
-  // if (!document.querySelector('.ytp-subtitles-button').offsetWidth) return;
-  // console.log('offsetWidth', document.querySelector('.ytp-subtitles-button').offsetWidth);
   const ytpSettingsMenu = document.querySelector('.ytp-popup.ytp-settings-menu');
   const ytpPanel = ytpSettingsMenu.querySelector('.ytp-panel');
   const panelMenu = ytpSettingsMenu.querySelector('.ytp-panel-menu');
@@ -68,7 +66,7 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
 
     <div class="ytp-menuitem" role="menuitemcheckbox" aria-checked="${singleStatus}" tabindex="0" id="single-button">
       <div class="ytp-menuitem-icon"></div>
-      <div class="ytp-menuitem-label">${chrome.i18n.getMessage('singleSubtitle')}</div>
+      <div class="ytp-menuitem-label" data-changetrack="false">${chrome.i18n.getMessage('singleSubtitle')}</div>
       <div class="ytp-menuitem-content">
         <div class="ytp-menuitem-toggle-checkbox"></div>
       </div>
@@ -76,18 +74,15 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
     `
   );
 
-  injection2(`
-    const { languageCode: defaultSubtitles } = document
-    .querySelector('.html5-video-player')
-    .getOption('captions', 'track');
-  `);
-
   ytpSettingsMenu.querySelector('#single-button').addEventListener('click', function () {
     chrome.storage.local.get('singleStatus', ({ singleStatus }) => {
       localStorage.setItem('singleStatus', !singleStatus);
       chrome.storage.local.set({ singleStatus: !singleStatus });
       this.setAttribute('aria-checked', !singleStatus);
-      if (singleStatus) {
+      const changeTrack = JSON.parse(document.querySelector('#single-button .ytp-menuitem-label').dataset.changetrack);
+      // const changeTrack = JSON.parse(localStorage.getItem('changeTrack'));
+      console.log('changeTrack: ', changeTrack);
+      if (singleStatus && changeTrack) {
         injection2(`
           document
           .querySelector('.html5-video-player')
@@ -219,6 +214,15 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
 
   [...panelMenu.children].forEach(el => el.style.setProperty('white-space', 'nowrap'));
 
+  injection2(`
+    if (!ytInitialPlayerResponse.captions) {
+      [
+        document.querySelector('.ytp-settings-menu #language-button'),
+        document.querySelector('.ytp-settings-menu #single-button'),
+      ].forEach(el => el.style.setProperty('display', 'none'));
+    }
+  `);
+
   return restartSubtitles;
 };
 
@@ -256,8 +260,16 @@ const reboot = () => {
   });
 };
 
-// 默认字幕设置时机, 当字幕关闭时获取为空对象 {}, 当没有字幕时获取为 undefined
-// DOMContentLoaded  load
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelector('.html5-video-player').addEventListener('onReady', console.log);
+});
 
-// const subtitlesButton = document.querySelector('.ytp-subtitles-button.ytp-button');
-// window.addEventListener('click', restartSubtitles, { once: true });
+// 默认字幕设置时机, 当字幕关闭时获取为空对象 {}, 当没有字幕时获取为 undefined
+// 没有字幕不显示操作, 避免获取默认字幕
+// 在点击时获取字幕
+// if (!document.querySelector('.ytp-subtitles-button').offsetWidth) return;
+// console.log('offsetWidth', document.querySelector('.ytp-subtitles-button').offsetWidth);
+// injection2(`console.log('字幕:', ytInitialPlayerResponse.captions);`);
+// injection2(
+//   `console.log('captions:', document.querySelector('.html5-video-player').getOption('captions', 'track'));`
+// );

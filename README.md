@@ -36,6 +36,8 @@ https://www.youtube.com/embed/vsMJiNtQWvw
 
 <!-- \n已开启 👍 -->
 
+# 字幕 API
+
 ytInitialPlayerResponse.captions.playerCaptionsTracklistRenderer.translationLanguages
 var e=this.H.getOption("captions","translationLanguages");
 
@@ -154,6 +156,8 @@ injection2(`localStorage.setItem( 'autoTranslationList', JSON.stringify(window.y
 // ({ single, selectLangCode, autoLangCode, autoTranslationList\_ }) => {
 // });
 
+# 字幕 API
+
 // const autoTranslationList = JSON.parse(ytplayer.config.args.player_response).captions.playerCaptionsTracklistRenderer
 // .translationLanguages;
 
@@ -209,9 +213,9 @@ injection2(`localStorage.setItem( 'autoTranslationList', JSON.stringify(window.y
 // chrome.pageAction.setTitle({ tabId, title });
 // chrome.pageAction.setTitle({ tabId, title: 'YouTube 双字幕\n 已关闭 ⚡' });
 
-# 拦截请求
+# 字幕列表
 
-<!-- https://www.youtube.com/api/timedtext?type=list&v=_toYRFk-AZQ -->
+https://www.youtube.com/api/timedtext?type=list&v=_toYRFk-AZQ
 
 ```
 /* await fetch(`https://www.youtube.com/api/timedtext?type=list&v=${v}`)
@@ -244,3 +248,16 @@ const result = list.find(v => languageCode.includes(v.lang_code));
 // });
 
 ```
+
+# subtitlesButton
+
+// const subtitlesButton = document.querySelector('.ytp-subtitles-button.ytp-button');
+// window.addEventListener('click', restartSubtitles, { once: true });
+
+# 加载事件
+
+// DOMContentLoaded load
+
+# defaultSubtitles
+
+// injection2(` // const { languageCode: defaultSubtitles } = document // .querySelector('.html5-video-player') // .getOption('captions', 'track'); //`);

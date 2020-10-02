@@ -50,6 +50,9 @@ const proxiedOpen = function () {
   nativeOpen.apply(this, arguments);
 };
 
+let defaultSubtitles = '';
+// localStorage.removeItem('changeTrack');
+
 const proxiedSend = async function () {
   if (this._url) {
     const u = new URL(this._url);
@@ -58,6 +61,11 @@ const proxiedSend = async function () {
     const singleStatus = JSON.parse(localStorage.getItem('singleStatus'));
     console.log('lang: ', lang);
 
+    if (!defaultSubtitles) {
+      defaultSubtitles = document.querySelector('.html5-video-player').getOption('captions', 'track').languageCode;
+    }
+    console.log('defaultSubtitles: ', defaultSubtitles);
+
     if (singleStatus) {
       const videoPlayer = document.querySelector('.html5-video-player');
       const result = videoPlayer.getOption('captions', 'tracklist').find(v => languageCode.includes(v.languageCode));
@@ -65,12 +73,15 @@ const proxiedSend = async function () {
       if (result) {
         console.log('result: ', result.languageCode);
         videoPlayer.setOption('captions', 'track', { languageCode: result.languageCode });
+        // localStorage.setItem('changeTrack', true);
+        document.querySelector('#single-button .ytp-menuitem-label').dataset.changetrack = true;
         if (lang !== result.languageCode) return;
         // 优先使用已有字幕
       } else {
         u.searchParams.set('tlang', languageCode[0]);
         const mergeLang = await fetch(u.toString()).then(res => res.json());
         Object.defineProperty(this, 'responseText', { value: JSON.stringify(mergeLang), writable: false });
+        document.querySelector('#single-button .ytp-menuitem-label').dataset.changetrack = false;
         // 使用自动翻译
       }
     } else if (!languageCode.includes(lang)) {
@@ -103,6 +114,7 @@ const proxiedSend = async function () {
 };
 
 // document.querySelector('.html5-video-player').getOption('captions', 'tracklist')
+// document.querySelector('.html5-video-player').getOption('captions', 'track')
 
 // document.querySelector('.html5-video-player').setOption('captions', 'track', { languageCode: 'en' });
 // document.querySelector('.html5-video-player').setOption('captions', 'reload', true);
