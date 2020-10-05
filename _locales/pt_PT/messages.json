@@ -19,5 +19,8 @@
   },
   "learnMore": {
     "message": "Saber mais"
+  },
+  "goBack": {
+    "message": "Nenhuma legenda encontrada"
   }
 }

@@ -3,7 +3,7 @@
     "message": "Sari kata ganda YouTube"
   },
   "description": {
-    "message": "Sari kata ganda YouTube dan pertukaran automatik ke bahasa tempatan."
+    "message": "Subtitle YouTube dan pertukaran automatik ke bahasa tempatan."
   },
   "singleSubtitle": {
     "message": "Sarikata tunggal"
@@ -19,5 +19,8 @@
   },
   "learnMore": {
     "message": "Ketahui Lebih Lanjut"
+  },
+  "goBack": {
+    "message": "Sari kata tidak dijumpai"
   }
 }

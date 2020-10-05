@@ -29,15 +29,25 @@ chrome.declarativeContent.onPageChanged.removeRules(undefined, () =>
   chrome.declarativeContent.onPageChanged.addRules([rule1])
 );
 
-const setIcon = (tabId, status, path) => {
-  chrome.storage.local.set({ status: !status }, () => chrome.pageAction.setIcon({ tabId, path }));
-};
-
 const toggleHandler = ({ id: tabId }) => {
   chrome.storage.local.get('status', ({ status }) => {
-    status ? setIcon(tabId, status, 'assets/disable32.png') : setIcon(tabId, status, 'assets/32.png');
+    status = !status;
+    chrome.storage.local.set({ status }, () => {
+      const path = status ? 'assets/32.png' : 'assets/disable32.png';
+      chrome.pageAction.setIcon({ tabId, path });
+      chrome.tabs.sendMessage(tabId, { status });
+    });
   });
 };
+
+// const setIcon = (tabId, status, path) => {
+//   chrome.storage.local.set({ status: !status }, () => chrome.pageAction.setIcon({ tabId, path }));
+// };
+
+// status ? setIcon(tabId, status, 'assets/disable32.png') : setIcon(tabId, status, 'assets/32.png');
+// chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+//   chrome.tabs.sendMessage(tabs[0].id, { name: 'Jack' });
+// });
 
 chrome.pageAction.onClicked.addListener(toggleHandler);
 

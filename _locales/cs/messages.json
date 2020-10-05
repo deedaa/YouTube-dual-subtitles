@@ -19,5 +19,8 @@
   },
   "learnMore": {
     "message": "Zjistit více"
+  },
+  "goBack": {
+    "message": "Nebyly nalezeny žádné titulky"
   }
 }

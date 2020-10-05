@@ -19,5 +19,8 @@
   },
   "learnMore": {
     "message": "Aprende más"
+  },
+  "goBack": {
+    "message": "No se encontraron subtítulos"
   }
 }

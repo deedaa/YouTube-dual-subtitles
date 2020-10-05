@@ -19,5 +19,8 @@
   },
   "learnMore": {
     "message": "Tudj meg többet"
+  },
+  "goBack": {
+    "message": "Nem található felirat"
   }
 }

@@ -19,5 +19,8 @@
   },
   "learnMore": {
     "message": "學到更多"
+  },
+  "goBack": {
+    "message": "找不到字幕"
   }
 }

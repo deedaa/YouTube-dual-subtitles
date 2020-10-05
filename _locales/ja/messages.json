@@ -19,5 +19,8 @@
   },
   "learnMore": {
     "message": "もっと詳しく知る"
+  },
+  "goBack": {
+    "message": "字幕が見つかりません"
   }
 }

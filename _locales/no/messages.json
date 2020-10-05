@@ -19,5 +19,8 @@
   },
   "learnMore": {
     "message": "Lære mer"
+  },
+  "goBack": {
+    "message": "Ingen undertekster funnet"
   }
 }

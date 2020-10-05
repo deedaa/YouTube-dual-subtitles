@@ -35,14 +35,15 @@ const restartSubtitles = () => {
   injection2(`document.querySelector('.html5-video-player').setOption('captions', 'reload', true);`);
 };
 
-chrome.storage.onChanged.addListener(({ status }) => {
-  if (!status) return;
-
-  if (status.newValue) {
+chrome.runtime.onMessage.addListener(({ status }) => {
+  if (status) {
     reboot();
   } else {
     injection2(`XMLHttpRequest.prototype.open = nativeOpen; XMLHttpRequest.prototype.send = nativeSend;`);
-    ['#language-button', '#single-button'].forEach(id => document.querySelector(id).remove());
+    if (JSON.parse(document.body.dataset.captions)) {
+      ['#language-button', '#single-button'].forEach(id => document.querySelector(id).remove());
+    }
+    document.body.removeAttribute('data-captions');
     restartSubtitles();
   }
 
@@ -50,6 +51,7 @@ chrome.storage.onChanged.addListener(({ status }) => {
 });
 
 const insertCustomMenu = ({ singleStatus, languageParameter }) => {
+  console.log('注入: insertCustomMenu');
   const ytpSettingsMenu = document.querySelector('.ytp-popup.ytp-settings-menu');
   const ytpPanel = ytpSettingsMenu.querySelector('.ytp-panel');
   const panelMenu = ytpSettingsMenu.querySelector('.ytp-panel-menu');
@@ -80,7 +82,6 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
       chrome.storage.local.set({ singleStatus: !singleStatus });
       this.setAttribute('aria-checked', !singleStatus);
       const changeTrack = JSON.parse(document.querySelector('#single-button .ytp-menuitem-label').dataset.changetrack);
-      // const changeTrack = JSON.parse(localStorage.getItem('changeTrack'));
       console.log('changeTrack: ', changeTrack);
       if (singleStatus && changeTrack) {
         injection2(`
@@ -110,15 +111,13 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
       const levelHeight = ytpSettingsMenu.style.getPropertyValue('height');
 
       injection2(`
-      try {
-        localStorage.setItem(
-          'autoTranslationList',
-          JSON.stringify(document.querySelector('.html5-video-player').getOption('captions', 'translationLanguages')||[])
-        );
-      } catch {
-        console.log('找不到字幕');
-      }
-    `);
+        try {
+          localStorage.setItem(
+            'autoTranslationList',
+            JSON.stringify(document.querySelector('.html5-video-player').getOption('captions', 'translationLanguages') || [])
+          );
+        } catch {}
+      `);
 
       const autoTranslationList = JSON.parse(localStorage.getItem('autoTranslationList'));
 
@@ -138,6 +137,16 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
       let resHeight = Math.round(document.querySelector('.html5-video-player').offsetHeight * 0.7);
       resHeight = resHeight > 414 ? 414 : resHeight;
 
+      const firstElement = `<div class="ytp-menuitem" tabindex="0" role="menuitemradio" style="pointer-events: ${
+        list ? 'auto' : 'none'
+      };" aria-checked="${`${autoLangCode}` === `${languageParameter.languageCode}`}">
+          <div class="ytp-menuitem-label" data-lang="${autoLangCode}" data-languagename="${chrome.i18n.getMessage(
+        'auto'
+      )}">
+            ${chrome.i18n.getMessage(list ? 'auto' : 'goBack')}
+          </div>
+        </div>`;
+
       ytpSettingsMenu.insertAdjacentHTML(
         'beforeend',
         `
@@ -145,17 +154,8 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
           <div class="ytp-panel-header">
             <button class="ytp-button ytp-panel-title">${chrome.i18n.getMessage('defaultSubtitles')}</button>
           </div>
-          <div class="ytp-panel-menu" role="menu" id="languageList">
-            <div class="ytp-menuitem" tabindex="0" role="menuitemradio" aria-checked=${
-              `${autoLangCode}` === `${languageParameter.languageCode}`
-            }>
-              <div class="ytp-menuitem-label" data-lang="${autoLangCode}" data-languagename="${chrome.i18n.getMessage(
-          'auto'
-        )}">
-               ${chrome.i18n.getMessage('auto')}
-              </div>
-            </div>
-
+          <div class="ytp-panel-menu" role="menu" id="languageList" style="pointer-events: ${list ? 'auto' : 'none'};">
+            ${firstElement}
             ${list}
           </div>
         </div>
@@ -214,62 +214,82 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
 
   [...panelMenu.children].forEach(el => el.style.setProperty('white-space', 'nowrap'));
 
-  injection2(`
-    if (!ytInitialPlayerResponse.captions) {
-      [
-        document.querySelector('.ytp-settings-menu #language-button'),
-        document.querySelector('.ytp-settings-menu #single-button'),
-      ].forEach(el => el.style.setProperty('display', 'none'));
-    }
-  `);
-
-  return restartSubtitles;
+  // return restartSubtitles;
 };
 
 const controls = new URLSearchParams(window.location.search).get('controls') !== '0';
 const UILang = chrome.i18n.getUILanguage();
 const autoLang = new Map(langsRaw).get(UILang);
 const autoLangCode = autoLang ? autoLang.languageCode : ['en'];
-
-const languageParameter_ = {
-  languageCode: autoLangCode,
-  languageName: chrome.i18n.getMessage('auto'),
-};
+const languageParameter_ = { languageCode: autoLangCode, languageName: chrome.i18n.getMessage('auto') };
 
 chrome.storage.local.get(null, ({ status, singleStatus, languageParameter = languageParameter_ }) => {
-  window.addEventListener('load', () => {
-    if (controls) insertCustomMenu({ singleStatus, languageParameter });
+  injection(() => {
+    if (status) {
+      localStorage.setItem('languageParameter', JSON.stringify(languageParameter));
+      localStorage.setItem('singleStatus', singleStatus);
+      injection2(`XMLHttpRequest.prototype.open = proxiedOpen; XMLHttpRequest.prototype.send = proxiedSend;`);
+      chrome.storage.local.set({ languageParameter });
+    }
   });
 
-  localStorage.setItem('languageParameter', JSON.stringify(languageParameter));
-  localStorage.setItem('singleStatus', singleStatus);
-  chrome.storage.local.set({ languageParameter });
-  injection(() => {
-    if (status) injection2(`XMLHttpRequest.prototype.open = proxiedOpen; XMLHttpRequest.prototype.send = proxiedSend;`);
-  });
+  if (status && controls) {
+    const loadEvent = window.self === window.top ? 'DOMContentLoaded' : 'load';
+    window.addEventListener(loadEvent, () => {
+      injection2(
+        `document.body.dataset.captions = window.self === window.top ? !!ytInitialPlayerResponse.captions : true;`
+      );
+
+      const captions = JSON.parse(document.body.dataset.captions);
+      if (captions) insertCustomMenu({ singleStatus, languageParameter });
+      console.log('captions: ', captions);
+    });
+  }
 });
 
 const reboot = () => {
-  chrome.storage.local.get(null, ({ singleStatus, languageParameter = languageParameter_ }) => {
-    localStorage.setItem('languageParameter', JSON.stringify(languageParameter));
-    localStorage.setItem('singleStatus', singleStatus);
-    chrome.storage.local.set({ languageParameter });
+  injection2(
+    `document.body.dataset.captions = window.self === window.top ? !!ytInitialPlayerResponse.captions : true;`
+  );
 
-    injection2(`XMLHttpRequest.prototype.open = proxiedOpen; XMLHttpRequest.prototype.send = proxiedSend;`);
-    if (controls) insertCustomMenu({ singleStatus, languageParameter })();
-  });
+  const captions = JSON.parse(document.body.dataset.captions);
+  if (captions && controls) {
+    chrome.storage.local.get(null, ({ singleStatus, languageParameter = languageParameter_ }) => {
+      localStorage.setItem('languageParameter', JSON.stringify(languageParameter));
+      localStorage.setItem('singleStatus', singleStatus);
+      chrome.storage.local.set({ languageParameter });
+
+      injection2(`XMLHttpRequest.prototype.open = proxiedOpen; XMLHttpRequest.prototype.send = proxiedSend;`);
+      restartSubtitles();
+      insertCustomMenu({ singleStatus, languageParameter });
+    });
+  }
+  console.log('captions: ', captions);
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelector('.html5-video-player').addEventListener('onReady', console.log);
-});
+// 翻译优化
+// 设计Google风格的logo
+// 命名问题
 
-// 默认字幕设置时机, 当字幕关闭时获取为空对象 {}, 当没有字幕时获取为 undefined
-// 没有字幕不显示操作, 避免获取默认字幕
-// 在点击时获取字幕
-// if (!document.querySelector('.ytp-subtitles-button').offsetWidth) return;
-// console.log('offsetWidth', document.querySelector('.ytp-subtitles-button').offsetWidth);
-// injection2(`console.log('字幕:', ytInitialPlayerResponse.captions);`);
-// injection2(
-//   `console.log('captions:', document.querySelector('.html5-video-player').getOption('captions', 'track'));`
-// );
+// document.addEventListener('DOMContentLoaded', () => {
+//   injection2(`
+//      console.log(999, ytInitialPlayerResponse.captions);
+//   `);
+// });
+
+// chrome.storage.onChanged.addListener(({ status }) => {
+//   if (!status) return;
+
+//   if (status.newValue) {
+//     reboot();
+//   } else {
+//     injection2(`XMLHttpRequest.prototype.open = nativeOpen; XMLHttpRequest.prototype.send = nativeSend;`);
+//     if (JSON.parse(document.body.dataset.captions)) {
+//       ['#language-button', '#single-button'].forEach(id => document.querySelector(id).remove());
+//     }
+//     document.body.removeAttribute('data-captions');
+//     restartSubtitles();
+//   }
+
+//   audioPlay('assets/2.ogg');
+// });

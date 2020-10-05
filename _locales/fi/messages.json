@@ -3,7 +3,7 @@
     "message": "YouTube-kaksoistekstit"
   },
   "description": {
-    "message": "YouTuben kaksoistekstitys ja automaattinen siirtyminen paikalliselle kielelle."
+    "message": "YouTuben kaksoistekstit ja automaattinen siirtyminen paikalliseen kieleen"
   },
   "singleSubtitle": {
     "message": "Yksi tekstitys"
@@ -19,5 +19,8 @@
   },
   "learnMore": {
     "message": "Lisätietoja"
+  },
+  "goBack": {
+    "message": "Ei tekstityksiä"
   }
 }

@@ -261,3 +261,36 @@ const result = list.find(v => languageCode.includes(v.lang_code));
 # defaultSubtitles
 
 // injection2(` // const { languageCode: defaultSubtitles } = document // .querySelector('.html5-video-player') // .getOption('captions', 'track'); //`);
+
+# ytInitialPlayerResponse
+
+```
+  // injection2(`
+  //   if (window.self === window.top && !ytInitialPlayerResponse.captions) {
+  //     ['.ytp-settings-menu #language-button', '.ytp-settings-menu #single-button'].forEach(id =>
+  //       document.querySelector(id).style.setProperty('display', 'none')
+  //     );
+  //   }
+  // `);
+
+  // injection2(`
+  //   const haveCaptions =
+  //     window.self === window.top
+  //       ? ytInitialPlayerResponse.captions
+  //       : document.querySelector('.html5-video-player').getOption('captions', 'track');
+  //   console.log('haveCaptions: ', !!haveCaptions);
+  // `);
+
+  /*  injection2(`
+    {
+      const tracklist = document.querySelector('.html5-video-player').getOption('captions', 'tracklist');
+      const display = tracklist ? tracklist.length : tracklist;
+      if (!display) {
+        [
+          document.querySelector('.ytp-settings-menu #language-button'),
+          document.querySelector('.ytp-settings-menu #single-button'),
+        ].forEach(el => el.style.setProperty('display', 'none'));
+      }
+    }
+  `); */
+```

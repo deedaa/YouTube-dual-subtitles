@@ -19,5 +19,8 @@
   },
   "learnMore": {
     "message": "Apprendre encore plus"
+  },
+  "goBack": {
+    "message": "Aucun sous-titre trouvé"
   }
 }

@@ -19,5 +19,8 @@
   },
   "learnMore": {
     "message": "Aprèn més"
+  },
+  "goBack": {
+    "message": "No s'ha trobat cap subtítol"
   }
 }

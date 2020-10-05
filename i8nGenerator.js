@@ -15,6 +15,7 @@ const loca2 = [
   'Automatic',
   'Feedback',
   'Learn More',
+  'No subtitles found',
 ];
 
 rimraf.sync('./_locales');
@@ -37,6 +38,7 @@ const langList = new Map(langsRaw);
         obj.auto = { message: translation[4] };
         obj.feedback = { message: translation[5] };
         obj.learnMore = { message: translation[6] };
+        obj.goBack = { message: translation[7] };
 
         const createFolder = `./_locales/${key.replace('-', '_')}`;
         fs.mkdirSync(createFolder);
@@ -52,7 +54,7 @@ const langList = new Map(langsRaw);
   console.log('writeFile end');
   const complete = fs.readdirSync('./_locales').every(file => {
     const content = fs.readFileSync(`./_locales/${file}/messages.json`, 'utf8');
-    return content.split('\n').length === 23;
+    return content.split('\n').length === 26;
   });
 
   console.log('complete =>', complete);

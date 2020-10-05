@@ -19,5 +19,8 @@
   },
   "learnMore": {
     "message": "Daha fazla bilgi edin"
+  },
+  "goBack": {
+    "message": "Altyazı bulunamadı"
   }
 }

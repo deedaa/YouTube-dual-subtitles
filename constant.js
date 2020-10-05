@@ -1,7 +1,5 @@
 const nativeOpen = XMLHttpRequest.prototype.open;
 const nativeSend = XMLHttpRequest.prototype.send;
-const subtitleUrl = 'www.youtube.com/api/timedtext';
-const subtitleUrl2 = 'www.youtube-nocookie.com/api/timedtext';
 
 const finishing = lang => {
   const events = [];
@@ -44,14 +42,11 @@ const finishing = lang => {
 };
 
 const proxiedOpen = function () {
-  if (arguments[1].includes(subtitleUrl) || arguments[1].includes(subtitleUrl2)) {
-    this._url = arguments[1];
-  }
+  if (arguments[1].includes('api/timedtext')) this._url = arguments[1];
   nativeOpen.apply(this, arguments);
 };
 
 let defaultSubtitles = '';
-// localStorage.removeItem('changeTrack');
 
 const proxiedSend = async function () {
   if (this._url) {
@@ -64,7 +59,6 @@ const proxiedSend = async function () {
     if (!defaultSubtitles) {
       defaultSubtitles = document.querySelector('.html5-video-player').getOption('captions', 'track').languageCode;
     }
-    console.log('defaultSubtitles: ', defaultSubtitles);
 
     if (singleStatus) {
       const videoPlayer = document.querySelector('.html5-video-player');
@@ -73,7 +67,6 @@ const proxiedSend = async function () {
       if (result) {
         console.log('result: ', result.languageCode);
         videoPlayer.setOption('captions', 'track', { languageCode: result.languageCode });
-        // localStorage.setItem('changeTrack', true);
         document.querySelector('#single-button .ytp-menuitem-label').dataset.changetrack = true;
         if (lang !== result.languageCode) return;
         // 优先使用已有字幕
@@ -92,14 +85,12 @@ const proxiedSend = async function () {
         fetch(u.toString()).then(res => res.json()),
       ]);
 
-      const aa = local.events.map(v => [v.tStartMs, v.segs[0].utf8.trim()]);
-      const bb = new Map(aa);
+      const localMap = new Map(local.events.map(v => [v.tStartMs, v.segs[0].utf8.trim()]));
 
       const mergeLang = finishing(original);
       mergeLang.events.forEach(v => {
-        const localLang = bb.get(v.tStartMs) || '';
+        const localLang = localMap.get(v.tStartMs) || '';
         const originalLang = v.segs[0].utf8.trim();
-        // console.log('localLang: ', v.tStartMs, localLang);
         v.segs[0].utf8 = `${originalLang}\n${localLang}`.trim();
       });
 
@@ -113,6 +104,7 @@ const proxiedSend = async function () {
   nativeSend.apply(this, arguments);
 };
 
+// document.querySelector('.html5-video-player').getOptions('captions')
 // document.querySelector('.html5-video-player').getOption('captions', 'tracklist')
 // document.querySelector('.html5-video-player').getOption('captions', 'track')
 
@@ -131,3 +123,7 @@ const proxiedSend = async function () {
 // const localLang = local.events[i] ? local.events[i].segs[0].utf8.trim() : '';
 // console.log('original', original);
 // console.log('local', local);
+
+// const subtitleUrl = 'api/timedtext';
+// const subtitleUrl2 = 'www.youtube-nocookie.com/api/timedtext';
+// || arguments[1].includes(subtitleUrl2)

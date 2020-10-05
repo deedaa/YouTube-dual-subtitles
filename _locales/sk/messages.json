@@ -19,5 +19,8 @@
   },
   "learnMore": {
     "message": "Uč sa viac"
+  },
+  "goBack": {
+    "message": "Nenašli sa žiadne titulky"
   }
 }
