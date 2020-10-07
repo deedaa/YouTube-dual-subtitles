@@ -298,3 +298,57 @@ const result = list.find(v => languageCode.includes(v.lang_code));
 "32": "assets/32.png",
 
 "default_title": "**MSG_name**"
+
+// chrome.storage.onChanged.addListener(({ status }) => {
+// if (!status) return;
+
+// if (status.newValue) {
+// reboot();
+// } else {
+// injection2(`XMLHttpRequest.prototype.open = nativeOpen; XMLHttpRequest.prototype.send = nativeSend;`);
+// if (JSON.parse(document.body.dataset.captions)) {
+// ['#language-button', '#single-button'].forEach(id => document.querySelector(id).remove());
+// }
+// document.body.removeAttribute('data-captions');
+// restartSubtitles();
+// }
+
+// audioPlay('assets/2.ogg');
+// });
+
+# setIcon
+
+// const setIcon = (tabId, status, path) => {
+// chrome.storage.local.set({ status: !status }, () => chrome.pageAction.setIcon({ tabId, path }));
+// };
+
+// status ? setIcon(tabId, status, 'assets/disable32.png') : setIcon(tabId, status, 'assets/32.png');
+// chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+// chrome.tabs.sendMessage(tabs[0].id, { name: 'Jack' });
+// });
+
+# constant
+
+// document.querySelector('.html5-video-player').getOptions('captions')
+// document.querySelector('.html5-video-player').getOption('captions', 'tracklist')
+// document.querySelector('.html5-video-player').getOption('captions', 'track')
+
+// document.querySelector('.html5-video-player').setOption('captions', 'track', { languageCode: 'en' });
+// document.querySelector('.html5-video-player').setOption('captions', 'reload', true);
+// document.querySelector('.html5-video-player').toggleSubtitles();
+// document.querySelector('.html5-video-player').stopVideo();
+// document.querySelector('.html5-video-player').loadModule("captions");
+
+// this.addEventListener('readystatechange', () => {
+// if (this.readyState == 3 && this.status == 200) {
+// console.log('修改请求');
+// Object.defineProperty(this, 'responseText', { value: JSON.stringify(mergeLang) });
+// }
+// });
+// const localLang = local.events[i] ? local.events[i].segs[0].utf8.trim() : '';
+// console.log('original', original);
+// console.log('local', local);
+
+// const subtitleUrl = 'api/timedtext';
+// const subtitleUrl2 = 'www.youtube-nocookie.com/api/timedtext';
+// || arguments[1].includes(subtitleUrl2)

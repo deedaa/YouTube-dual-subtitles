@@ -3,14 +3,14 @@ const injection = handler => {
   script.src = chrome.runtime.getURL('constant.js');
   script.onload = handler;
   (document.head || document.documentElement).append(script);
-  // script.remove();
+  script.remove();
 };
 
 const injection2 = textContent => {
   const script = document.createElement('script');
   script.textContent = textContent;
   (document.head || document.documentElement).append(script);
-  // script.remove();
+  script.remove();
 };
 
 const audioPlay = async url => {
@@ -51,7 +51,6 @@ chrome.runtime.onMessage.addListener(({ status }) => {
 });
 
 const insertCustomMenu = ({ singleStatus, languageParameter }) => {
-  console.log('注入: insertCustomMenu');
   const ytpSettingsMenu = document.querySelector('.ytp-popup.ytp-settings-menu');
   const ytpPanel = ytpSettingsMenu.querySelector('.ytp-panel');
   const panelMenu = ytpSettingsMenu.querySelector('.ytp-panel-menu');
@@ -82,7 +81,6 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
       chrome.storage.local.set({ singleStatus: !singleStatus });
       this.setAttribute('aria-checked', !singleStatus);
       const changeTrack = JSON.parse(document.querySelector('#single-button .ytp-menuitem-label').dataset.changetrack);
-      console.log('changeTrack: ', changeTrack);
       if (singleStatus && changeTrack) {
         injection2(`
           document
@@ -170,7 +168,7 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
         ytpPanel.classList.add('ytp-panel-animate-back');
         ytpSettingsMenu.querySelector('#forward').classList.remove('ytp-panel-animate-forward');
         setTimeout(() => ytpSettingsMenu.classList.remove('ytp-popup-animating'), 280);
-      }, 8);
+      }, 10);
 
       const defaultLevel = reboot => {
         ytpSettingsMenu.classList.add('ytp-popup-animating');
@@ -240,7 +238,6 @@ chrome.storage.local.get(null, ({ status, singleStatus, languageParameter = lang
 
       const captions = JSON.parse(document.body.dataset.captions);
       if (captions) insertCustomMenu({ singleStatus, languageParameter });
-      console.log('captions: ', captions);
     });
   }
 });
@@ -262,30 +259,4 @@ const reboot = () => {
       insertCustomMenu({ singleStatus, languageParameter });
     });
   }
-  console.log('captions: ', captions);
 };
-
-// node zip 打包
-
-// document.addEventListener('DOMContentLoaded', () => {
-//   injection2(`
-//      console.log(999, ytInitialPlayerResponse.captions);
-//   `);
-// });
-
-// chrome.storage.onChanged.addListener(({ status }) => {
-//   if (!status) return;
-
-//   if (status.newValue) {
-//     reboot();
-//   } else {
-//     injection2(`XMLHttpRequest.prototype.open = nativeOpen; XMLHttpRequest.prototype.send = nativeSend;`);
-//     if (JSON.parse(document.body.dataset.captions)) {
-//       ['#language-button', '#single-button'].forEach(id => document.querySelector(id).remove());
-//     }
-//     document.body.removeAttribute('data-captions');
-//     restartSubtitles();
-//   }
-
-//   audioPlay('assets/2.ogg');
-// });

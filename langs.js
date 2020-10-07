@@ -433,4 +433,4 @@ const langsRaw = [
   ],
 ];
 
-if (typeof window === 'undefined') module.exports = { langsRaw };
+// if (typeof window === 'undefined') module.exports = { langsRaw };

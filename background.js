@@ -67,12 +67,3 @@ chrome.contextMenus.onClicked.addListener(({ menuItemId }) => {
     chrome.tabs.create({ url: 'https://www.youtube.com/channel/UCY_XK0-kSagJq9ZQspmzd-g?view_as=subscriber' });
   if (menuItemId === 'github') chrome.tabs.create({ url: 'https://github.com/ouweiya/YouTube-dual-subtitles' });
 });
-
-// const setIcon = (tabId, status, path) => {
-//   chrome.storage.local.set({ status: !status }, () => chrome.pageAction.setIcon({ tabId, path }));
-// };
-
-// status ? setIcon(tabId, status, 'assets/disable32.png') : setIcon(tabId, status, 'assets/32.png');
-// chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-//   chrome.tabs.sendMessage(tabs[0].id, { name: 'Jack' });
-// });

@@ -54,7 +54,6 @@ const proxiedSend = async function () {
     const lang = u.searchParams.get('lang');
     const { languageCode } = JSON.parse(localStorage.getItem('languageParameter'));
     const singleStatus = JSON.parse(localStorage.getItem('singleStatus'));
-    console.log('lang: ', lang);
 
     if (!defaultSubtitles) {
       defaultSubtitles = document.querySelector('.html5-video-player').getOption('captions', 'track').languageCode;
@@ -65,17 +64,16 @@ const proxiedSend = async function () {
       const result = videoPlayer.getOption('captions', 'tracklist').find(v => languageCode.includes(v.languageCode));
 
       if (result) {
-        console.log('result: ', result.languageCode);
         videoPlayer.setOption('captions', 'track', { languageCode: result.languageCode });
         document.querySelector('#single-button .ytp-menuitem-label').dataset.changetrack = true;
         if (lang !== result.languageCode) return;
-        // 优先使用已有字幕
+        // have
       } else {
         u.searchParams.set('tlang', languageCode[0]);
         const mergeLang = await fetch(u.toString()).then(res => res.json());
         Object.defineProperty(this, 'responseText', { value: JSON.stringify(mergeLang), writable: false });
         document.querySelector('#single-button .ytp-menuitem-label').dataset.changetrack = false;
-        // 使用自动翻译
+        // translation
       }
     } else if (!languageCode.includes(lang)) {
       u.searchParams.set('tlang', languageCode[0]);
@@ -94,36 +92,9 @@ const proxiedSend = async function () {
         v.segs[0].utf8 = `${originalLang}\n${localLang}`.trim();
       });
 
-      // console.log('mergeLang: ', mergeLang);
       Object.defineProperty(this, 'responseText', { value: JSON.stringify(mergeLang), writable: false });
     }
-
-    console.log('拦截');
   }
 
   nativeSend.apply(this, arguments);
 };
-
-// document.querySelector('.html5-video-player').getOptions('captions')
-// document.querySelector('.html5-video-player').getOption('captions', 'tracklist')
-// document.querySelector('.html5-video-player').getOption('captions', 'track')
-
-// document.querySelector('.html5-video-player').setOption('captions', 'track', { languageCode: 'en' });
-// document.querySelector('.html5-video-player').setOption('captions', 'reload', true);
-// document.querySelector('.html5-video-player').toggleSubtitles();
-// document.querySelector('.html5-video-player').stopVideo();
-// document.querySelector('.html5-video-player').loadModule("captions");
-
-// this.addEventListener('readystatechange', () => {
-//   if (this.readyState == 3 && this.status == 200) {
-//     console.log('修改请求');
-//     Object.defineProperty(this, 'responseText', { value: JSON.stringify(mergeLang) });
-//   }
-// });
-// const localLang = local.events[i] ? local.events[i].segs[0].utf8.trim() : '';
-// console.log('original', original);
-// console.log('local', local);
-
-// const subtitleUrl = 'api/timedtext';
-// const subtitleUrl2 = 'www.youtube-nocookie.com/api/timedtext';
-// || arguments[1].includes(subtitleUrl2)
