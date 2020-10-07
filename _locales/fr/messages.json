@@ -1,9 +1,9 @@
 {
   "name": {
-    "message": "Double sous-titres YouTube"
+    "message": "Double sous-titres YouTube ™"
   },
   "description": {
-    "message": "Double sous-titres YouTube et passage automatique à la langue locale."
+    "message": "Double sous-titres YouTube ™ et basculement automatique vers la langue locale."
   },
   "singleSubtitle": {
     "message": "Sous-titre unique"

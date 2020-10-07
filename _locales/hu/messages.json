@@ -1,9 +1,9 @@
 {
   "name": {
-    "message": "YouTube kettős felirat"
+    "message": "YouTube ™ kettős felirat"
   },
   "description": {
-    "message": "YouTube kettős felirat és automatikus váltás helyi nyelvre."
+    "message": "YouTube ™ kettős felirat és automatikus váltás a helyi nyelvre."
   },
   "singleSubtitle": {
     "message": "Egyetlen felirat"

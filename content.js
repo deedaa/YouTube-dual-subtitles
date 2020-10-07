@@ -213,8 +213,6 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
   });
 
   [...panelMenu.children].forEach(el => el.style.setProperty('white-space', 'nowrap'));
-
-  // return restartSubtitles;
 };
 
 const controls = new URLSearchParams(window.location.search).get('controls') !== '0';
@@ -268,8 +266,7 @@ const reboot = () => {
 };
 
 // 翻译优化
-// 设计Google风格的logo
-// 命名问题
+// node zip 打包
 
 // document.addEventListener('DOMContentLoaded', () => {
 //   injection2(`

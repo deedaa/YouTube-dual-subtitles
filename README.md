@@ -294,3 +294,7 @@ const result = list.find(v => languageCode.includes(v.lang_code));
     }
   `); */
 ```
+
+"32": "assets/32.png",
+
+"default_title": "**MSG_name**"

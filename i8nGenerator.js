@@ -8,8 +8,8 @@ const translate = new Translate({ key });
 // automatic
 // Auto
 const loca2 = [
-  'YouTube dual subtitles',
-  'YouTube dual subtitles and automatic switching to local language.',
+  'YouTube™ dual subtitles',
+  'YouTube™ dual subtitles and automatic switching to local language.',
   'Single subtitle',
   'Default subtitles',
   'Automatic',
