@@ -207,10 +207,9 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
 
       window.addEventListener('click', revertOrigin, { once: true });
       window.addEventListener('blur', revertOrigin, { once: true });
+      [...panelMenu.children].forEach(el => el.style.setProperty('white-space', 'nowrap'));
     });
   });
-
-  [...panelMenu.children].forEach(el => el.style.setProperty('white-space', 'nowrap'));
 };
 
 const controls = new URLSearchParams(window.location.search).get('controls') !== '0';
