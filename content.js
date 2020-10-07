@@ -265,7 +265,6 @@ const reboot = () => {
   console.log('captions: ', captions);
 };
 
-// 翻译优化
 // node zip 打包
 
 // document.addEventListener('DOMContentLoaded', () => {
