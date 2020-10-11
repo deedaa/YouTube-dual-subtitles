@@ -352,3 +352,79 @@ const result = list.find(v => languageCode.includes(v.lang_code));
 // const subtitleUrl = 'api/timedtext';
 // const subtitleUrl2 = 'www.youtube-nocookie.com/api/timedtext';
 // || arguments[1].includes(subtitleUrl2)
+
+"page_action": {},
+
+# 菜单
+
+// chrome.contextMenus.create({
+// id: 'issues',
+// title: chrome.i18n.getMessage('feedback'),
+// contexts: ['page_action'],
+// });
+
+// chrome.contextMenus.create({
+// id: 'more',
+// title: chrome.i18n.getMessage('learnMore'),
+// contexts: ['page_action'],
+// });
+
+// chrome.contextMenus.create({
+// id: 'github',
+// title: 'GitHub',
+// contexts: ['page_action'],
+// });
+
+# onUpdated
+
+```js
+// chrome.tabs.onUpdated.addListener((tabId, status) => {
+// console.log('onUpdated: ', tabId);
+// chrome.storage.local.get('status', result => {
+// if (!result.status && status.status === 'loading') {
+// chrome.pageAction.setIcon({ tabId, path: 'assets/disable16.png' });
+// }
+// });
+// });
+```
+
+# declarativeContent
+
+```
+// [
+// new chrome.declarativeContent.PageStateMatcher({
+// pageUrl: { hostEquals: 'www.youtube.com', pathEquals: '/watch' },
+// }),
+// new chrome.declarativeContent.PageStateMatcher({
+// css: [`iframe[src*='www.youtube.com/embed']`],
+// }),
+// new chrome.declarativeContent.PageStateMatcher({
+// css: [`iframe[src*='www.youtube-nocookie.com/embed']`],
+// }),
+// ]
+```
+
+// chrome.pageAction.hide(tabId);
+// chrome.pageAction.show(tabId);
+
+"tabs",
+
+# url
+
+"https://www.youtube.com/watch?v=*",
+"https://www.youtube.com/embed/*",
+"https://www.youtube-nocookie.com/embed/*",
+// if (!status) chrome.runtime.sendMessage({ status });
+
+// const path = status ? 'assets/16.png' : 'assets/disable16.png';
+// chrome.pageAction.setIcon({ tabId, path });
+
+/_
+chrome.tabs.onUpdated.addListener((tabId, status, tab) => {
+chrome.storage.local.get('status', result => {
+if (!result.status && status.status === 'loading') {
+chrome.pageAction.setIcon({ tabId, path: 'assets/disable16.png' });
+}
+});
+});
+_/

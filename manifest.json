@@ -26,7 +26,7 @@
       "all_frames": true
     }
   ],
-  "permissions": ["storage", "tabs", "declarativeContent", "contextMenus"],
+  "permissions": ["storage", "declarativeContent", "contextMenus"],
   "web_accessible_resources": ["constant.js", "assets/2.ogg"],
   "manifest_version": 2
 }

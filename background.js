@@ -1,63 +1,44 @@
+const conditions = [
+  { pageUrl: { hostEquals: 'www.youtube.com', pathEquals: '/watch' } },
+  { css: [`iframe[src*='www.youtube.com/embed']`] },
+  { css: [`iframe[src*='www.youtube-nocookie.com/embed']`] },
+].map(entry => new chrome.declarativeContent.PageStateMatcher(entry));
+
+const rule1 = { id: 'showAction', conditions, actions: [new chrome.declarativeContent.ShowPageAction()] };
+const rule2 = {
+  id: 'hideAction',
+  conditions,
+  actions: [new chrome.declarativeContent.SetIcon({ path: 'assets/disable16.png' })],
+};
+
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.local.set({ status: true, singleStatus: false });
-});
+  [
+    { id: 'issues', title: chrome.i18n.getMessage('feedback') },
+    { id: 'more', title: chrome.i18n.getMessage('learnMore') },
+    { id: 'github', title: 'GitHub' },
+  ].forEach(entry => chrome.contextMenus.create({ ...entry, contexts: ['page_action'] }));
 
-chrome.tabs.onUpdated.addListener((tabId, status) => {
-  chrome.storage.local.get('status', result => {
-    if (!result.status && status.status === 'loading') {
-      chrome.pageAction.setIcon({ tabId, path: 'assets/disable16.png' });
-    }
+  chrome.declarativeContent.onPageChanged.removeRules(undefined, () => {
+    chrome.declarativeContent.onPageChanged.addRules([rule1]);
   });
 });
 
-const rule1 = {
-  conditions: [
-    new chrome.declarativeContent.PageStateMatcher({
-      pageUrl: { hostEquals: 'www.youtube.com', pathEquals: '/watch' },
-    }),
-    new chrome.declarativeContent.PageStateMatcher({
-      css: [`iframe[src*='www.youtube.com/embed']`],
-    }),
-    new chrome.declarativeContent.PageStateMatcher({
-      css: [`iframe[src*='www.youtube-nocookie.com/embed']`],
-    }),
-  ],
-  actions: [new chrome.declarativeContent.ShowPageAction()],
-};
-
-chrome.declarativeContent.onPageChanged.removeRules(undefined, () =>
-  chrome.declarativeContent.onPageChanged.addRules([rule1])
-);
-
-const toggleHandler = ({ id: tabId }) => {
+chrome.pageAction.onClicked.addListener(({ id }) => {
   chrome.storage.local.get('status', ({ status }) => {
     status = !status;
     chrome.storage.local.set({ status }, () => {
-      const path = status ? 'assets/16.png' : 'assets/disable16.png';
-      chrome.pageAction.setIcon({ tabId, path });
-      chrome.tabs.sendMessage(tabId, { status });
+      if (status) {
+        chrome.declarativeContent.onPageChanged.removeRules(['hideAction']);
+        // console.log('显示icon');
+      } else {
+        chrome.declarativeContent.onPageChanged.addRules([rule2]);
+        // console.log('隐藏icon');
+      }
+
+      chrome.tabs.sendMessage(id, { status });
     });
   });
-};
-
-chrome.pageAction.onClicked.addListener(toggleHandler);
-
-chrome.contextMenus.create({
-  id: 'issues',
-  title: chrome.i18n.getMessage('feedback'),
-  contexts: ['page_action'],
-});
-
-chrome.contextMenus.create({
-  id: 'more',
-  title: chrome.i18n.getMessage('learnMore'),
-  contexts: ['page_action'],
-});
-
-chrome.contextMenus.create({
-  id: 'github',
-  title: 'GitHub',
-  contexts: ['page_action'],
 });
 
 chrome.contextMenus.onClicked.addListener(({ menuItemId }) => {
@@ -67,3 +48,6 @@ chrome.contextMenus.onClicked.addListener(({ menuItemId }) => {
     chrome.tabs.create({ url: 'https://www.youtube.com/channel/UCY_XK0-kSagJq9ZQspmzd-g?view_as=subscriber' });
   if (menuItemId === 'github') chrome.tabs.create({ url: 'https://github.com/ouweiya/YouTube-dual-subtitles' });
 });
+
+// 全面的测试
+// icon调色
