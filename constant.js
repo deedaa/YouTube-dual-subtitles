@@ -65,14 +65,14 @@ const proxiedSend = async function () {
 
       if (result) {
         videoPlayer.setOption('captions', 'track', { languageCode: result.languageCode });
-        document.querySelector('#single-button .ytp-menuitem-label').dataset.changetrack = true;
+        document.body.dataset.changetrack = true;
         if (lang !== result.languageCode) return;
         // have
       } else {
         u.searchParams.set('tlang', languageCode[0]);
         const mergeLang = await fetch(u.toString()).then(res => res.json());
         Object.defineProperty(this, 'responseText', { value: JSON.stringify(mergeLang), writable: false });
-        document.querySelector('#single-button .ytp-menuitem-label').dataset.changetrack = false;
+        document.body.dataset.changetrack = false;
         // translation
       }
     } else if (!languageCode.includes(lang)) {

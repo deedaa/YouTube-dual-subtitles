@@ -77,11 +77,13 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
 
   ytpSettingsMenu.querySelector('#single-button').addEventListener('click', function () {
     chrome.storage.local.get('singleStatus', ({ singleStatus }) => {
-      localStorage.setItem('singleStatus', !singleStatus);
-      chrome.storage.local.set({ singleStatus: !singleStatus });
-      this.setAttribute('aria-checked', !singleStatus);
-      const changeTrack = JSON.parse(document.querySelector('#single-button .ytp-menuitem-label').dataset.changetrack);
-      if (singleStatus && changeTrack) {
+      singleStatus = !singleStatus;
+      localStorage.setItem('singleStatus', singleStatus);
+      chrome.storage.local.set({ singleStatus });
+      this.setAttribute('aria-checked', singleStatus);
+      const changeTrack = JSON.parse(document.body.dataset.changetrack || false);
+
+      if (!singleStatus && changeTrack) {
         injection2(`
           document
           .querySelector('.html5-video-player')
@@ -205,8 +207,7 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
         defaultLevel(restartSubtitles);
       });
 
-      window.addEventListener('click', revertOrigin, { once: true });
-      window.addEventListener('blur', revertOrigin, { once: true });
+      ['click', 'blur'].forEach(event => window.addEventListener(event, revertOrigin, { once: true }));
       [...panelMenu.children].forEach(el => el.style.setProperty('white-space', 'nowrap'));
     });
   });

@@ -428,3 +428,14 @@ chrome.pageAction.setIcon({ tabId, path: 'assets/disable16.png' });
 });
 });
 _/
+
+```js
+// document.querySelector('#single-button .ytp-menuitem-label').dataset.changetrack = true;
+// document.querySelector('#single-button .ytp-menuitem-label').dataset.changetrack = false;
+// const changeTrack = JSON.parse(document.querySelector('#single-button .ytp-menuitem-label').dataset.changetrack);
+```
+
+```js
+// window.addEventListener('click', revertOrigin, { once: true });
+// window.addEventListener('blur', revertOrigin, { once: true });
+```

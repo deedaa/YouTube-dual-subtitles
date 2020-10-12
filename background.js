@@ -48,6 +48,3 @@ chrome.contextMenus.onClicked.addListener(({ menuItemId }) => {
     chrome.tabs.create({ url: 'https://www.youtube.com/channel/UCY_XK0-kSagJq9ZQspmzd-g?view_as=subscriber' });
   if (menuItemId === 'github') chrome.tabs.create({ url: 'https://github.com/ouweiya/YouTube-dual-subtitles' });
 });
-
-// 全面的测试
-// icon调色
