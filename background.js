@@ -30,10 +30,8 @@ chrome.pageAction.onClicked.addListener(({ id }) => {
     chrome.storage.local.set({ status }, () => {
       if (status) {
         chrome.declarativeContent.onPageChanged.removeRules(['hideAction']);
-        // console.log('显示icon');
       } else {
         chrome.declarativeContent.onPageChanged.addRules([rule2]);
-        // console.log('隐藏icon');
       }
 
       chrome.tabs.sendMessage(id, { status });
@@ -44,7 +42,6 @@ chrome.pageAction.onClicked.addListener(({ id }) => {
 chrome.contextMenus.onClicked.addListener(({ menuItemId }) => {
   if (menuItemId === 'issues')
     chrome.tabs.create({ url: 'https://github.com/ouweiya/YouTube-dual-subtitles/issues/new' });
-  if (menuItemId === 'more')
-    chrome.tabs.create({ url: 'https://www.youtube.com/channel/UCY_XK0-kSagJq9ZQspmzd-g?view_as=subscriber' });
+  if (menuItemId === 'more') chrome.tabs.create({ url: 'http://youtube.material-ui-china.com' });
   if (menuItemId === 'github') chrome.tabs.create({ url: 'https://github.com/ouweiya/YouTube-dual-subtitles' });
 });

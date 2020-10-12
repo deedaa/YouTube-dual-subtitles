@@ -439,3 +439,11 @@ _/
 // window.addEventListener('click', revertOrigin, { once: true });
 // window.addEventListener('blur', revertOrigin, { once: true });
 ```
+
+Provide two subtitle references for YouTube videos, which are convenient for non-local users to read, and automatically translate at the same time, eliminating the need to manually switch translation for each video.
+
+```
+"https://www.youtube.com/watch?v=*",
+"https://www.youtube.com/embed/*",
+"https://www.youtube-nocookie.com/embed/*"
+```
