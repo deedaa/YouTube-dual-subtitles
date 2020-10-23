@@ -17,16 +17,16 @@
   "content_scripts": [
     {
       "matches": [
-        "https://www.youtube.com/watch?v=*",
+        "https://www.youtube.com/*",
         "https://www.youtube.com/embed/*",
         "https://www.youtube-nocookie.com/embed/*"
       ],
-      "js": ["langs.js", "content.js"],
+      "js": ["langs.js", "timedtext.js"],
       "run_at": "document_start",
       "all_frames": true
     }
   ],
-  "permissions": ["storage", "declarativeContent", "contextMenus"],
+  "permissions": ["storage", "declarativeContent", "contextMenus", "tabs", "https://www.youtube.com/watch?v=*"],
   "web_accessible_resources": ["constant.js", "assets/2.ogg"],
   "manifest_version": 2
 }

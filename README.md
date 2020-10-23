@@ -447,3 +447,35 @@ Provide two subtitle references for YouTube videos, which are convenient for non
 "https://www.youtube.com/embed/*",
 "https://www.youtube-nocookie.com/embed/*"
 ```
+
+"offline_enabled": true,
+
+为 YouTube 视频提供两个字幕参考，方便非本地用户阅读，同时自动翻译，无需手动切换每个视频的翻译。
+
+扩展使用说明
+默认字幕:
+此选项初始值为"自动", 表示与浏览器语言相同.
+如果浏览器语言是日语,将会将其他语言翻译为日语.
+如果视频本身字幕为日语,则不会再翻译为相同字幕,仍旧显示为单字幕.
+如果浏览器使用英语, 同时默认字幕没有指定为"日语", 而是初始值"自动", 同时视频本身字幕为英语, 则不会再翻译,因为不会翻译相同的语言.
+
+单字幕:
+单字幕切换按钮用来切换单双字幕两种模式.
+如果使用单字幕, 首先不会进行机器翻译, 会优先使用视频已有字幕, 如果没有,则再才会进行机器翻译.
+
+最佳的使用设置:
+浏览器语言设置成母语, 并将"自动"设置默认字幕.
+
+Right click
+Feedback
+Open source code
+Learn more
+
+51, 56, 59 不行
+60 可以
+需要授权
+https://www.youtube.com/watch?v=YK8GZBx3hpg
+
+"https://www.youtube.com/watch?v=*",
+"https://www.youtube.com/*",
+"https://www.baidu.com/*"

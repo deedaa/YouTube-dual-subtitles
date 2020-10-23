@@ -11,6 +11,17 @@ const rule2 = {
   actions: [new chrome.declarativeContent.SetIcon({ path: 'assets/disable16.png' })],
 };
 
+const rule3 = {
+  id: 'js',
+  conditions: [
+    new chrome.declarativeContent.PageStateMatcher({
+      pageUrl: { hostEquals: 'www.youtube.com', pathEquals: '/watch' },
+      css: [`ytd-player#ytd-player:not([data-content_='true'])`],
+    }),
+  ],
+  actions: [new chrome.declarativeContent.RequestContentScript({ js: ['content.js'] })],
+};
+// 合并选择器 `ytd-player#ytd-player` `html:not([data-content_='true'])`
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.local.set({ status: true, singleStatus: false });
   [
@@ -20,7 +31,7 @@ chrome.runtime.onInstalled.addListener(() => {
   ].forEach(entry => chrome.contextMenus.create({ ...entry, contexts: ['page_action'] }));
 
   chrome.declarativeContent.onPageChanged.removeRules(undefined, () => {
-    chrome.declarativeContent.onPageChanged.addRules([rule1]);
+    chrome.declarativeContent.onPageChanged.addRules([rule1, rule3]);
   });
 });
 

@@ -1,38 +1,20 @@
-const injection = handler => {
-  const script = document.createElement('script');
-  script.src = chrome.runtime.getURL('constant.js');
-  script.onload = handler;
-  (document.head || document.documentElement).append(script);
-  script.remove();
-};
+// const injection = handler => {
+//   const script = document.createElement('script');
+//   script.src = chrome.runtime.getURL('constant.js');
+//   script.onload = handler;
+//   (document.head || document.documentElement).append(script);
+//   script.remove();
+// };
 
-const injection2 = textContent => {
-  const script = document.createElement('script');
-  script.textContent = textContent;
-  (document.head || document.documentElement).append(script);
-  script.remove();
-};
-
-const audioPlay = async url => {
-  const context = new AudioContext();
-  var gainNode = context.createGain();
-
-  const source = context.createBufferSource();
-  const audioBuffer = await fetch(chrome.runtime.getURL(url))
-    .then(res => res.arrayBuffer())
-    .then(ArrayBuffer => context.decodeAudioData(ArrayBuffer));
-
-  source.buffer = audioBuffer;
-
-  source.connect(gainNode);
-  gainNode.connect(context.destination);
-  gainNode.gain.setValueAtTime(0.1, context.currentTime);
-  source.start();
-  // source.start(0, 0, 1);
-};
+// const injection2 = textContent => {
+//   const script = document.createElement('script');
+//   script.textContent = textContent;
+//   (document.head || document.documentElement).append(script);
+//   script.remove();
+// };
 
 const restartSubtitles = () => {
-  injection2(`document.querySelector('.html5-video-player').setOption('captions', 'reload', true);`);
+  injection2(`document.querySelector('#ytd-player .html5-video-player').setOption('captions', 'reload', true);`);
 };
 
 chrome.runtime.onMessage.addListener(({ status }) => {
@@ -40,9 +22,8 @@ chrome.runtime.onMessage.addListener(({ status }) => {
     reboot();
   } else {
     injection2(`XMLHttpRequest.prototype.open = nativeOpen; XMLHttpRequest.prototype.send = nativeSend;`);
-    if (JSON.parse(document.body.dataset.captions)) {
-      ['#language-button', '#single-button'].forEach(id => document.querySelector(id).remove());
-    }
+
+    ['#language-button', '#single-button'].forEach(id => document.querySelector(id).remove());
     document.body.removeAttribute('data-captions');
     restartSubtitles();
   }
@@ -50,11 +31,35 @@ chrome.runtime.onMessage.addListener(({ status }) => {
   audioPlay('assets/2.ogg');
 });
 
+const stopPropagation = e => e.stopPropagation();
+
+// setTimeout(() => {
+//   const windowList = [...document.querySelectorAll('.html5-video-player')]
+//     .map(el => ({ parent: el, settingButton: el.querySelector('.ytp-settings-button') }))
+//     .filter(v => v.settingButton);
+
+//   console.log('windowList: ', windowList);
+//   windowList.forEach(v =>
+//     v.settingButton.addEventListener(
+//       'mouseenter',
+//       () => {
+//         console.log('设置按钮');
+//       }
+//       // { once: true }
+//     )
+//   );
+// }, 4000);
+// #ytd-player .ytp-settings-button
+// document.querySelector('.ytp-settings-button').addEventListener('mouseenter', () => {
+//   console.log('ok');
+// });
+
 const insertCustomMenu = ({ singleStatus, languageParameter }) => {
-  const ytpSettingsMenu = document.querySelector('.ytp-popup.ytp-settings-menu');
+  const ytpSettingsMenu = document.querySelector('#ytd-player .ytp-settings-menu');
   const ytpPanel = ytpSettingsMenu.querySelector('.ytp-panel');
   const panelMenu = ytpSettingsMenu.querySelector('.ytp-panel-menu');
-  ytpSettingsMenu.addEventListener('click', e => e.stopPropagation());
+
+  ytpSettingsMenu.addEventListener('click', stopPropagation);
 
   panelMenu.insertAdjacentHTML(
     'beforeend',
@@ -84,9 +89,11 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
       const changeTrack = JSON.parse(document.body.dataset.changetrack || false);
 
       if (!singleStatus && changeTrack) {
+        console.log('关闭字幕');
         injection2(`
+          console.log(222, defaultSubtitles );
           document
-          .querySelector('.html5-video-player')
+          .querySelector('#ytd-player .html5-video-player')
           .setOption('captions', 'track', { languageCode: defaultSubtitles });
         `);
       } else {
@@ -114,7 +121,7 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
         try {
           localStorage.setItem(
             'autoTranslationList',
-            JSON.stringify(document.querySelector('.html5-video-player').getOption('captions', 'translationLanguages') || [])
+            JSON.stringify(document.querySelector('#ytd-player .html5-video-player').getOption('captions', 'translationLanguages') || [])
           );
         } catch {}
       `);
@@ -134,7 +141,7 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
         )
         .join('');
 
-      let resHeight = Math.round(document.querySelector('.html5-video-player').offsetHeight * 0.7);
+      let resHeight = Math.round(document.querySelector('#ytd-player .html5-video-player').offsetHeight * 0.7);
       resHeight = resHeight > 414 ? 414 : resHeight;
 
       const firstElement = `<div class="ytp-menuitem" tabindex="0" role="menuitemradio" style="pointer-events: ${
@@ -213,23 +220,45 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
   });
 };
 
-const controls = new URLSearchParams(window.location.search).get('controls') !== '0';
-const UILang = chrome.i18n.getUILanguage();
-const autoLang = new Map(langsRaw).get(UILang);
-const autoLangCode = autoLang ? autoLang.languageCode : ['en'];
-const languageParameter_ = { languageCode: autoLangCode, languageName: chrome.i18n.getMessage('auto') };
+// const UILang = chrome.i18n.getUILanguage();
+// const autoLang = new Map(langsRaw).get(UILang);
+// const autoLangCode = autoLang ? autoLang.languageCode : ['en'];
+// const languageParameter_ = { languageCode: autoLangCode, languageName: chrome.i18n.getMessage('auto') };
+// const controls = new URLSearchParams(window.location.search).get('controls') !== '0';
 
 chrome.storage.local.get(null, ({ status, singleStatus, languageParameter = languageParameter_ }) => {
-  injection(() => {
-    if (status) {
-      localStorage.setItem('languageParameter', JSON.stringify(languageParameter));
-      localStorage.setItem('singleStatus', singleStatus);
-      injection2(`XMLHttpRequest.prototype.open = proxiedOpen; XMLHttpRequest.prototype.send = proxiedSend;`);
-      chrome.storage.local.set({ languageParameter });
-    }
-  });
+  document.querySelector('ytd-player#ytd-player').dataset.content_ = true;
 
   if (status && controls) {
+    insertCustomMenu({ singleStatus, languageParameter });
+  }
+});
+
+const reboot = () => {
+  chrome.storage.local.get(null, ({ singleStatus, languageParameter = languageParameter_ }) => {
+    localStorage.setItem('languageParameter', JSON.stringify(languageParameter));
+    localStorage.setItem('singleStatus', singleStatus);
+    chrome.storage.local.set({ languageParameter });
+
+    injection2(`XMLHttpRequest.prototype.open = proxiedOpen; XMLHttpRequest.prototype.send = proxiedSend;`);
+    restartSubtitles();
+
+    if (controls) insertCustomMenu({ singleStatus, languageParameter });
+  });
+};
+
+console.log('注入了');
+
+// window.addEventListener('hashchange', function (e) {
+//   console.log('hash changed');
+// });
+// window.addEventListener('popstate', function (e) {
+//   console.log('url changed');
+// });
+
+// console.log(chrome.tabs);
+
+/* if (status && controls) {
     const loadEvent = window.self === window.top ? 'DOMContentLoaded' : 'load';
     window.addEventListener(loadEvent, () => {
       injection2(
@@ -239,24 +268,23 @@ chrome.storage.local.get(null, ({ status, singleStatus, languageParameter = lang
       const captions = JSON.parse(document.body.dataset.captions);
       if (captions) insertCustomMenu({ singleStatus, languageParameter });
     });
-  }
-});
+  } */
 
-const reboot = () => {
-  injection2(
-    `document.body.dataset.captions = window.self === window.top ? !!ytInitialPlayerResponse.captions : true;`
-  );
+// document.querySelector('html').dataset.content_ = true;
 
-  const captions = JSON.parse(document.body.dataset.captions);
-  if (captions && controls) {
-    chrome.storage.local.get(null, ({ singleStatus, languageParameter = languageParameter_ }) => {
-      localStorage.setItem('languageParameter', JSON.stringify(languageParameter));
-      localStorage.setItem('singleStatus', singleStatus);
-      chrome.storage.local.set({ languageParameter });
+// injection(() => {
+//   if (status) {
+//     localStorage.setItem('languageParameter', JSON.stringify(languageParameter));
+//     localStorage.setItem('singleStatus', singleStatus);
+//     injection2(`XMLHttpRequest.prototype.open = proxiedOpen; XMLHttpRequest.prototype.send = proxiedSend;`);
+//     chrome.storage.local.set({ languageParameter });
+//   }
+// });
 
-      injection2(`XMLHttpRequest.prototype.open = proxiedOpen; XMLHttpRequest.prototype.send = proxiedSend;`);
-      restartSubtitles();
-      insertCustomMenu({ singleStatus, languageParameter });
-    });
-  }
-};
+// injection2(
+//   `document.body.dataset.captions = window.self === window.top ? !!ytInitialPlayerResponse.captions : true;`
+// );
+
+// const captions = JSON.parse(document.body.dataset.captions);
+// captions &&
+// if (JSON.parse(document.body.dataset.captions)) { }

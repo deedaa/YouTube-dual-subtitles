@@ -4,7 +4,7 @@
     "rimraf": "^3.0.2"
   },
   "scripts": {
-    "zip": "7z.exe a YouTube-dual-subtitles.zip assets background.js constant.js content.js langs.js manifest.json _locales",
+    "zip": "7z.exe a YouTube-dual-subtitles.zip assets background.js constant.js content.js langs.js manifest.json _locales test.js",
     "complete": "7z.exe t ./YouTube-dual-subtitles.zip"
   }
 }
