@@ -56,15 +56,15 @@ const proxiedSend = async function () {
     const lang = u.searchParams.get('lang');
     const { languageCode } = JSON.parse(localStorage.getItem('languageParameter'));
     const singleStatus = JSON.parse(localStorage.getItem('singleStatus'));
-    console.log('pathname: ', window.location.pathname);
-    if (!defaultSubtitles && window.location.pathname === '/watch') {
-      defaultSubtitles = document.querySelector('#ytd-player .html5-video-player').getOption('captions', 'track')
-        .languageCode;
-      // console.log(222, document.querySelector('#ytd-player .html5-video-player'));
-      // let a = document.querySelector('.html5-video-player').getOption('captions', 'track');
-      // console.log('a: ', a);
-      console.log('defaultSubtitles: ', defaultSubtitles);
-    }
+    // console.log('pathname: ', window.location.pathname);
+    // if (!defaultSubtitles && window.location.pathname === '/watch') {
+    //   defaultSubtitles = document.querySelector('#ytd-player .html5-video-player').getOption('captions', 'track')
+    //     .languageCode;
+    //   // console.log(222, document.querySelector('#ytd-player .html5-video-player'));
+    //   // let a = document.querySelector('.html5-video-player').getOption('captions', 'track');
+    //   // console.log('a: ', a);
+    //   console.log('defaultSubtitles: ', defaultSubtitles);
+    // }
 
     if (singleStatus) {
       const videoPlayer = document.querySelector('#ytd-player .html5-video-player');
