@@ -218,7 +218,8 @@ injection2(`localStorage.setItem( 'autoTranslationList', JSON.stringify(window.y
 https://www.youtube.com/api/timedtext?type=list&v=_toYRFk-AZQ
 
 ```
-/* await fetch(`https://www.youtube.com/api/timedtext?type=list&v=${v}`)
+/*
+await fetch(`https://www.youtube.com/api/timedtext?type=list&v=${v}`)
 .then(response => response.text())
 .then(str => new window.DOMParser().parseFromString(str, 'text/xml'))
 .then(data => {

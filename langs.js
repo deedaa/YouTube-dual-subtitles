@@ -437,6 +437,7 @@ const UILang = chrome.i18n.getUILanguage();
 const autoLang = new Map(langsRaw).get(UILang);
 // const autoLangCode = autoLang ? autoLang.languageCode : ['en'];
 const autoLangCode = ['zh-Hans'];
+// const autoLangCode = ['en'];
 const languageParameter_ = { languageCode: autoLangCode, languageName: chrome.i18n.getMessage('auto') };
 
 const controls = new URLSearchParams(window.location.search).get('controls') !== '0';

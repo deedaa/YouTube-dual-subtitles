@@ -1,18 +1,3 @@
-// const injection = handler => {
-//   const script = document.createElement('script');
-//   script.src = chrome.runtime.getURL('constant.js');
-//   script.onload = handler;
-//   (document.head || document.documentElement).append(script);
-//   script.remove();
-// };
-
-// const injection2 = textContent => {
-//   const script = document.createElement('script');
-//   script.textContent = textContent;
-//   (document.head || document.documentElement).append(script);
-//   script.remove();
-// };
-
 const restartSubtitles = () => {
   injection2(`document.querySelector('#ytd-player .html5-video-player').setOption('captions', 'reload', true);`);
 };
@@ -20,49 +5,24 @@ const restartSubtitles = () => {
 chrome.runtime.onMessage.addListener(({ status }) => {
   if (status) {
     injection2(`XMLHttpRequest.prototype.open = proxiedOpen; XMLHttpRequest.prototype.send = proxiedSend;`);
-    restartSubtitles();
     ['#language-button', '#single-button'].forEach(id => document.querySelector(id).style.removeProperty('display'));
-    // reboot();
   } else {
     injection2(`XMLHttpRequest.prototype.open = nativeOpen; XMLHttpRequest.prototype.send = nativeSend;`);
-    restartSubtitles();
     ['#language-button', '#single-button'].forEach(id =>
       document.querySelector(id).style.setProperty('display', 'none')
     );
-    // ['#language-button', '#single-button'].forEach(id => document.querySelector(id).remove());
-    // document.body.removeAttribute('data-captions');
-    // 'important'
   }
 
+  restartSubtitles();
   audioPlay('assets/2.ogg');
 });
-
-const stopPropagation = e => e.stopPropagation();
-
-// setTimeout(() => {
-//   const windowList = [...document.querySelectorAll('.html5-video-player')]
-//     .map(el => ({ parent: el, settingButton: el.querySelector('.ytp-settings-button') }))
-//     .filter(v => v.settingButton);
-
-//   console.log('windowList: ', windowList);
-//   windowList.forEach(v =>
-//     v.settingButton.addEventListener(
-//       'mouseenter',
-//       () => {
-//         console.log('设置按钮');
-//       }
-//       // { once: true }
-//     )
-//   );
-// }, 4000);
-// #ytd-player .ytp-settings-button
 
 const insertCustomMenu = ({ singleStatus, languageParameter }) => {
   const ytpSettingsMenu = document.querySelector('#ytd-player .ytp-settings-menu');
   const ytpPanel = ytpSettingsMenu.querySelector('.ytp-panel');
   const panelMenu = ytpSettingsMenu.querySelector('.ytp-panel-menu');
 
-  ytpSettingsMenu.addEventListener('click', stopPropagation);
+  ytpSettingsMenu.addEventListener('click', e => e.stopPropagation());
 
   panelMenu.insertAdjacentHTML(
     'beforeend',
@@ -87,7 +47,6 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
     chrome.storage.local.get(null, ({ status }) => {
       if (!status) return;
       const captions = document.querySelector(`#ytd-player .ytp-subtitles-button`).offsetWidth;
-      console.log('captions: ', captions);
 
       if (captions) {
         ['#language-button', '#single-button'].forEach(id =>
@@ -107,23 +66,7 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
       localStorage.setItem('singleStatus', singleStatus);
       chrome.storage.local.set({ singleStatus });
       this.setAttribute('aria-checked', singleStatus);
-      const changeTrack = JSON.parse(document.body.dataset.changetrack || false);
-
-      if (!singleStatus && changeTrack) {
-        console.log('关闭字幕');
-        injection2(`
-          console.log(222, defaultSubtitles );
-          document
-          .querySelector('#ytd-player .html5-video-player')
-          .setOption('captions', 'track', { languageCode: defaultSubtitles });
-        `);
-      } else {
-        console.log('字幕重启');
-        injection2(`
-          defaultSubtitles = document.querySelector('#ytd-player .html5-video-player').getOption('captions', 'track').languageCode;
-        `);
-        restartSubtitles();
-      }
+      restartSubtitles();
     });
   });
 
@@ -245,19 +188,58 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
   });
 };
 
+chrome.storage.local.get(null, ({ singleStatus, languageParameter = languageParameter_ }) => {
+  document.querySelector('ytd-player#ytd-player').dataset.content_ = true;
+  if (controls) insertCustomMenu({ singleStatus, languageParameter });
+});
+
+console.log('注入了');
+
+// iframe 的植入时机
+
+// const changeTrack = JSON.parse(document.body.dataset.changetrack || false);
+/* if (!singleStatus && changeTrack) {
+        console.log('关闭字幕');
+        injection2(`
+          console.log(222, defaultSubtitles );
+          document
+          .querySelector('#ytd-player .html5-video-player')
+          .setOption('captions', 'track', { languageCode: defaultSubtitles });
+        `);
+      } else {
+        console.log('字幕重启');
+        injection2(`
+          defaultSubtitles = document.querySelector('#ytd-player .html5-video-player').getOption('captions', 'track').languageCode;
+        `);
+        restartSubtitles();
+      } */
+
+// reboot();
+
+// ['#language-button', '#single-button'].forEach(id => document.querySelector(id).remove());
+// document.body.removeAttribute('data-captions');
+// 'important'
+
+// const injection = handler => {
+//   const script = document.createElement('script');
+//   script.src = chrome.runtime.getURL('constant.js');
+//   script.onload = handler;
+//   (document.head || document.documentElement).append(script);
+//   script.remove();
+// };
+
+// const injection2 = textContent => {
+//   const script = document.createElement('script');
+//   script.textContent = textContent;
+//   (document.head || document.documentElement).append(script);
+//   script.remove();
+// };
+
 // const UILang = chrome.i18n.getUILanguage();
 // const autoLang = new Map(langsRaw).get(UILang);
 // const autoLangCode = autoLang ? autoLang.languageCode : ['en'];
 // const languageParameter_ = { languageCode: autoLangCode, languageName: chrome.i18n.getMessage('auto') };
 // const controls = new URLSearchParams(window.location.search).get('controls') !== '0';
-
-chrome.storage.local.get(null, ({ status, singleStatus, languageParameter = languageParameter_ }) => {
-  document.querySelector('ytd-player#ytd-player').dataset.content_ = true;
-
-  if (controls) {
-    insertCustomMenu({ singleStatus, languageParameter });
-  }
-});
 
 // const reboot = () => {
 //   chrome.storage.local.get(null, ({ singleStatus, languageParameter = languageParameter_ }) => {
@@ -271,8 +253,6 @@ chrome.storage.local.get(null, ({ status, singleStatus, languageParameter = lang
 //     if (controls) insertCustomMenu({ singleStatus, languageParameter });
 //   });
 // };
-
-console.log('注入了');
 
 // window.addEventListener('hashchange', function (e) {
 //   console.log('hash changed');
@@ -321,3 +301,23 @@ console.log('注入了');
 
 // document.querySelector(`#ytd-player .ytp-subtitles-button:not([style='true'])`)
 // getPropertyValue('display')
+
+// setTimeout(() => {
+//   const windowList = [...document.querySelectorAll('.html5-video-player')]
+//     .map(el => ({ parent: el, settingButton: el.querySelector('.ytp-settings-button') }))
+//     .filter(v => v.settingButton);
+
+//   console.log('windowList: ', windowList);
+//   windowList.forEach(v =>
+//     v.settingButton.addEventListener(
+//       'mouseenter',
+//       () => {
+//         console.log('设置按钮');
+//       }
+//       // { once: true }
+//     )
+//   );
+// }, 4000);
+// #ytd-player .ytp-settings-button
+
+// const stopPropagation = e => e.stopPropagation();

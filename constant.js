@@ -48,38 +48,52 @@ const proxiedOpen = function () {
   nativeOpen.apply(this, arguments);
 };
 
-let defaultSubtitles = '';
-
+// let defaultSubtitles = '';
+// document.querySelector('#ytd-player .html5-video-player').getOption('captions', 'track')
 const proxiedSend = async function () {
   if (this._url) {
     const u = new URL(this._url);
     const lang = u.searchParams.get('lang');
+    const v = u.searchParams.get('v');
     const { languageCode } = JSON.parse(localStorage.getItem('languageParameter'));
     const singleStatus = JSON.parse(localStorage.getItem('singleStatus'));
-    // console.log('pathname: ', window.location.pathname);
-    // if (!defaultSubtitles && window.location.pathname === '/watch') {
-    //   defaultSubtitles = document.querySelector('#ytd-player .html5-video-player').getOption('captions', 'track')
-    //     .languageCode;
-    //   // console.log(222, document.querySelector('#ytd-player .html5-video-player'));
-    //   // let a = document.querySelector('.html5-video-player').getOption('captions', 'track');
-    //   // console.log('a: ', a);
-    //   console.log('defaultSubtitles: ', defaultSubtitles);
-    // }
 
     if (singleStatus) {
-      const videoPlayer = document.querySelector('#ytd-player .html5-video-player');
-      const result = videoPlayer.getOption('captions', 'tracklist').find(v => languageCode.includes(v.languageCode));
+      // const videoPlayer = document.querySelector('#ytd-player .html5-video-player');
+      // const result = videoPlayer.getOption('captions', 'tracklist').find(v => languageCode.includes(v.languageCode));
+      // console.log('videoPlayer: ', videoPlayer);
+      const result = await fetch(`https://www.youtube.com/api/timedtext?type=list&v=${v}`)
+        .then(response => response.text())
+        .then(str => new window.DOMParser().parseFromString(str, 'text/xml'))
+        .then(data => {
+          const list = [...data.querySelectorAll('track')].map(v => ({
+            name: v.getAttribute('name'),
+            lang_code: v.getAttribute('lang_code'),
+          }));
+          console.log('list: ', list);
+          const result = list.find(v => languageCode.includes(v.lang_code));
+          return result;
+        });
 
+      console.log('result: ', result);
       if (result) {
-        videoPlayer.setOption('captions', 'track', { languageCode: result.languageCode });
-        document.body.dataset.changetrack = true;
-        if (lang !== result.languageCode) return;
+        result.name ? u.searchParams.set('name', result.name) : u.searchParams.delete('name');
+        console.log('result.lang_code: ', result.lang_code);
+        u.searchParams.set('lang', result.lang_code);
+
+        const mergeLang = await fetch(u.toString()).then(res => res.json());
+        Object.defineProperty(this, 'responseText', { value: JSON.stringify(mergeLang), writable: false });
+        // console.dir(u.toString());
+        // console.log('mergeLang: ', mergeLang);
+        // videoPlayer.setOption('captions', 'track', { languageCode: result.languageCode });
+        // document.body.dataset.changetrack = true;
+        // if (lang !== result.languageCode) return;
         // have
       } else {
         u.searchParams.set('tlang', languageCode[0]);
         const mergeLang = await fetch(u.toString()).then(res => res.json());
         Object.defineProperty(this, 'responseText', { value: JSON.stringify(mergeLang), writable: false });
-        document.body.dataset.changetrack = false;
+        // document.body.dataset.changetrack = false;
         // translation
       }
     } else if (!languageCode.includes(lang)) {
@@ -105,3 +119,13 @@ const proxiedSend = async function () {
 
   nativeSend.apply(this, arguments);
 };
+
+// console.log('pathname: ', window.location.pathname);
+// if (!defaultSubtitles && window.location.pathname === '/watch') {
+//   defaultSubtitles = document.querySelector('#ytd-player .html5-video-player').getOption('captions', 'track')
+//     .languageCode;
+//   // console.log(222, document.querySelector('#ytd-player .html5-video-player'));
+//   // let a = document.querySelector('.html5-video-player').getOption('captions', 'track');
+//   // console.log('a: ', a);
+//   console.log('defaultSubtitles: ', defaultSubtitles);
+// }
