@@ -433,46 +433,4 @@ const langsRaw = [
   ],
 ];
 
-const UILang = chrome.i18n.getUILanguage();
-const autoLang = new Map(langsRaw).get(UILang);
-// const autoLangCode = autoLang ? autoLang.languageCode : ['en'];
-const autoLangCode = ['zh-Hans'];
-// const autoLangCode = ['en'];
-const languageParameter_ = { languageCode: autoLangCode, languageName: chrome.i18n.getMessage('auto') };
-
-const controls = new URLSearchParams(window.location.search).get('controls') !== '0';
-
-const injection = handler => {
-  const script = document.createElement('script');
-  script.src = chrome.runtime.getURL('constant.js');
-  script.onload = handler;
-  (document.head || document.documentElement).append(script);
-  script.remove();
-};
-
-const injection2 = textContent => {
-  const script = document.createElement('script');
-  script.textContent = textContent;
-  (document.head || document.documentElement).append(script);
-  script.remove();
-};
-
-const audioPlay = async url => {
-  const context = new AudioContext();
-  var gainNode = context.createGain();
-
-  const source = context.createBufferSource();
-  const audioBuffer = await fetch(chrome.runtime.getURL(url))
-    .then(res => res.arrayBuffer())
-    .then(ArrayBuffer => context.decodeAudioData(ArrayBuffer));
-
-  source.buffer = audioBuffer;
-
-  source.connect(gainNode);
-  gainNode.connect(context.destination);
-  gainNode.gain.setValueAtTime(0.1, context.currentTime);
-  source.start();
-  // source.start(0, 0, 1);
-};
-
 // if (typeof window === 'undefined') module.exports = { langsRaw };

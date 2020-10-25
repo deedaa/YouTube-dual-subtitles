@@ -1,7 +1,7 @@
 const nativeOpen = XMLHttpRequest.prototype.open;
 const nativeSend = XMLHttpRequest.prototype.send;
 
-const finishing = lang => {
+const mergeWord = lang => {
   const events = [];
   let before = null;
   let segment = '';
@@ -42,14 +42,10 @@ const finishing = lang => {
 };
 
 const proxiedOpen = function () {
-  if (arguments[1].includes('api/timedtext')) {
-    this._url = arguments[1];
-  }
+  if (arguments[1].includes('api/timedtext')) this._url = arguments[1];
   nativeOpen.apply(this, arguments);
 };
 
-// let defaultSubtitles = '';
-// document.querySelector('#ytd-player .html5-video-player').getOption('captions', 'track')
 const proxiedSend = async function () {
   if (this._url) {
     const u = new URL(this._url);
@@ -59,9 +55,6 @@ const proxiedSend = async function () {
     const singleStatus = JSON.parse(localStorage.getItem('singleStatus'));
 
     if (singleStatus) {
-      // const videoPlayer = document.querySelector('#ytd-player .html5-video-player');
-      // const result = videoPlayer.getOption('captions', 'tracklist').find(v => languageCode.includes(v.languageCode));
-      // console.log('videoPlayer: ', videoPlayer);
       const result = await fetch(`https://www.youtube.com/api/timedtext?type=list&v=${v}`)
         .then(response => response.text())
         .then(str => new window.DOMParser().parseFromString(str, 'text/xml'))
@@ -78,24 +71,14 @@ const proxiedSend = async function () {
       console.log('result: ', result);
       if (result) {
         result.name ? u.searchParams.set('name', result.name) : u.searchParams.delete('name');
-        console.log('result.lang_code: ', result.lang_code);
         u.searchParams.set('lang', result.lang_code);
-
-        const mergeLang = await fetch(u.toString()).then(res => res.json());
-        Object.defineProperty(this, 'responseText', { value: JSON.stringify(mergeLang), writable: false });
-        // console.dir(u.toString());
-        // console.log('mergeLang: ', mergeLang);
-        // videoPlayer.setOption('captions', 'track', { languageCode: result.languageCode });
-        // document.body.dataset.changetrack = true;
-        // if (lang !== result.languageCode) return;
         // have
       } else {
         u.searchParams.set('tlang', languageCode[0]);
-        const mergeLang = await fetch(u.toString()).then(res => res.json());
-        Object.defineProperty(this, 'responseText', { value: JSON.stringify(mergeLang), writable: false });
-        // document.body.dataset.changetrack = false;
         // translation
       }
+      const subtitles = await fetch(u.toString()).then(res => res.json());
+      Object.defineProperty(this, 'responseText', { value: JSON.stringify(subtitles), writable: false });
     } else if (!languageCode.includes(lang)) {
       u.searchParams.set('tlang', languageCode[0]);
 
@@ -106,19 +89,31 @@ const proxiedSend = async function () {
 
       const localMap = new Map(local.events.map(v => [v.tStartMs, v.segs[0].utf8.trim()]));
 
-      const mergeLang = finishing(original);
-      mergeLang.events.forEach(v => {
+      const subtitles = mergeWord(original);
+      subtitles.events.forEach(v => {
         const localLang = localMap.get(v.tStartMs) || '';
         const originalLang = v.segs[0].utf8.trim();
         v.segs[0].utf8 = `${originalLang}\n${localLang}`.trim();
       });
 
-      Object.defineProperty(this, 'responseText', { value: JSON.stringify(mergeLang), writable: false });
+      Object.defineProperty(this, 'responseText', { value: JSON.stringify(subtitles), writable: false });
     }
   }
 
   nativeSend.apply(this, arguments);
 };
+
+// let defaultSubtitles = '';
+// document.querySelector('#ytd-player .html5-video-player').getOption('captions', 'track')
+
+// const videoPlayer = document.querySelector('#ytd-player .html5-video-player');
+// const result = videoPlayer.getOption('captions', 'tracklist').find(v => languageCode.includes(v.languageCode));
+// console.log('videoPlayer: ', videoPlayer);
+
+// const mergeLang = await fetch(u.toString()).then(res => res.json());
+// Object.defineProperty(this, 'responseText', { value: JSON.stringify(mergeLang), writable: false });
+// document.body.dataset.changetrack = false;
+// console.dir(u.toString());
 
 // console.log('pathname: ', window.location.pathname);
 // if (!defaultSubtitles && window.location.pathname === '/watch') {

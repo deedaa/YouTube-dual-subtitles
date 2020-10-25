@@ -1,5 +1,5 @@
 const conditions = [
-  { pageUrl: { hostEquals: 'www.youtube.com', pathEquals: '/watch' } },
+  { pageUrl: { hostEquals: 'www.youtube.com' /* pathEquals: '/watch' */ } },
   { css: [`iframe[src*='www.youtube.com/embed']`] },
   { css: [`iframe[src*='www.youtube-nocookie.com/embed']`] },
 ].map(entry => new chrome.declarativeContent.PageStateMatcher(entry));
@@ -21,12 +21,27 @@ const rule3 = {
   ],
   actions: [new chrome.declarativeContent.RequestContentScript({ js: ['content.js'] })],
 };
-// 合并选择器 `ytd-player#ytd-player` `html:not([data-content_='true'])`
+
+const UILang = chrome.i18n.getUILanguage();
+const autoLang = new Map(langsRaw).get(UILang);
+// const autoLangCode = autoLang ? autoLang.languageCode : ['en'];
+const autoLangCode = ['zh-Hans'];
+// const autoLangCode = ['en'];
+
+const i18nGet = chrome.i18n.getMessage;
+
+const languageParameter = {
+  auto: 'true',
+  languageCode: autoLangCode,
+  languageName: i18nGet('auto'),
+};
+
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.local.set({ status: true, singleStatus: false });
+  chrome.storage.local.set({ status: true, singleStatus: false, languageParameter, autoLangCode });
+
   [
-    { id: 'issues', title: chrome.i18n.getMessage('feedback') },
-    { id: 'more', title: chrome.i18n.getMessage('learnMore') },
+    { id: 'issues', title: i18nGet('feedback') },
+    { id: 'more', title: i18nGet('learnMore') },
     { id: 'github', title: 'GitHub' },
   ].forEach(entry => chrome.contextMenus.create({ ...entry, contexts: ['page_action'] }));
 
@@ -44,7 +59,6 @@ chrome.pageAction.onClicked.addListener(({ id }) => {
       } else {
         chrome.declarativeContent.onPageChanged.addRules([rule2]);
       }
-
       chrome.tabs.sendMessage(id, { status });
     });
   });
@@ -56,3 +70,5 @@ chrome.contextMenus.onClicked.addListener(({ menuItemId }) => {
   if (menuItemId === 'more') chrome.tabs.create({ url: 'http://youtube.material-ui-china.com' });
   if (menuItemId === 'github') chrome.tabs.create({ url: 'https://github.com/ouweiya/YouTube-dual-subtitles' });
 });
+
+// 合并选择器 `ytd-player#ytd-player` `html:not([data-content_='true'])`

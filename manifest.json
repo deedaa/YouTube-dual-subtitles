@@ -11,7 +11,7 @@
   },
   "page_action": {},
   "background": {
-    "scripts": ["background.js"],
+    "scripts": ["langs.js", "background.js"],
     "persistent": false
   },
   "content_scripts": [
@@ -21,12 +21,12 @@
         "https://www.youtube.com/embed/*",
         "https://www.youtube-nocookie.com/embed/*"
       ],
-      "js": ["langs.js", "timedtext.js"],
+      "js": ["timedtext.js"],
       "run_at": "document_start",
       "all_frames": true
     }
   ],
-  "permissions": ["storage", "declarativeContent", "contextMenus", "tabs", "https://www.youtube.com/watch?v=*"],
+  "permissions": ["storage", "declarativeContent", "contextMenus", "https://www.youtube.com/watch?v=*"],
   "web_accessible_resources": ["constant.js", "assets/2.ogg"],
   "manifest_version": 2
 }
