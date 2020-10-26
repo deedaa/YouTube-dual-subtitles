@@ -1,5 +1,5 @@
 const conditions = [
-  { pageUrl: { hostEquals: 'www.youtube.com' /* pathEquals: '/watch' */ } },
+  { pageUrl: { hostEquals: 'www.youtube.com' } },
   { css: [`iframe[src*='www.youtube.com/embed']`] },
   { css: [`iframe[src*='www.youtube-nocookie.com/embed']`] },
 ].map(entry => new chrome.declarativeContent.PageStateMatcher(entry));
@@ -19,7 +19,7 @@ const rule3 = {
       css: [`ytd-player#ytd-player:not([data-content_='true'])`],
     }),
   ],
-  actions: [new chrome.declarativeContent.RequestContentScript({ js: ['content.js'] })],
+  actions: [new chrome.declarativeContent.RequestContentScript({ js: ['watch.js'] })],
 };
 
 const UILang = chrome.i18n.getUILanguage();
@@ -72,3 +72,4 @@ chrome.contextMenus.onClicked.addListener(({ menuItemId }) => {
 });
 
 // 合并选择器 `ytd-player#ytd-player` `html:not([data-content_='true'])`
+/* pathEquals: '/watch' */

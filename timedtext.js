@@ -1,95 +1,126 @@
-const injection = handler => {
-  const script = document.createElement('script');
-  script.src = chrome.runtime.getURL('constant.js');
-  script.onload = handler;
-  (document.head || document.documentElement).append(script);
-  script.remove();
-};
+const nativeOpen = XMLHttpRequest.prototype.open;
+const nativeSend = XMLHttpRequest.prototype.send;
 
-const injection2 = textContent => {
-  const script = document.createElement('script');
-  script.textContent = textContent;
-  (document.head || document.documentElement).append(script);
-  script.remove();
-};
+const mergeWord = lang => {
+  const events = [];
+  let before = null;
+  let segment = '';
 
-const audioPlay = async url => {
-  const context = new AudioContext();
-  var gainNode = context.createGain();
+  lang.events.forEach((event, i) => {
+    if (!event.segs) return;
+    if (!before) before = event;
 
-  const source = context.createBufferSource();
-  const audioBuffer = await fetch(chrome.runtime.getURL(url))
-    .then(res => res.arrayBuffer())
-    .then(ArrayBuffer => context.decodeAudioData(ArrayBuffer));
+    if (event.dDurationMs && event.tStartMs >= before.tStartMs + before.dDurationMs) {
+      events.push({
+        tStartMs: before.tStartMs,
+        dDurationMs: before.dDurationMs,
+        segs: [{ utf8: segment.replace(/\n/g, ' ') }],
+      });
 
-  source.buffer = audioBuffer;
+      before = event;
+      segment = event.segs.reduce((acc, v) => (acc += v.utf8), '');
 
-  source.connect(gainNode);
-  gainNode.connect(context.destination);
-  gainNode.gain.setValueAtTime(0.1, context.currentTime);
-  source.start();
-  // source.start(0, 0, 1);
-};
-
-const restartSubtitles = () => {
-  injection2(
-    `document.querySelectorAll('.html5-video-player').forEach(element => element.setOption('captions', 'reload', true));`
-  );
-};
-
-chrome.runtime.onMessage.addListener(({ status }) => {
-  if (status) {
-    chrome.storage.local.get(null, ({ singleStatus, languageParameter }) => {
-      localStorage.setItem('languageParameter', JSON.stringify(languageParameter));
-      localStorage.setItem('singleStatus', singleStatus);
-      injection2(`XMLHttpRequest.prototype.open = proxiedOpen; XMLHttpRequest.prototype.send = proxiedSend;`);
-      restartSubtitles();
-    });
-  } else {
-    injection2(`XMLHttpRequest.prototype.open = nativeOpen; XMLHttpRequest.prototype.send = nativeSend;`);
-    restartSubtitles();
-  }
-
-  audioPlay('assets/2.ogg');
-});
-
-chrome.storage.local.get(null, ({ status, singleStatus, languageParameter }) => {
-  injection(() => {
-    if (status) {
-      localStorage.setItem('languageParameter', JSON.stringify(languageParameter));
-      localStorage.setItem('singleStatus', singleStatus);
-      injection2(`XMLHttpRequest.prototype.open = proxiedOpen; XMLHttpRequest.prototype.send = proxiedSend;`);
+      if (i === lang.events.length - 1) {
+        events.push({
+          tStartMs: before.tStartMs,
+          dDurationMs: before.dDurationMs,
+          segs: [{ utf8: segment.replace(/\n/g, ' ') }],
+        });
+      }
+    } else {
+      segment += event.segs.reduce((acc, v) => (acc += v.utf8), '');
     }
   });
-});
 
-// chrome.storage.local.set({ languageParameter });
+  return {
+    wireMagic: 'pb3',
+    pens: [{}],
+    wsWinStyles: [{}],
+    wpWinPositions: [{}],
+    events: events,
+  };
+};
 
-// console.log('status: ', status);
-// injection2(`document.querySelector('#ytd-player .html5-video-player').setOption('captions', 'reload', true);`);
+const proxiedOpen = function () {
+  if (arguments[1].includes('api/timedtext')) this._url = arguments[1];
+  nativeOpen.apply(this, arguments);
+};
 
-// ['#language-button', '#single-button'].forEach(id => document.querySelector(id).style.removeProperty('display'));
-// ['#language-button', '#single-button'].forEach(id =>
-//   document.querySelector(id).style.setProperty('display', 'none')
-// );
+const proxiedSend = async function () {
+  if (this._url) {
+    const u = new URL(this._url);
+    const lang = u.searchParams.get('lang');
+    const v = u.searchParams.get('v');
+    const { languageCode } = JSON.parse(localStorage.getItem('languageParameter'));
+    const singleStatus = JSON.parse(localStorage.getItem('singleStatus'));
 
-// const UILang = chrome.i18n.getUILanguage();
-// const autoLang = new Map(langsRaw).get(UILang);
-// // const autoLangCode = autoLang ? autoLang.languageCode : ['en'];
-// const autoLangCode = ['zh-Hans'];
-// const languageParameter_ = { languageCode: autoLangCode, languageName: chrome.i18n.getMessage('auto') };
+    if (singleStatus) {
+      const result = await fetch(`https://www.youtube.com/api/timedtext?type=list&v=${v}`)
+        .then(response => response.text())
+        .then(str => new window.DOMParser().parseFromString(str, 'text/xml'))
+        .then(data => {
+          const list = [...data.querySelectorAll('track')].map(v => ({
+            name: v.getAttribute('name'),
+            lang_code: v.getAttribute('lang_code'),
+          }));
+          console.log('list: ', list);
+          const result = list.find(v => languageCode.includes(v.lang_code));
+          return result;
+        });
 
-// const injection = handler => {
-//   const script = document.createElement('script');
-//   script.src = chrome.runtime.getURL('constant.js');
-//   script.onload = handler;
-//   (document.head || document.documentElement).append(script);
-//   script.remove();
-// };
+      console.log('result: ', result);
+      if (result) {
+        result.name ? u.searchParams.set('name', result.name) : u.searchParams.delete('name');
+        u.searchParams.set('lang', result.lang_code);
+        // have
+      } else {
+        u.searchParams.set('tlang', languageCode[0]);
+        // translation
+      }
+      const subtitles = await fetch(u.toString()).then(res => res.json());
+      Object.defineProperty(this, 'responseText', { value: JSON.stringify(subtitles), writable: false });
+    } else if (!languageCode.includes(lang)) {
+      u.searchParams.set('tlang', languageCode[0]);
 
-// const injection2 = textContent => {
-//   const script = document.createElement('script');
-//   script.textContent = textContent;
-//   (document.head || document.documentElement).append(script);
-//   script.remove();
-// };
+      const [original, local] = await Promise.all([
+        fetch(this._url).then(res => res.json()),
+        fetch(u.toString()).then(res => res.json()),
+      ]);
+
+      const localMap = new Map(local.events.map(v => [v.tStartMs, v.segs[0].utf8.trim()]));
+
+      const subtitles = mergeWord(original);
+      subtitles.events.forEach(v => {
+        const localLang = localMap.get(v.tStartMs) || '';
+        const originalLang = v.segs[0].utf8.trim();
+        v.segs[0].utf8 = `${originalLang}\n${localLang}`.trim();
+      });
+
+      Object.defineProperty(this, 'responseText', { value: JSON.stringify(subtitles), writable: false });
+    }
+  }
+
+  nativeSend.apply(this, arguments);
+};
+
+// let defaultSubtitles = '';
+// document.querySelector('#ytd-player .html5-video-player').getOption('captions', 'track')
+
+// const videoPlayer = document.querySelector('#ytd-player .html5-video-player');
+// const result = videoPlayer.getOption('captions', 'tracklist').find(v => languageCode.includes(v.languageCode));
+// console.log('videoPlayer: ', videoPlayer);
+
+// const mergeLang = await fetch(u.toString()).then(res => res.json());
+// Object.defineProperty(this, 'responseText', { value: JSON.stringify(mergeLang), writable: false });
+// document.body.dataset.changetrack = false;
+// console.dir(u.toString());
+
+// console.log('pathname: ', window.location.pathname);
+// if (!defaultSubtitles && window.location.pathname === '/watch') {
+//   defaultSubtitles = document.querySelector('#ytd-player .html5-video-player').getOption('captions', 'track')
+//     .languageCode;
+//   // console.log(222, document.querySelector('#ytd-player .html5-video-player'));
+//   // let a = document.querySelector('.html5-video-player').getOption('captions', 'track');
+//   // console.log('a: ', a);
+//   console.log('defaultSubtitles: ', defaultSubtitles);
+// }

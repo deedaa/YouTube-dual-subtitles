@@ -16,17 +16,18 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "https://www.youtube.com/*",
-        "https://www.youtube.com/embed/*",
-        "https://www.youtube-nocookie.com/embed/*"
-      ],
-      "js": ["timedtext.js"],
+      "matches": ["https://www.youtube.com/*", "https://www.youtube-nocookie.com/embed/*"],
+      "js": ["subtitles.js"],
       "run_at": "document_start",
+      "all_frames": true
+    },
+    {
+      "matches": ["https://www.youtube.com/embed/*", "https://www.youtube-nocookie.com/embed/*"],
+      "js": ["embed.js"],
       "all_frames": true
     }
   ],
   "permissions": ["storage", "declarativeContent", "contextMenus", "https://www.youtube.com/watch?v=*"],
-  "web_accessible_resources": ["constant.js", "assets/2.ogg"],
+  "web_accessible_resources": ["timedtext.js", "assets/2.ogg"],
   "manifest_version": 2
 }

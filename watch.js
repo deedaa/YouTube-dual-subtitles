@@ -28,8 +28,8 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
 
   document.querySelector('#ytd-player .ytp-settings-button').addEventListener('mouseenter', () => {
     chrome.storage.local.get(null, ({ status }) => {
-      const captions = document.querySelector(`#ytd-player .ytp-subtitles-button`).offsetWidth;
-      if (status && captions) {
+      const subtitles = document.querySelector(`#ytd-player .ytp-subtitles-button`).offsetWidth;
+      if (status && subtitles) {
         ['#language-button', '#single-button'].forEach(id =>
           document.querySelector(id).style.removeProperty('display')
         );
@@ -52,6 +52,7 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
   });
 
   const revertOrigin = e => {
+    console.log('revertOrigin: ');
     const eventType = e.type === 'blur' ? 'click' : 'blur';
     window.removeEventListener(eventType, revertOrigin);
 
@@ -170,16 +171,36 @@ const insertCustomMenu = ({ singleStatus, languageParameter }) => {
   });
 };
 
-const controls = new URLSearchParams(window.location.search).get('controls') !== '0';
-
 chrome.storage.local.get(null, ({ singleStatus, languageParameter }) => {
   document.querySelector('ytd-player#ytd-player').dataset.content_ = true;
-  if (controls) insertCustomMenu({ singleStatus, languageParameter });
+
+  const observer = new MutationObserver(() => {
+    const ytpSettingsMenu = document.querySelector('#ytd-player .ytp-settings-menu');
+    console.log('ytpSettingsMenu: ', ytpSettingsMenu);
+    if (ytpSettingsMenu) {
+      observer.disconnect();
+      insertCustomMenu({ singleStatus, languageParameter });
+    }
+  });
+
+  observer.observe(document.querySelector('ytd-player#ytd-player'), { subtree: true, childList: true });
 });
 
-console.log('注入了');
+console.log('watch 注入了');
 
-// iframe 的植入时机
+// if (controls)
+// const controls = new URLSearchParams(window.location.search).get('controls') !== '0';
+
+/*   const callback = () => {
+    const ytpSettingsMenu = document.querySelector('#ytd-player .ytp-settings-menu');
+    console.log('ytpSettingsMenu: ', ytpSettingsMenu);
+    if (ytpSettingsMenu) {
+      observer.disconnect();
+      if (controls) insertCustomMenu({ singleStatus, languageParameter });
+    }
+  }; */
+
+// const targetNode = document.querySelector('ytd-player#ytd-player');
 
 // `${autoLangCode}` === `${languageParameter.languageCode}`
 
