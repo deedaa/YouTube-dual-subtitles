@@ -26,7 +26,6 @@ const UILang = chrome.i18n.getUILanguage();
 const autoLang = new Map(langsRaw).get(UILang);
 // const autoLangCode = autoLang ? autoLang.languageCode : ['en'];
 const autoLangCode = ['zh-Hans'];
-// const autoLangCode = ['en'];
 
 const i18nGet = chrome.i18n.getMessage;
 
@@ -70,6 +69,3 @@ chrome.contextMenus.onClicked.addListener(({ menuItemId }) => {
   if (menuItemId === 'more') chrome.tabs.create({ url: 'http://youtube.material-ui-china.com' });
   if (menuItemId === 'github') chrome.tabs.create({ url: 'https://github.com/ouweiya/YouTube-dual-subtitles' });
 });
-
-// 合并选择器 `ytd-player#ytd-player` `html:not([data-content_='true'])`
-/* pathEquals: '/watch' */

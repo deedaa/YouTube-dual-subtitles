@@ -96,31 +96,10 @@ const proxiedSend = async function () {
         v.segs[0].utf8 = `${originalLang}\n${localLang}`.trim();
       });
 
+      console.log('subtitles: ', subtitles);
       Object.defineProperty(this, 'responseText', { value: JSON.stringify(subtitles), writable: false });
     }
   }
 
   nativeSend.apply(this, arguments);
 };
-
-// let defaultSubtitles = '';
-// document.querySelector('#ytd-player .html5-video-player').getOption('captions', 'track')
-
-// const videoPlayer = document.querySelector('#ytd-player .html5-video-player');
-// const result = videoPlayer.getOption('captions', 'tracklist').find(v => languageCode.includes(v.languageCode));
-// console.log('videoPlayer: ', videoPlayer);
-
-// const mergeLang = await fetch(u.toString()).then(res => res.json());
-// Object.defineProperty(this, 'responseText', { value: JSON.stringify(mergeLang), writable: false });
-// document.body.dataset.changetrack = false;
-// console.dir(u.toString());
-
-// console.log('pathname: ', window.location.pathname);
-// if (!defaultSubtitles && window.location.pathname === '/watch') {
-//   defaultSubtitles = document.querySelector('#ytd-player .html5-video-player').getOption('captions', 'track')
-//     .languageCode;
-//   // console.log(222, document.querySelector('#ytd-player .html5-video-player'));
-//   // let a = document.querySelector('.html5-video-player').getOption('captions', 'track');
-//   // console.log('a: ', a);
-//   console.log('defaultSubtitles: ', defaultSubtitles);
-// }

@@ -507,3 +507,214 @@ https://www.youtube.com/watch?v=YK8GZBx3hpg
 const ytpSettingsMenuClick = e => e.stopPropagation();
 
 "https://www.youtube.com/embed/*",
+
+```js
+// if (controls)
+// const controls = new URLSearchParams(window.location.search).get('controls') !== '0';
+
+/*   const callback = () => {
+    const ytpSettingsMenu = document.querySelector('#ytd-player .ytp-settings-menu');
+    console.log('ytpSettingsMenu: ', ytpSettingsMenu);
+    if (ytpSettingsMenu) {
+      observer.disconnect();
+      if (controls) insertCustomMenu({ singleStatus, languageParameter });
+    }
+  }; */
+
+// const targetNode = document.querySelector('ytd-player#ytd-player');
+
+// `${autoLangCode}` === `${languageParameter.languageCode}`
+
+// if (captions) {
+//   ['#language-button', '#single-button'].forEach(id =>
+//     document.querySelector(id).style.removeProperty('display')
+//   );
+// } else {
+//   ['#language-button', '#single-button'].forEach(id =>
+//     document.querySelector(id).style.setProperty('display', 'none')
+//   );
+// }
+
+// const changeTrack = JSON.parse(document.body.dataset.changetrack || false);
+/* if (!singleStatus && changeTrack) {
+        console.log('关闭字幕');
+        injection2(`
+          console.log(222, defaultSubtitles );
+          document
+          .querySelector('#ytd-player .html5-video-player')
+          .setOption('captions', 'track', { languageCode: defaultSubtitles });
+        `);
+      } else {
+        console.log('字幕重启');
+        injection2(`
+          defaultSubtitles = document.querySelector('#ytd-player .html5-video-player').getOption('captions', 'track').languageCode;
+        `);
+        restartSubtitles();
+      } */
+
+// reboot();
+
+// ['#language-button', '#single-button'].forEach(id => document.querySelector(id).remove());
+// document.body.removeAttribute('data-captions');
+// 'important'
+
+// const injection = handler => {
+//   const script = document.createElement('script');
+//   script.src = chrome.runtime.getURL('constant.js');
+//   script.onload = handler;
+//   (document.head || document.documentElement).append(script);
+//   script.remove();
+// };
+
+// const injection2 = textContent => {
+//   const script = document.createElement('script');
+//   script.textContent = textContent;
+//   (document.head || document.documentElement).append(script);
+//   script.remove();
+// };
+
+// const UILang = chrome.i18n.getUILanguage();
+// const autoLang = new Map(langsRaw).get(UILang);
+// const autoLangCode = autoLang ? autoLang.languageCode : ['en'];
+// const languageParameter_ = { languageCode: autoLangCode, languageName: chrome.i18n.getMessage('auto') };
+// const controls = new URLSearchParams(window.location.search).get('controls') !== '0';
+
+// const reboot = () => {
+//   chrome.storage.local.get(null, ({ singleStatus, languageParameter = languageParameter_ }) => {
+//     localStorage.setItem('languageParameter', JSON.stringify(languageParameter));
+//     localStorage.setItem('singleStatus', singleStatus);
+//     chrome.storage.local.set({ languageParameter });
+
+//     injection2(`XMLHttpRequest.prototype.open = proxiedOpen; XMLHttpRequest.prototype.send = proxiedSend;`);
+//     restartSubtitles();
+
+//     if (controls) insertCustomMenu({ singleStatus, languageParameter });
+//   });
+// };
+
+// window.addEventListener('hashchange', function (e) {
+//   console.log('hash changed');
+// });
+// window.addEventListener('popstate', function (e) {
+//   console.log('url changed');
+// });
+
+// console.log(chrome.tabs);
+
+/* if (status && controls) {
+    const loadEvent = window.self === window.top ? 'DOMContentLoaded' : 'load';
+    window.addEventListener(loadEvent, () => {
+      injection2(
+        `document.body.dataset.captions = window.self === window.top ? !!ytInitialPlayerResponse.captions : true;`
+      );
+
+      const captions = JSON.parse(document.body.dataset.captions);
+      if (captions) insertCustomMenu({ singleStatus, languageParameter });
+    });
+  } */
+
+// document.querySelector('html').dataset.content_ = true;
+
+// injection(() => {
+//   if (status) {
+//     localStorage.setItem('languageParameter', JSON.stringify(languageParameter));
+//     localStorage.setItem('singleStatus', singleStatus);
+//     injection2(`XMLHttpRequest.prototype.open = proxiedOpen; XMLHttpRequest.prototype.send = proxiedSend;`);
+//     chrome.storage.local.set({ languageParameter });
+//   }
+// });
+
+// injection2(
+//   `document.body.dataset.captions = window.self === window.top ? !!ytInitialPlayerResponse.captions : true;`
+// );
+
+// const captions = JSON.parse(document.body.dataset.captions);
+// captions &&
+// if (JSON.parse(document.body.dataset.captions)) { }
+
+// injection2(
+//   `document.body.dataset.captions = window.self === window.top ? !!ytInitialPlayerResponse.captions : true;`
+// );
+// const captions = JSON.parse(document.body.dataset.captions);
+
+// document.querySelector(`#ytd-player .ytp-subtitles-button:not([style='true'])`)
+// getPropertyValue('display')
+
+// setTimeout(() => {
+//   const windowList = [...document.querySelectorAll('.html5-video-player')]
+//     .map(el => ({ parent: el, settingButton: el.querySelector('.ytp-settings-button') }))
+//     .filter(v => v.settingButton);
+
+//   console.log('windowList: ', windowList);
+//   windowList.forEach(v =>
+//     v.settingButton.addEventListener(
+//       'mouseenter',
+//       () => {
+//         console.log('设置按钮');
+//       }
+//       // { once: true }
+//     )
+//   );
+// }, 4000);
+// #ytd-player .ytp-settings-button
+
+// const stopPropagation = e => e.stopPropagation();
+```
+
+// let defaultSubtitles = '';
+// document.querySelector('#ytd-player .html5-video-player').getOption('captions', 'track')
+
+// const videoPlayer = document.querySelector('#ytd-player .html5-video-player');
+// const result = videoPlayer.getOption('captions', 'tracklist').find(v => languageCode.includes(v.languageCode));
+// console.log('videoPlayer: ', videoPlayer);
+
+// const mergeLang = await fetch(u.toString()).then(res => res.json());
+// Object.defineProperty(this, 'responseText', { value: JSON.stringify(mergeLang), writable: false });
+// document.body.dataset.changetrack = false;
+// console.dir(u.toString());
+
+// console.log('pathname: ', window.location.pathname);
+// if (!defaultSubtitles && window.location.pathname === '/watch') {
+// defaultSubtitles = document.querySelector('#ytd-player .html5-video-player').getOption('captions', 'track')
+// .languageCode;
+// // console.log(222, document.querySelector('#ytd-player .html5-video-player'));
+// // let a = document.querySelector('.html5-video-player').getOption('captions', 'track');
+// // console.log('a: ', a);
+// console.log('defaultSubtitles: ', defaultSubtitles);
+// }
+
+// chrome.storage.local.set({ languageParameter });
+
+// console.log('status: ', status);
+// injection2(`document.querySelector('#ytd-player .html5-video-player').setOption('captions', 'reload', true);`);
+
+// ['#language-button', '#single-button'].forEach(id => document.querySelector(id).style.removeProperty('display'));
+// ['#language-button', '#single-button'].forEach(id =>
+// document.querySelector(id).style.setProperty('display', 'none')
+// );
+
+// const UILang = chrome.i18n.getUILanguage();
+// const autoLang = new Map(langsRaw).get(UILang);
+// // const autoLangCode = autoLang ? autoLang.languageCode : ['en'];
+// const autoLangCode = ['zh-Hans'];
+// const languageParameter\_ = { languageCode: autoLangCode, languageName: chrome.i18n.getMessage('auto') };
+
+// const injection = handler => {
+// const script = document.createElement('script');
+// script.src = chrome.runtime.getURL('constant.js');
+// script.onload = handler;
+// (document.head || document.documentElement).append(script);
+// script.remove();
+// };
+
+// const injection2 = textContent => {
+// const script = document.createElement('script');
+// script.textContent = textContent;
+// (document.head || document.documentElement).append(script);
+// script.remove();
+// };
+
+// const ytpSettingsMenu = document.querySelector('#ytd-player .ytp-settings-menu');
+// 合并选择器 `ytd-player#ytd-player` `html:not([data-content_='true'])`
+/_ pathEquals: '/watch' _/
+// const autoLangCode = ['en'];
